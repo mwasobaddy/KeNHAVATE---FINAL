@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+@import 'flowbite';
 
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -22,6 +23,12 @@
     --color-zinc-800: #262626;
     --color-zinc-900: #171717;
     --color-zinc-950: #0a0a0a;
+
+    /* KeNHAVATE Color Palette */
+    --color-kenha-cream: #F8EBD5;
+    --color-kenha-dark: #231F20;
+    --color-kenha-yellow: #FFF200;
+    --color-kenha-gray: #9B9EA4;
 
     --color-accent: var(--color-neutral-800);
     --color-accent-content: var(--color-neutral-800);

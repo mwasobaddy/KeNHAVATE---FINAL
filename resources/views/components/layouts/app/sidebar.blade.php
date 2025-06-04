@@ -14,6 +14,10 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="lightbulb" :href="route('ideas.index')" :current="request()->routeIs('ideas.*')" wire:navigate>{{ __('Ideas') }}</flux:navlist.item>
+                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'admin']))
+                        <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
+                    @endif
                 </flux:navlist.group>
             </flux:navlist>
 
