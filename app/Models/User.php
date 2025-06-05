@@ -23,14 +23,15 @@ class User extends Authenticatable
         'first_name',
         'last_name', 
         'email',
-        'personal_email',
         'password',
         'gender',
         'phone',
+        'phone_number',
         'account_status',
         'terms_accepted',
         'last_login_at',
         'login_count',
+        'email_verified_at',
     ];
 
     /**

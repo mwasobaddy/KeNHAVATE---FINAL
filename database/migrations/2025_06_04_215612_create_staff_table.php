@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('personal_email')->nullable(); // For staff with @kenha.co.ke emails
             $table->string('staff_number')->unique();
             $table->string('job_title');
             $table->string('department');

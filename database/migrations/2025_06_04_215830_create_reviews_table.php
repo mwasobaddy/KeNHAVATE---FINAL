@@ -21,14 +21,14 @@ return new class extends Migration
             $table->text('feedback')->nullable();
             $table->json('criteria_scores')->nullable(); // For detailed scoring
             $table->decimal('overall_score', 5, 2)->nullable();
-            $table->timestamp('reviewed_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->json('attachments')->nullable();
             $table->timestamps();
             
             // Indexes for performance
             $table->index(['reviewer_id', 'review_stage']);
             // Note: morphs() already creates index for reviewable_type, reviewable_id
-            $table->index(['decision', 'reviewed_at']);
+            $table->index(['decision', 'completed_at']);
         });
     }
 

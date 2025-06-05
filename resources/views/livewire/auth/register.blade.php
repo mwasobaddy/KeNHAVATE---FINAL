@@ -93,7 +93,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
                 'email' => $this->email,
-                'phone_number' => $this->phone_number,
+                'phone' => $this->phone_number,
                 'email_verified_at' => now(),
                 'password' => Hash::make('temp_password_' . uniqid()), // Temporary password
             ]);
@@ -102,14 +102,19 @@ new #[Layout('components.layouts.auth')] class extends Component {
             if ($this->isKenhaStaff) {
                 Staff::create([
                     'user_id' => $user->id,
-                    'staff_number' => $this->staff_number,
-                    'department' => $this->department,
                     'personal_email' => $this->personal_email,
+                    'staff_number' => $this->staff_number,
+                    'job_title' => 'To be assigned', // Default value - can be updated later
+                    'department' => $this->department,
+                    'supervisor_name' => null, // Optional field
+                    'work_station' => 'To be assigned', // Default value - can be updated later
+                    'employment_date' => now()->toDateString(), // Use registration date as default
+                    'employment_type' => 'permanent', // Default assumption for @kenha.co.ke emails
                 ]);
             }
 
             // Assign appropriate role
-            $role = $this->isKenhaStaff ? 'user' : 'user'; // Default role, can be changed by admin later
+            $role = 'user'; // All users get 'user' role by default, regardless of email domain
             $user->assignRole($role);
 
             // Log registration

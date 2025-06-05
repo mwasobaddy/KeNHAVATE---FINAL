@@ -36,6 +36,22 @@ return new class extends Migration
             $table->boolean('collaboration_enabled')->default(false);
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('completed_at')->nullable();
+            
+            // Workflow tracking fields
+            $table->timestamp('manager_review_started_at')->nullable();
+            $table->timestamp('manager_review_completed_at')->nullable();
+            $table->timestamp('sme_review_started_at')->nullable();
+            $table->timestamp('sme_review_completed_at')->nullable();
+            $table->timestamp('board_review_started_at')->nullable();
+            $table->timestamp('board_review_completed_at')->nullable();
+            $table->timestamp('collaboration_started_at')->nullable();
+            $table->timestamp('implementation_started_at')->nullable();
+            $table->foreignId('assigned_manager_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('assigned_sme_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('assigned_board_member_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->integer('total_review_time_hours')->default(0);
+            $table->json('workflow_metadata')->nullable();
+            
             $table->softDeletes();
             $table->timestamps();
             

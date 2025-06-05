@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('message');
             $table->morphs('related'); // Related entity (idea, challenge, etc.)
             $table->json('data')->nullable(); // Additional data
+            $table->json('metadata')->nullable(); // Additional context data
             $table->timestamp('read_at')->nullable();
             $table->boolean('email_sent')->default(false);
             $table->timestamp('email_sent_at')->nullable();

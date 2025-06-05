@@ -16,14 +16,17 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('device_fingerprint')->unique();
             $table->string('device_name')->nullable();
+            $table->string('device_type')->nullable();
             $table->string('browser')->nullable();
-            $table->string('platform')->nullable();
+            $table->string('operating_system')->nullable();
             $table->string('ip_address', 45);
             $table->text('user_agent');
             $table->boolean('is_trusted')->default(false);
             $table->timestamp('first_seen_at')->useCurrent();
             $table->timestamp('last_seen_at')->useCurrent();
+            $table->timestamp('last_used_at')->useCurrent();
             $table->integer('login_count')->default(1);
+            $table->json('location')->nullable();
             $table->timestamps();
             
             // Ensure one record per user per device
@@ -31,7 +34,7 @@ return new class extends Migration
             
             // Indexes for performance
             $table->index(['user_id', 'is_trusted']);
-            $table->index(['device_fingerprint', 'last_seen_at']);
+            $table->index(['device_fingerprint', 'last_used_at']);
             $table->index(['ip_address', 'created_at']);
         });
     }

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->string('personal_email')->nullable(); // For staff with @kenha.co.ke emails
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(); // Nullable for OTP-only users
             $table->enum('gender', ['male', 'female', 'other'])->nullable();

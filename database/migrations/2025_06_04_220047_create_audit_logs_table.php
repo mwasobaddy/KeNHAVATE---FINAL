@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('action', [
                 'account_creation',
                 'login', 
+                'login_success',
                 'logout',
                 'idea_submission',
                 'challenge_creation',
@@ -28,7 +29,16 @@ return new class extends Migration
                 'review_submission',
                 'status_change',
                 'role_assignment',
-                'permission_change'
+                'permission_change',
+                'otp_generated',
+                'otp_resent',
+                'otp_verified',
+                'otp_validated',
+                'otp_failed',
+                'otp_validation_failed',
+                'new_device_login',
+                'device_trusted',
+                'password_change'
             ]);
             $table->string('entity_type')->nullable(); // Model class name
             $table->unsignedBigInteger('entity_id')->nullable(); // Model ID
@@ -37,6 +47,7 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->text('description')->nullable();
+            $table->json('metadata')->nullable(); // Additional context data
             $table->timestamps();
             
             // Indexes for performance

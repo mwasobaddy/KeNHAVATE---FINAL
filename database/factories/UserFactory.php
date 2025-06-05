@@ -30,7 +30,6 @@ class UserFactory extends Factory
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => fake()->unique()->safeEmail(),
-            'personal_email' => fake()->unique()->safeEmail(),
             'phone' => fake()->phoneNumber(),
             'gender' => fake()->randomElement(['male', 'female', 'other']),
             'email_verified_at' => now(),

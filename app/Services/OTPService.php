@@ -192,7 +192,7 @@ class OTPService
             Mail::to($email)->send(new \App\Mail\OTPMail($data));
             
             // Log successful email send
-            \Log::info("OTP Email Sent Successfully", [
+            \Log::info("OTP " . $otpCode . " Email Sent Successfully", [
                 'to' => $email,
                 'purpose' => $purpose,
                 'expires_at' => now()->addMinutes(15)
