@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('implementation_plan')->nullable();
             $table->json('attachments')->nullable();
             $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
-            $table->string('category')->nullable();
+            $table->foreignId('category_id')->constrained('categories')->onDelete('set null');
             $table->enum('current_stage', [
                 'draft', 
                 'submitted', 
