@@ -136,7 +136,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
             // Login the user
             Auth::login($user);
 
-            $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+            // Redirect to role-specific dashboard
+            $redirectRoute = $this->getDashboardRoute($user);
+            $this->redirectIntended($redirectRoute, navigate: true);
 
         } catch (\Exception $e) {
             $this->addError('otp', $e->getMessage());
@@ -161,6 +163,24 @@ new #[Layout('components.layouts.auth')] class extends Component {
         } catch (\Exception $e) {
             $this->addError('otp', $e->getMessage());
         }
+    }
+
+    /**
+     * Get role-specific dashboard route
+     */
+    private function getDashboardRoute(User $user): string
+    {
+        $userRole = $user->roles->first()?->name ?? 'user';
+        
+        return match($userRole) {
+            'developer', 'administrator' => route('dashboard.admin'),
+            'board_member' => route('dashboard.board-member'),
+            'manager' => route('dashboard.manager'),
+            'sme' => route('dashboard.sme'),
+            'challenge_reviewer' => route('dashboard.challenge-reviewer'),
+            'idea_reviewer' => route('dashboard.idea-reviewer'),
+            default => route('dashboard.user'),
+        };
     }
 
     /**

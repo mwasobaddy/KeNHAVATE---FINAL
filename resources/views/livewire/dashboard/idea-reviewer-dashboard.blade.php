@@ -146,6 +146,7 @@ new class extends Component
     }
 }; ?>
 
+<x-layouts.app title="Idea Reviewer Dashboard">
 <div class="space-y-6">
     {{-- Welcome Section --}}
     <div class="bg-[#F8EBD5] rounded-lg p-6 border border-[#9B9EA4]/20">
@@ -396,3 +397,4 @@ new class extends Component
         </div>
     </div>
 </div>
+</x-layouts.app>
