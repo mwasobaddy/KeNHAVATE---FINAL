@@ -5,7 +5,8 @@ use App\Models\Idea;
 use App\Models\Review;
 use App\Models\Challenge;
 
-new class extends Component
+
+new #[Layout('components.layouts.app', title: 'Board Member Dashboard')] class extends Component
 {
     public $pendingApprovals;
     public $recentDecisions;
@@ -104,7 +105,6 @@ new class extends Component
     }
 }; ?>
 
-<x-layouts.app title="Board Member Dashboard">
 <div class="space-y-6">
     {{-- Welcome Section --}}
     <div class="bg-gradient-to-r from-[#F8EBD5] to-[#FFF200]/20 rounded-lg p-6 border border-[#9B9EA4]/20">
@@ -364,4 +364,3 @@ new class extends Component
         </div>
     </div>
 </div>
-</x-layouts.app>

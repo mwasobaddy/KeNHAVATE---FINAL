@@ -5,7 +5,8 @@ use App\Models\Idea;
 use App\Models\Challenge;
 use App\Models\Review;
 
-new class extends Component {
+new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extends Component
+{
     
     public function with(): array
     {
@@ -33,7 +34,7 @@ new class extends Component {
     
 }; ?>
 
-<x-layouts.app title="Manager Dashboard">
+
 <div class="space-y-6">
     <!-- Manager Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -218,4 +219,3 @@ new class extends Component {
         </div>
     </div>
 </div>
-</x-layouts.app>

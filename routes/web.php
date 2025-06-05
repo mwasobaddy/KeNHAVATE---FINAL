@@ -11,15 +11,15 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-// Role-specific dashboards
+// Role-specific dashboards using Volt routes for proper Livewire component handling
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard/user', 'livewire.dashboard.user-dashboard')->name('dashboard.user');
-    Route::view('dashboard/admin', 'livewire.dashboard.admin-dashboard')->middleware('role:developer|administrator')->name('dashboard.admin');
-    Route::view('dashboard/board-member', 'livewire.dashboard.board-member-dashboard')->middleware('role:board_member')->name('dashboard.board-member');
-    Route::view('dashboard/manager', 'livewire.dashboard.manager-dashboard')->middleware('role:manager')->name('dashboard.manager');
-    Route::view('dashboard/sme', 'livewire.dashboard.sme-dashboard')->middleware('role:sme')->name('dashboard.sme');
-    Route::view('dashboard/challenge-reviewer', 'livewire.dashboard.challenge-reviewer-dashboard')->middleware('role:challenge_reviewer')->name('dashboard.challenge-reviewer');
-    Route::view('dashboard/idea-reviewer', 'livewire.dashboard.idea-reviewer-dashboard')->middleware('role:idea_reviewer')->name('dashboard.idea-reviewer');
+    Volt::route('dashboard/user', 'dashboard.user-dashboard')->name('dashboard.user');
+    Volt::route('dashboard/admin', 'dashboard.admin-dashboard')->middleware('role:developer|administrator')->name('dashboard.admin');
+    Volt::route('dashboard/board-member', 'dashboard.board-member-dashboard')->middleware('role:board_member')->name('dashboard.board-member');
+    Volt::route('dashboard/manager', 'dashboard.manager-dashboard')->middleware('role:manager')->name('dashboard.manager');
+    Volt::route('dashboard/sme', 'dashboard.sme-dashboard')->middleware('role:sme')->name('dashboard.sme');
+    Volt::route('dashboard/challenge-reviewer', 'dashboard.challenge-reviewer-dashboard')->middleware('role:challenge_reviewer')->name('dashboard.challenge-reviewer');
+    Volt::route('dashboard/idea-reviewer', 'dashboard.idea-reviewer-dashboard')->middleware('role:idea_reviewer')->name('dashboard.idea-reviewer');
 });
 
 Route::middleware(['auth'])->group(function () {
