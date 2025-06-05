@@ -3,7 +3,7 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800">
+    <body class="min-h-screen  bg-gradient-to-br from-[#F8EBD5]/20 via-white to-[#F8EBD5]/10 dark:from-zinc-900/50 dark:via-zinc-800 dark:to-zinc-900/30">
         <!-- Desktop Sidebar - Always Visible -->
         <flux:sidebar sticky class="hidden lg:flex border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <!-- Desktop sidebar has no toggle and is always visible -->
@@ -194,7 +194,7 @@
         </flux:sidebar>
 
         <!-- Mobile User Menu -->
-        <flux:header class="lg:hidden">
+        <flux:header class="lg:hidden sticky top-0 z-50 bg-white border-b border-zinc-200 dark:bg-zinc-900 dark:border-zinc-700 px-4 py-2">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <flux:spacer />
@@ -242,7 +242,7 @@
                 </flux:menu>
             </flux:dropdown>
         </flux:header>
-
+        
         {{ $slot }}
 
         @fluxScripts
