@@ -102,8 +102,16 @@ KeNHAVATE is a comprehensive innovation portal designed for Kenya National Highw
      - Staff Number
      - Personal Email (must differ from institutional email)
 
-4. **Account Status Verification**
-   - **Active**: Redirect to Terms & Conditions (required on every login)
+4. **Terms and Conditions Agreement** (MANDATORY for all users)
+   - **All users must agree to terms before proceeding to dashboard**
+   - Terms are based on official KeNHA Terms of Use (TERMS.MD)
+   - Agreement is tracked with timestamp in `terms_accepted` column
+   - Users can view full terms with scroll-to-read functionality
+   - **Disagree Action**: User is returned to login page with clear message
+   - **Agree Action**: `terms_accepted` is set to `true`, proceed to account status verification
+
+5. **Account Status Verification**
+   - **Active**: Redirect to role-specific dashboard
    - **Banned**: Redirect to banned account appeal page with form submission capability
    - **Suspended/Temporarily Disabled**: Redirect to suspended account appeal page with form submission capability
    - **Unassigned Role**: Error page with admin contact prompt
@@ -149,7 +157,12 @@ KeNHAVATE is a comprehensive innovation portal designed for Kenya National Highw
    - Additional staff-specific fields (same as sign-in process)
    - Dual table storage (users + staff tables)
 
-3. **Default Role Assignment**
+3. **Terms and Conditions Agreement** (MANDATORY)
+   - Same terms agreement process as sign-in flow
+   - Must accept before account creation completion
+   - `terms_accepted` field set to `true` upon agreement
+
+4. **Default Role Assignment**
    - All new users receive "user" role initially
    - Role elevation requires admin intervention
 
@@ -158,6 +171,8 @@ KeNHAVATE is a comprehensive innovation portal designed for Kenya National Highw
 - Device tracking and notifications
 - Session management and timeout handling
 - Password requirements for developer accounts
+- Terms and conditions agreement tracking with audit trail
+- Session validation for terms acceptance
 
 ---
 

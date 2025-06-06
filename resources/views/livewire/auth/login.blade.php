@@ -169,8 +169,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
             // Login the user
             Auth::login($user, $this->remember);
             Session::regenerate();
+            // update the column terms_accepted in users table
+            $user->update(['terms_accepted' => false]);
 
-            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+            // Check if user has accepted terms
+            if (!$user->terms_accepted) {
+                $this->redirectRoute('terms-and-conditions', navigate: true);
+            } else {
+                $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+            }
 
         } catch (\Exception $e) {
             RateLimiter::hit($this->throttleKey());

@@ -12,11 +12,11 @@ Volt::route('banned-account', 'auth.banned-account')->name('banned-account');
 Volt::route('suspended-account', 'auth.suspended-account')->name('suspended-account');
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'terms.accepted'])
     ->name('dashboard');
 
 // Role-specific dashboards using Volt routes for proper Livewire component handling
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'terms.accepted'])->group(function () {
     Volt::route('dashboard/user', 'dashboard.user-dashboard')->name('dashboard.user');
     Volt::route('dashboard/admin', 'dashboard.admin-dashboard')->middleware('role:developer|administrator')->name('dashboard.admin');
     Volt::route('dashboard/board-member', 'dashboard.board-member-dashboard')->middleware('role:board_member')->name('dashboard.board-member');
@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Volt::route('dashboard/idea-reviewer', 'dashboard.idea-reviewer-dashboard')->middleware('role:idea_reviewer')->name('dashboard.idea-reviewer');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');

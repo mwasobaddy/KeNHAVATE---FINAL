@@ -17,9 +17,19 @@ Route::middleware('guest')->group(function () {
     Volt::route('reset-password/{token}', 'auth.reset-password')
         ->name('password.reset');
 
+    // Account status pages (accessible without authentication)
+    Volt::route('banned-account', 'auth.banned-account')
+        ->name('banned-account');
+        
+    Volt::route('suspended-account', 'auth.suspended-account')
+        ->name('suspended-account');
 });
 
 Route::middleware('auth')->group(function () {
+    // Terms and conditions for authenticated users who haven't accepted terms
+    Volt::route('terms-and-conditions', 'auth.terms-and-conditions')
+        ->name('terms-and-conditions');
+
     Volt::route('verify-email', 'auth.verify-email')
         ->name('verification.notice');
 

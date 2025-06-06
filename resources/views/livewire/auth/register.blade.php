@@ -26,6 +26,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public bool $isKenhaStaff = false;
     public string $otpMessage = '';
     public int $resendCooldown = 0;
+    
+    public string $title = 'Create Account';
+    public string $description = 'Join the KeNHAVATE innovation community';
 
     protected OTPService $otpService;
     protected AuditService $auditService;
@@ -184,9 +187,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
             // Login the user
             Auth::login($user);
 
-            // Redirect to role-specific dashboard
-            $redirectRoute = $this->getDashboardRoute($user);
-            $this->redirectIntended($redirectRoute, navigate: true);
+            // Since this is a new user, they haven't accepted terms yet
+            // Redirect to terms and conditions page
+            $this->redirectRoute('terms-and-conditions', navigate: true);
 
         } catch (\Exception $e) {
             $this->addError('otp', $e->getMessage());
