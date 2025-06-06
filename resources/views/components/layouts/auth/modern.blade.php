@@ -115,7 +115,7 @@
                         </div>
 
                         <!-- 3D Geometric Illustration -->
-                        <div class="mt-12 relative">
+                        <div class="mt-12 absolute right-0 w-fit -z-[1]">
                             <!-- Main 3D Container -->
                             <div class="relative w-72 h-48 mx-auto">
                                 <!-- Large Cube -->
