@@ -283,7 +283,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     autofocus
                     autocomplete="email"
                     placeholder="hello@example.com"
-                    class="mt-1 block w-full rounded-lg border-[#9B9EA4] shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200]"
+                    class="mt-1 block w-full rounded-lg border-[#9B9EA4] dark:border-zinc-600 shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200] dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400"
                 />
             </div>
 
@@ -294,21 +294,21 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
             <!-- Submit Button -->
             <div class="space-y-4">
-                <flux:button variant="primary" type="submit" class="w-full justify-center rounded-lg bg-[#FFF200] px-4 py-3 text-sm font-semibold text-[#231F20] shadow-lg hover:bg-[#FFF200]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] transition-all duration-200 hover:shadow-xl">
+                <flux:button variant="primary" type="submit" class="w-full justify-center rounded-lg bg-[#FFF200] dark:bg-yellow-400 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-zinc-900 shadow-lg hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] dark:focus-visible:outline-yellow-400 transition-all duration-200 hover:shadow-xl">
                     Send Verification Code
                 </flux:button>
                 
                 <!-- Alternative Login Options -->
                 <div class="relative">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-[#9B9EA4]"></div>
+                        <div class="w-full border-t border-[#9B9EA4] dark:border-zinc-600"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="bg-[#F8EBD5] px-2 text-[#9B9EA4]">or</span>
+                        <span class="bg-[#F8EBD5] dark:bg-zinc-900 px-2 text-[#9B9EA4] dark:text-zinc-400">or</span>
                     </div>
                 </div>
                 
-                <flux:button variant="outline" type="button" class="w-full justify-center rounded-lg border border-[#9B9EA4] bg-[#F8EBD5] px-4 py-3 text-sm font-semibold text-[#231F20] shadow-sm hover:bg-[#9B9EA4]/10">
+                <flux:button variant="outline" type="button" class="w-full justify-center rounded-lg border border-[#9B9EA4] dark:border-zinc-600 bg-[#F8EBD5] dark:bg-zinc-800/50 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-white shadow-sm hover:bg-[#9B9EA4]/10 dark:hover:bg-zinc-700/50">
                     <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -323,15 +323,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <!-- OTP Form -->
         <div class="space-y-6">
             @if ($otpMessage)
-                <div class="rounded-lg bg-[#F8EBD5] p-4 border border-[#FFF200]">
+                <div class="rounded-lg bg-[#F8EBD5] dark:bg-zinc-800/50 p-4 border border-[#FFF200] dark:border-yellow-400">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-[#FFF200]" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="h-5 w-5 text-[#FFF200] dark:text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <p class="text-sm font-medium text-[#231F20]">{{ $otpMessage }}</p>
+                            <p class="text-sm font-medium text-[#231F20] dark:text-white">{{ $otpMessage }}</p>
                         </div>
                     </div>
                 </div>
@@ -350,14 +350,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
                         placeholder="000000"
                         maxlength="6"
                         pattern="[0-9]{6}"
-                        class="text-center text-2xl tracking-[0.5em] font-mono block w-full rounded-lg border-[#9B9EA4] shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200]"
+                        class="text-center text-2xl tracking-[0.5em] font-mono block w-full rounded-lg border-[#9B9EA4] dark:border-zinc-600 shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200] dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400"
                     />
-                    <p class="mt-2 text-sm text-[#9B9EA4]">Enter the 6-digit code sent to <span class="font-medium text-[#231F20]">{{ $email }}</span></p>
+                    <p class="mt-2 text-sm text-[#9B9EA4] dark:text-zinc-400">Enter the 6-digit code sent to <span class="font-medium text-[#231F20] dark:text-white">{{ $email }}</span></p>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="space-y-4">
-                    <flux:button variant="primary" type="submit" class="w-full justify-center rounded-lg bg-[#FFF200] px-4 py-3 text-sm font-semibold text-[#231F20] shadow-lg hover:bg-[#FFF200]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] transition-all duration-200 hover:shadow-xl">
+                    <flux:button variant="primary" type="submit" class="w-full justify-center rounded-lg bg-[#FFF200] dark:bg-yellow-400 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-zinc-900 shadow-lg hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] dark:focus-visible:outline-yellow-400 transition-all duration-200 hover:shadow-xl">
                         Verify & Continue
                     </flux:button>
                     
@@ -367,13 +367,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
                             variant="ghost" 
                             size="sm"
                             type="button"
-                            class="text-[#9B9EA4] hover:text-[#231F20]"
+                            class="text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-white"
                         >
                             ← Change Email
                         </flux:button>
                         
                         @if ($resendCooldown > 0)
-                            <span class="text-sm text-[#9B9EA4]">
+                            <span class="text-sm text-[#9B9EA4] dark:text-zinc-400">
                                 Resend in <span x-data="{ countdown: @entangle('resendCooldown') }" 
                                     x-init="
                                         $watch('countdown', value => {
@@ -383,7 +383,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                         })
                                     " 
                                     x-text="countdown"
-                                    class="font-medium text-[#FFF200]">{{ $resendCooldown }}</span>s
+                                    class="font-medium text-[#FFF200] dark:text-yellow-400">{{ $resendCooldown }}</span>s
                             </span>
                         @else
                             <flux:button 
@@ -391,7 +391,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                 variant="ghost" 
                                 size="sm"
                                 type="button"
-                                class="text-[#9B9EA4] hover:text-[#231F20]"
+                                class="text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-white"
                             >
                                 Resend Code
                             </flux:button>
@@ -403,10 +403,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
     @endif
 
     @if (Route::has('register'))
-        <div class="text-center border-t border-[#9B9EA4] pt-6">
-            <p class="text-sm text-[#9B9EA4]">
+        <div class="text-center border-t border-[#9B9EA4] dark:border-zinc-600 pt-6">
+            <p class="text-sm text-[#9B9EA4] dark:text-zinc-400">
                 Don't have an account?
-                <flux:link :href="route('register')" wire:navigate class="font-medium text-[#FFF200] hover:text-[#FFF200]/80">Sign up for free</flux:link>
+                <flux:link :href="route('register')" wire:navigate class="font-medium text-[#FFF200] dark:text-yellow-400 hover:text-[#FFF200]/80 dark:hover:text-yellow-300">Sign up for free</flux:link>
             </p>
         </div>
     @endif

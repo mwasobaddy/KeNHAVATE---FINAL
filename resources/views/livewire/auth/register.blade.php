@@ -246,8 +246,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
             <!-- KeNHA Staff Additional Fields -->
             @if ($isKenhaStaff)
-                <div class="p-4 bg-[#F8EBD5] border border-[#FFF200] rounded-lg">
-                    <p class="text-sm text-[#231F20] font-medium mb-4">
+                <div class="p-4 bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 rounded-lg">
+                    <p class="text-sm text-[#231F20] dark:text-white font-medium mb-4">
                         KeNHA Staff Registration - Additional Information Required
                     </p>
                     
@@ -302,7 +302,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <!-- OTP Verification Form -->
         <div class="flex flex-col gap-4">
             @if ($otpMessage)
-                <div class="p-4 mb-4 text-sm text-[#231F20] rounded-lg bg-[#F8EBD5] border border-[#FFF200]">
+                <div class="p-4 mb-4 text-sm text-[#231F20] dark:text-white rounded-lg bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400">
                     {{ $otpMessage }}
                 </div>
             @endif
@@ -333,13 +333,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
                             variant="ghost" 
                             size="sm"
                             type="button"
-                            class="text-[#9B9EA4] hover:text-[#231F20]"
+                            class="text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-white"
                         >
                             ← Back to Registration
                         </flux:button>
                         
                         @if ($resendCooldown > 0)
-                            <span class="text-[#9B9EA4]">
+                            <span class="text-[#9B9EA4] dark:text-zinc-400">
                                 Resend in <span x-data="{ countdown: @entangle('resendCooldown') }" 
                                     x-init="
                                         $watch('countdown', value => {
@@ -356,7 +356,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                 variant="ghost" 
                                 size="sm"
                                 type="button"
-                                class="text-[#9B9EA4] hover:text-[#231F20]"
+                                class="text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-white"
                             >
                                 Resend Code
                             </flux:button>
@@ -367,9 +367,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     @endif
 
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-[#9B9EA4]">
+    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-[#9B9EA4] dark:text-zinc-400">
         Already have an account?
-        <flux:link :href="route('login')" wire:navigate class="text-[#FFF200] hover:text-[#FFF200]/80">Log in</flux:link>
+        <flux:link :href="route('login')" wire:navigate class="text-[#FFF200] dark:text-yellow-400 hover:text-[#FFF200]/80 dark:hover:text-yellow-300">Log in</flux:link>
     </div>
 </div>
 
