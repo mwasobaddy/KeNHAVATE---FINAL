@@ -96,6 +96,19 @@ new #[Layout('components.layouts.auth')] class extends Component {
             // Verify OTP
             $user = $this->otpService->verifyOTP($this->email, $this->otp, 'login');
             
+            // Check account status before allowing login
+            if ($user->isBanned()) {
+                session(['banned_user_email' => $user->email]);
+                $this->redirectRoute('banned-account', navigate: true);
+                return;
+            }
+            
+            if ($user->isSuspended()) {
+                session(['suspended_user_email' => $user->email]);
+                $this->redirectRoute('suspended-account', navigate: true);
+                return;
+            }
+            
             // Generate device fingerprint
             $deviceFingerprint = $this->generateDeviceFingerprint();
             

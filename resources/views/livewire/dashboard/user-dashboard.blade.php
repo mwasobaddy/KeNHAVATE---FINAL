@@ -47,9 +47,9 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
 <div class="min-h-screen relative overflow-hidden">
     {{-- Animated Background Elements --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-20 left-20 w-72 h-72 bg-[#FFF200]/5 dark:bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute top-20 left-20 w-72 h-72 bg-[#FFF200]/80 dark:bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute bottom-20 right-20 w-96 h-96 bg-[#F8EBD5]/20 dark:bg-amber-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-[#FFF200]/3 dark:bg-yellow-400/5 rounded-full blur-2xl animate-pulse delay-500"></div>
+        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-[#FFF200]/50 dark:bg-yellow-400/5 rounded-full blur-2xl animate-pulse delay-500"></div>
     </div>
 
     <div class="relative z-10 md:p-6 space-y-8 max-w-7xl mx-auto">

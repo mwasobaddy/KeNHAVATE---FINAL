@@ -7,6 +7,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Account status pages (no auth required as users can't authenticate)
+Volt::route('banned-account', 'auth.banned-account')->name('banned-account');
+Volt::route('suspended-account', 'auth.suspended-account')->name('suspended-account');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

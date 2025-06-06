@@ -40,6 +40,7 @@ class UserSeeder extends Seeder
         $this->createChallengeReviewers();
         $this->createIdeaReviewers();
         $this->createRegularUsers();
+        $this->createTestAccountStatusUsers();
         $this->createKenhaStaffUsers();
 
         $this->command->info('UserSeeder completed successfully!');
@@ -75,7 +76,7 @@ class UserSeeder extends Seeder
     private function createKelvinWanjohi(): void
     {
         $kelvin = User::updateOrCreate(
-            ['email' => 'kelvinramsiel@kenha.co.ke'],
+            ['email' => 'kelvinramsiel@gmail.com'],
             [
                 'first_name' => 'Kelvin',
                 'last_name' => 'Wanjohi',
@@ -388,6 +389,56 @@ class UserSeeder extends Seeder
     }
 
     /**
+     * Create test users with different account statuses (banned/suspended) for testing appeal functionality
+     */
+    private function createTestAccountStatusUsers(): void
+    {
+        $testUsers = [
+            [
+                'first_name' => 'Banned',
+                'last_name' => 'User',
+                'email' => 'banned.user@gmail.com',
+                'phone' => '+254706789012',
+                'account_status' => 'banned',
+            ],
+            [
+                'first_name' => 'Suspended',
+                'last_name' => 'User', 
+                'email' => 'suspended.user@gmail.com',
+                'phone' => '+254707890123',
+                'account_status' => 'suspended',
+            ],
+            [
+                'first_name' => 'Temp',
+                'last_name' => 'Suspended',
+                'email' => 'temp.suspended@yahoo.com',
+                'phone' => '+254708901234',
+                'account_status' => 'suspended',
+            ]
+        ];
+
+        foreach ($testUsers as $userData) {
+            $user = User::updateOrCreate(
+                ['email' => $userData['email']],
+                [
+                    'first_name' => $userData['first_name'],
+                    'last_name' => $userData['last_name'],
+                    'phone' => $userData['phone'],
+                    'gender' => fake()->randomElement(['male', 'female']),
+                    'email_verified_at' => now(),
+                    'password' => Hash::make('password123'),
+                    'account_status' => $userData['account_status'],
+                    'terms_accepted' => true,
+                ]
+            );
+
+            $user->assignRole('user');
+            $statusLabel = ucfirst($userData['account_status']);
+            $this->command->info("⚠️  Created {$statusLabel} User: {$user->first_name} {$user->last_name} ({$user->email})");
+        }
+    }
+
+    /**
      * Create additional KeNHA staff users using factory
      */
     private function createKenhaStaffUsers(): void
@@ -492,12 +543,25 @@ class UserSeeder extends Seeder
 
         $totalUsers = User::count();
         $totalStaff = Staff::count();
+        $activeUsers = User::where('account_status', 'active')->count();
+        $bannedUsers = User::where('account_status', 'banned')->count();
+        $suspendedUsers = User::where('account_status', 'suspended')->count();
         
         $this->command->info("--------------------------------");
         $this->command->info("📈 Total Users: {$totalUsers}");
         $this->command->info("🏢 KeNHA Staff: {$totalStaff}");
+        $this->command->info("✅ Active Users: {$activeUsers}");
+        if ($bannedUsers > 0) {
+            $this->command->info("🚫 Banned Users: {$bannedUsers}");
+        }
+        if ($suspendedUsers > 0) {
+            $this->command->info("⏸️  Suspended Users: {$suspendedUsers}");
+        }
         $this->command->info("================================");
         $this->command->info("🔑 Default Password: password123");
-        $this->command->info("✅ All users are active and email verified");
+        $this->command->info("✅ Most users are active and email verified");
+        if ($bannedUsers > 0 || $suspendedUsers > 0) {
+            $this->command->info("⚠️  Test appeal functionality with banned/suspended users");
+        }
     }
 }

@@ -152,6 +152,38 @@ class User extends Authenticatable
     }
 
     /**
+     * Appeal messages sent by this user
+     */
+    public function appealMessages()
+    {
+        return $this->hasMany(AppealMessage::class);
+    }
+
+    /**
+     * Check if user account is banned
+     */
+    public function isBanned(): bool
+    {
+        return $this->account_status === 'banned';
+    }
+
+    /**
+     * Check if user account is suspended
+     */
+    public function isSuspended(): bool
+    {
+        return $this->account_status === 'suspended';
+    }
+
+    /**
+     * Check if user account is active
+     */
+    public function isActive(): bool
+    {
+        return $this->account_status === 'active';
+    }
+
+    /**
      * Points earned by this user
      */
     public function points()
