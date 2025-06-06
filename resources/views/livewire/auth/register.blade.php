@@ -35,6 +35,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $this->auditService = $auditService;
     }
 
+    public function mount(): void
+    {
+        $this->title = $this->showOtpForm ? 'Verify Your Email' : 'Create Account';
+        $this->description = $this->showOtpForm ? 'Enter the verification code sent to your email' : 'Join the KeNHAVATE innovation community';
+    }
+
     public function updatedEmail(): void
     {
         $this->isKenhaStaff = str_ends_with(strtolower($this->email), '@kenha.co.ke');
@@ -197,8 +203,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
 <div class="flex flex-col gap-6">
     <x-auth-header 
-        :title="$showOtpForm ? 'Verify Your Email' : 'Create an account'" 
-        :description="$showOtpForm ? 'Enter the verification code sent to your email' : 'Enter your details below to create your account'" 
+        :title="$showOtpForm ? 'Verify Your Email' : 'Create Account'" 
+        :description="$showOtpForm ? 'Enter the verification code sent to your email' : 'Join the KeNHAVATE innovation community'" 
     />
 
     <!-- Session Status -->

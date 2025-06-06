@@ -7,6 +7,9 @@ use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] class extends Component {
+    public string $title = 'Verify Email';
+    public string $description = 'Please verify your email address by clicking on the link we sent to your email.';
+
     /**
      * Send an email verification notification to the user.
      */
@@ -34,24 +37,68 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="mt-4 flex flex-col gap-6">
-    <flux:text class="text-center">
-        {{ __('Please verify your email address by clicking on the link we just emailed to you.') }}
-    </flux:text>
+<div class="flex flex-col space-y-6">
+    <!-- Information Message -->
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+        <div class="flex items-center mb-3">
+            <div class="flex-shrink-0">
+                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-lg font-semibold text-blue-800">Email Verification Required</h3>
+            </div>
+        </div>
+        <p class="text-blue-700">
+            Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.
+        </p>
+    </div>
 
     @if (session('status') == 'verification-link-sent')
-        <flux:text class="text-center font-medium !dark:text-green-400 !text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </flux:text>
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <p class="text-green-800 text-sm font-medium">
+                    A new verification link has been sent to the email address you provided during registration.
+                </p>
+            </div>
+        </div>
     @endif
 
-    <div class="flex flex-col items-center justify-between space-y-3">
-        <flux:button wire:click="sendVerification" variant="primary" class="w-full">
-            {{ __('Resend verification email') }}
-        </flux:button>
+    <div class="flex flex-col space-y-4">
+        <button 
+            wire:click="sendVerification" 
+            wire:loading.attr="disabled"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+            <span wire:loading.remove>Resend Verification Email</span>
+            <span wire:loading class="flex items-center justify-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Sending...
+            </span>
+        </button>
 
-        <flux:link class="text-sm cursor-pointer" wire:click="logout">
-            {{ __('Log out') }}
-        </flux:link>
+        <button 
+            wire:click="logout" 
+            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+        >
+            Log Out
+        </button>
+    </div>
+
+    <!-- Help Text -->
+    <div class="text-center">
+        <p class="text-sm text-gray-600">
+            Didn't receive the email? Check your spam folder or contact 
+            <a href="mailto:support@kenha.co.ke" class="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
+                support@kenha.co.ke
+            </a>
+        </p>
     </div>
 </div>

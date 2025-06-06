@@ -17,6 +17,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public string $password = '';
     public string $password_confirmation = '';
 
+    public string $title = 'Reset Password';
+    public string $description = 'Enter your email and new password to reset your account password.';
+
     /**
      * Mount the component.
      */
@@ -68,48 +71,98 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
-
+<div class="flex flex-col space-y-6">
     <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+    @if (session('status'))
+        <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <p class="text-green-800 text-sm">{{ session('status') }}</p>
+            </div>
+        </div>
+    @endif
 
-    <form wire:submit="resetPassword" class="flex flex-col gap-6">
+    <form wire:submit="resetPassword" class="space-y-6">
         <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email')"
-            type="email"
-            required
-            autocomplete="email"
-        />
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                Email Address <span class="text-red-500">*</span>
+            </label>
+            <input
+                wire:model="email"
+                id="email"
+                type="email"
+                required
+                autocomplete="email"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+            />
+            @error('email')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
 
         <!-- Password -->
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Password')"
-            viewable
-        />
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                New Password <span class="text-red-500">*</span>
+            </label>
+            <input
+                wire:model="password"
+                id="password"
+                type="password"
+                required
+                autocomplete="new-password"
+                placeholder="Enter new password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+            />
+            @error('password')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
 
         <!-- Confirm Password -->
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
-
-        <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Reset password') }}
-            </flux:button>
+        <div>
+            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+                Confirm New Password <span class="text-red-500">*</span>
+            </label>
+            <input
+                wire:model="password_confirmation"
+                id="password_confirmation"
+                type="password"
+                required
+                autocomplete="new-password"
+                placeholder="Confirm new password"
+                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200"
+            />
+            @error('password_confirmation')
+                <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
+
+        <button 
+            type="submit" 
+            wire:loading.attr="disabled"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+            <span wire:loading.remove>Reset Password</span>
+            <span wire:loading class="flex items-center justify-center">
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Resetting...
+            </span>
+        </button>
     </form>
+
+    <div class="text-center">
+        <p class="text-sm text-gray-600">
+            Remember your password? 
+            <a href="{{ route('login') }}" wire:navigate class="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
+                Sign in here
+            </a>
+        </p>
+    </div>
 </div>
