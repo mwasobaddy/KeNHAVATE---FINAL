@@ -125,16 +125,16 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
 <div class="space-y-6">
     <!-- Status Alert -->
-    <div class="rounded-lg bg-[#F8EBD5] border border-[#FFF200] p-6">
+    <div class="rounded-lg bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 p-6">
         <div class="flex items-center">
             <div class="flex-shrink-0">
-                <svg class="h-8 w-8 text-[#FFF200]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="h-8 w-8 text-[#FFF200] dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
                 </svg>
             </div>
             <div class="ml-4">
-                <h3 class="text-lg font-medium text-[#231F20]">Account Permanently Banned</h3>
-                <div class="mt-2 text-sm text-[#231F20]">
+                <h3 class="text-lg font-medium text-[#231F20] dark:text-white">Account Permanently Banned</h3>
+                <div class="mt-2 text-sm text-[#231F20] dark:text-zinc-300">
                     <p>Your account has been banned due to violations of our community guidelines or terms of service. You cannot access the KeNHAVATE Innovation Portal or submit ideas and challenges.</p>
                 </div>
             </div>
@@ -143,9 +143,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     @if($canSendAppeal)
         <!-- Appeal Instructions -->
-        <div class="rounded-lg bg-[#F8EBD5] border border-[#FFF200] p-6">
-            <h3 class="text-lg font-medium text-[#231F20] mb-2">Submit an Appeal</h3>
-            <p class="text-[#231F20]">
+        <div class="rounded-lg bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 p-6">
+            <h3 class="text-lg font-medium text-[#231F20] dark:text-white mb-2">Submit an Appeal</h3>
+            <p class="text-[#231F20] dark:text-zinc-300">
                 If you believe your account was banned in error, you may submit an appeal. 
                 Please provide a detailed explanation of why you think the ban should be reviewed.
                 <strong>You can only submit one appeal per day.</strong>
@@ -153,15 +153,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
 
         @if(session('success'))
-            <div class="rounded-lg bg-[#F8EBD5] border border-[#FFF200] p-4">
+            <div class="rounded-lg bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 p-4">
                 <div class="flex">
                     <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-[#FFF200]" viewBox="0 0 20 20" fill="currentColor">
+                        <svg class="h-5 w-5 text-[#FFF200] dark:text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-[#231F20]">{{ session('success') }}</p>
+                        <p class="text-sm font-medium text-[#231F20] dark:text-white">{{ session('success') }}</p>
                     </div>
                 </div>
             </div>
@@ -170,27 +170,27 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <!-- Appeal Form -->
         <form wire:submit="sendAppeal" class="space-y-6">
             <div>
-                <label for="message" class="block text-sm font-medium text-[#231F20] mb-2">
+                <label for="message" class="block text-sm font-medium text-[#231F20] dark:text-white mb-2">
                     Appeal Message <span class="text-red-500">*</span>
                 </label>
                 <textarea 
                     wire:model="message" 
                     id="message"
                     rows="6" 
-                    class="block w-full rounded-lg border-[#9B9EA4] shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200]"
+                    class="block w-full rounded-lg border-[#9B9EA4] dark:border-zinc-600 shadow-sm focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200] dark:focus:ring-yellow-400 dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400"
                     placeholder="Please explain why you believe your account was banned in error and why it should be reinstated..."
                     required
                 ></textarea>
                 @error('message')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
-                <p class="text-xs text-[#9B9EA4] mt-1">Minimum 10 characters, maximum 1000 characters</p>
+                <p class="text-xs text-[#9B9EA4] dark:text-zinc-400 mt-1">Minimum 10 characters, maximum 1000 characters</p>
             </div>
 
             <button 
                 type="submit" 
                 wire:loading.attr="disabled"
-                class="w-full justify-center rounded-lg bg-[#FFF200] px-4 py-3 text-sm font-semibold text-[#231F20] shadow-lg hover:shadow-xl hover:bg-[#FFF200]/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] disabled:opacity-50 transition-all duration-200"
+                class="w-full justify-center rounded-lg bg-[#FFF200] dark:bg-yellow-400 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-zinc-900 shadow-lg hover:shadow-xl hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] dark:focus-visible:outline-yellow-400 disabled:opacity-50 transition-all duration-200"
             >
                 <span wire:loading.remove>Submit Appeal</span>
                 <span wire:loading>Submitting...</span>
@@ -198,38 +198,38 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </form>
     @else
         <!-- Appeal Status -->
-        <div class="rounded-lg bg-[#F8EBD5] border border-[#FFF200] p-6">
+        <div class="rounded-lg bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 p-6">
             @if($lastAppeal)
-                <h3 class="text-lg font-medium text-[#231F20] mb-2">Appeal Status</h3>
-                <p class="text-[#231F20] mb-4">
+                <h3 class="text-lg font-medium text-[#231F20] dark:text-white mb-2">Appeal Status</h3>
+                <p class="text-[#231F20] dark:text-zinc-300 mb-4">
                     You submitted an appeal on {{ $lastAppeal->created_at->format('M d, Y \a\t g:i A') }}.
                 </p>
                 
                 @if($lastAppeal->status === 'pending')
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <div class="w-2 h-2 bg-[#FFF200] rounded-full animate-pulse"></div>
+                            <div class="w-2 h-2 bg-[#FFF200] dark:bg-yellow-400 rounded-full animate-pulse"></div>
                         </div>
-                        <p class="ml-2 text-[#231F20]">
+                        <p class="ml-2 text-[#231F20] dark:text-zinc-300">
                             <strong>Status:</strong> Under Review - Your appeal is being reviewed by our administrators.
                         </p>
                     </div>
                 @elseif($lastAppeal->status === 'reviewed')
-                    <p class="text-[#231F20]">
+                    <p class="text-[#231F20] dark:text-zinc-300">
                         <strong>Status:</strong> Reviewed - Your appeal has been reviewed.
                         @if($lastAppeal->admin_response)
                             <br><strong>Response:</strong> {{ $lastAppeal->admin_response }}
                         @endif
                     </p>
                 @elseif($lastAppeal->status === 'approved')
-                    <p class="text-green-700">
+                    <p class="text-green-700 dark:text-green-400">
                         <strong>Status:</strong> Approved - Your appeal has been approved. Please try logging in again.
                         @if($lastAppeal->admin_response)
                             <br><strong>Response:</strong> {{ $lastAppeal->admin_response }}
                         @endif
                     </p>
                 @elseif($lastAppeal->status === 'rejected')
-                    <p class="text-red-700">
+                    <p class="text-red-700 dark:text-red-400">
                         <strong>Status:</strong> Rejected - Your appeal has been rejected.
                         @if($lastAppeal->admin_response)
                             <br><strong>Response:</strong> {{ $lastAppeal->admin_response }}
@@ -239,8 +239,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
             @endif
             
             @if($hoursUntilNextAppeal > 0)
-                <div class="mt-4 p-4 bg-[#FFF200]/20 rounded-lg">
-                    <p class="text-[#231F20] text-sm">
+                <div class="mt-4 p-4 bg-[#FFF200]/20 dark:bg-yellow-400/20 rounded-lg">
+                    <p class="text-[#231F20] dark:text-white text-sm">
                         You can submit another appeal in <span class="font-medium">{{ $hoursUntilNextAppeal }} hours</span>.
                     </p>
                 </div>
@@ -249,17 +249,17 @@ new #[Layout('components.layouts.auth')] class extends Component {
     @endif
 
     <!-- Action Buttons -->
-    <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-[#9B9EA4]">
+    <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-[#9B9EA4] dark:border-zinc-600">
         <button 
             wire:click="logout"
-            class="flex-1 justify-center rounded-lg border border-[#9B9EA4] bg-white px-4 py-3 text-sm font-semibold text-[#231F20] shadow-lg hover:shadow-xl hover:bg-[#F8EBD5] transition-all duration-200"
+            class="flex-1 justify-center rounded-lg border border-[#9B9EA4] dark:border-zinc-600 bg-white dark:bg-zinc-800/50 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-white shadow-lg hover:shadow-xl hover:bg-[#F8EBD5] dark:hover:bg-zinc-700/50 transition-all duration-200"
         >
             Back to Login
         </button>
         
         <a 
             href="mailto:support@kenha.co.ke?subject=Account%20Ban%20Appeal" 
-            class="flex-1 justify-center rounded-lg bg-[#FFF200] px-4 py-3 text-sm font-semibold text-[#231F20] shadow-lg hover:shadow-xl hover:bg-[#FFF200]/90 text-center transition-all duration-200"
+            class="flex-1 justify-center rounded-lg bg-[#FFF200] dark:bg-yellow-400 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-zinc-900 shadow-lg hover:shadow-xl hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 text-center transition-all duration-200"
         >
             Contact Support Directly
         </a>

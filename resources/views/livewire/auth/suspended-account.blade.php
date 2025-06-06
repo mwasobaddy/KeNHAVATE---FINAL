@@ -128,18 +128,18 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
 <div class="flex flex-col space-y-6">
     <!-- Account Status Alert -->
-    <div class="bg-[#F8EBD5] border border-[#FFF200] rounded-xl p-6">
+    <div class="bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 rounded-xl p-6">
         <div class="flex items-center mb-3">
             <div class="flex-shrink-0">
-                <svg class="w-8 h-8 text-[#FFF200]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-8 h-8 text-[#FFF200] dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
                 </svg>
             </div>
             <div class="ml-3">
-                <h3 class="text-lg font-semibold text-[#231F20]">Account Temporarily Suspended</h3>
+                <h3 class="text-lg font-semibold text-[#231F20] dark:text-white">Account Temporarily Suspended</h3>
             </div>
         </div>
-        <p class="text-[#231F20]">
+        <p class="text-[#231F20] dark:text-zinc-300">
             Your account has been temporarily suspended due to policy violations or security concerns. 
             During this suspension period, you cannot access the KeNHAVATE Innovation Portal.
         </p>
@@ -149,51 +149,51 @@ new #[Layout('components.layouts.auth')] class extends Component {
         <!-- Appeal Form -->
         <div class="space-y-6">
             <div>
-                <h2 class="text-xl font-semibold text-[#231F20] mb-2">Submit an Appeal</h2>
-                <p class="text-[#9B9EA4] text-sm">
+                <h2 class="text-xl font-semibold text-[#231F20] dark:text-white mb-2">Submit an Appeal</h2>
+                <p class="text-[#9B9EA4] dark:text-zinc-400 text-sm">
                     If you believe your account was suspended in error, you may submit an appeal. 
                     Please provide a detailed explanation. <strong>You can only submit one appeal per day.</strong>
                 </p>
             </div>
 
             @if(session('success'))
-                <div class="bg-[#F8EBD5] border border-[#FFF200] rounded-xl p-4">
+                <div class="bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 rounded-xl p-4">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 text-[#FFF200] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-[#FFF200] dark:text-yellow-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        <p class="text-[#231F20] text-sm">{{ session('success') }}</p>
+                        <p class="text-[#231F20] dark:text-white text-sm">{{ session('success') }}</p>
                     </div>
                 </div>
             @endif
 
             <form wire:submit="sendAppeal" class="space-y-6">
                 <div>
-                    <label for="message" class="block text-sm font-medium text-[#231F20] mb-2">
+                    <label for="message" class="block text-sm font-medium text-[#231F20] dark:text-white mb-2">
                         Appeal Message <span class="text-red-500">*</span>
                     </label>
                     <textarea 
                         wire:model="message" 
                         id="message"
                         rows="6" 
-                        class="w-full px-4 py-3 border border-[#9B9EA4] rounded-xl focus:ring-2 focus:ring-[#FFF200] focus:border-transparent resize-none"
+                        class="w-full px-4 py-3 border border-[#9B9EA4] dark:border-zinc-600 rounded-xl focus:ring-2 focus:ring-[#FFF200] focus:border-transparent resize-none dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400"
                         placeholder="Please explain why you believe your account was suspended in error and why the suspension should be lifted..."
                         required
                     ></textarea>
                     @error('message')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                    <p class="text-xs text-[#9B9EA4] mt-1">Minimum 10 characters, maximum 1000 characters</p>
+                    <p class="text-xs text-[#9B9EA4] dark:text-zinc-400 mt-1">Minimum 10 characters, maximum 1000 characters</p>
                 </div>
 
                 <button 
                     type="submit" 
                     wire:loading.attr="disabled"
-                    class="w-full bg-[#FFF200] hover:bg-[#FFF200]/90 text-[#231F20] font-semibold py-3 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                    class="w-full bg-[#FFF200] dark:bg-yellow-400 hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 text-[#231F20] dark:text-zinc-900 font-semibold py-3 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
                 >
                     <span wire:loading.remove>Submit Appeal</span>
                     <span wire:loading class="flex items-center justify-center">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-[#231F20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-[#231F20] dark:text-zinc-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -204,49 +204,49 @@ new #[Layout('components.layouts.auth')] class extends Component {
         </div>
     @else
         <!-- Appeal Status -->
-        <div class="bg-[#F8EBD5] border border-[#FFF200] rounded-xl p-6">
+        <div class="bg-[#F8EBD5] dark:bg-zinc-800/50 border border-[#FFF200] dark:border-yellow-400 rounded-xl p-6">
             @if($lastAppeal)
-                <h3 class="text-lg font-semibold text-[#231F20] mb-3">Appeal Status</h3>
+                <h3 class="text-lg font-semibold text-[#231F20] dark:text-white mb-3">Appeal Status</h3>
                 <div class="space-y-3">
-                    <p class="text-[#231F20]">
+                    <p class="text-[#231F20] dark:text-zinc-300">
                         <strong>Submitted:</strong> {{ $lastAppeal->created_at->format('M d, Y \a\t g:i A') }}
                     </p>
                     
                     <div class="flex items-center space-x-2">
-                        <strong class="text-[#231F20]">Status:</strong>
+                        <strong class="text-[#231F20] dark:text-white">Status:</strong>
                         @if($lastAppeal->status === 'pending')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FFF200] text-[#231F20]">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#FFF200] dark:bg-yellow-400 text-[#231F20] dark:text-zinc-900">
                                 Under Review
                             </span>
-                            <span class="text-[#231F20]">Your appeal is being reviewed by our administrators.</span>
+                            <span class="text-[#231F20] dark:text-zinc-300">Your appeal is being reviewed by our administrators.</span>
                         @elseif($lastAppeal->status === 'reviewed')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#9B9EA4] text-white">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#9B9EA4] dark:bg-zinc-600 text-white">
                                 Reviewed
                             </span>
                         @elseif($lastAppeal->status === 'approved')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-400">
                                 Approved
                             </span>
-                            <span class="text-green-700">Your appeal has been approved. Please try logging in again.</span>
+                            <span class="text-green-700 dark:text-green-400">Your appeal has been approved. Please try logging in again.</span>
                         @elseif($lastAppeal->status === 'rejected')
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-400">
                                 Rejected
                             </span>
                         @endif
                     </div>
 
                     @if($lastAppeal->admin_response)
-                        <div class="bg-white border border-[#9B9EA4] rounded-lg p-4 mt-3">
-                            <p class="text-sm font-medium text-[#231F20] mb-1">Administrator Response:</p>
-                            <p class="text-[#9B9EA4] text-sm">{{ $lastAppeal->admin_response }}</p>
+                        <div class="bg-white dark:bg-zinc-800/50 border border-[#9B9EA4] dark:border-zinc-600 rounded-lg p-4 mt-3">
+                            <p class="text-sm font-medium text-[#231F20] dark:text-white mb-1">Administrator Response:</p>
+                            <p class="text-[#9B9EA4] dark:text-zinc-400 text-sm">{{ $lastAppeal->admin_response }}</p>
                         </div>
                     @endif
                 </div>
             @endif
             
             @if($hoursUntilNextAppeal > 0)
-                <div class="mt-4 p-3 bg-[#FFF200]/20 border border-[#FFF200] rounded-lg">
-                    <p class="text-[#231F20] text-sm">
+                <div class="mt-4 p-3 bg-[#FFF200]/20 dark:bg-yellow-400/20 border border-[#FFF200] dark:border-yellow-400 rounded-lg">
+                    <p class="text-[#231F20] dark:text-white text-sm">
                         <strong>Next Appeal:</strong> You can submit another appeal in {{ $hoursUntilNextAppeal }} hours.
                     </p>
                 </div>
@@ -258,14 +258,14 @@ new #[Layout('components.layouts.auth')] class extends Component {
     <div class="flex flex-col sm:flex-row gap-4">
         <button 
             wire:click="logout"
-            class="flex-1 bg-[#9B9EA4] hover:bg-[#9B9EA4]/90 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+            class="flex-1 bg-[#9B9EA4] dark:bg-zinc-600 hover:bg-[#9B9EA4]/90 dark:hover:bg-zinc-500 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
         >
             Back to Login
         </button>
         
         <a 
             href="mailto:support@kenha.co.ke?subject=Account%20Suspension%20Appeal" 
-            class="flex-1 bg-white border border-[#9B9EA4] hover:bg-[#F8EBD5] text-[#231F20] font-semibold py-3 px-6 rounded-xl transition-all duration-200 text-center shadow-lg hover:shadow-xl"
+            class="flex-1 bg-white dark:bg-zinc-800/50 border border-[#9B9EA4] dark:border-zinc-600 hover:bg-[#F8EBD5] dark:hover:bg-zinc-700/50 text-[#231F20] dark:text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 text-center shadow-lg hover:shadow-xl"
         >
             Contact Support Directly
         </a>
