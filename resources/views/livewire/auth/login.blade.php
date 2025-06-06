@@ -346,17 +346,66 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     <div class="flex justify-center space-x-3 mb-4" 
                          x-data="{ 
                              otp: ['', '', '', '', '', ''],
-                             focusNext(index) {
-                                 if (index < 5 && this.otp[index] !== '') {
-                                     this.$refs['otp' + (index + 1)].focus();
-                                 }
-                                 this.updateOtp();
+                             currentIndex: 0,
+                             init() {
+                                 // Auto-focus first input when component initializes
+                                 this.$nextTick(() => {
+                                     this.$refs['otp0'].focus();
+                                 });
                              },
-                             focusPrev(index) {
-                                 if (index > 0) {
-                                     this.$refs['otp' + (index - 1)].focus();
+                             handleInput(index, event) {
+                                 const value = event.target.value;
+                                 
+                                 // Only allow single digit numbers
+                                 if (value.length > 1) {
+                                     event.target.value = value.slice(-1);
+                                     this.otp[index] = event.target.value;
+                                 } else if (/^[0-9]$/.test(value) || value === '') {
+                                     this.otp[index] = value;
+                                 } else {
+                                     // Reject non-numeric input
+                                     event.target.value = this.otp[index];
+                                     return;
                                  }
+                                 
                                  this.updateOtp();
+                                 
+                                 // Auto-advance to next input if digit was entered
+                                 if (value !== '' && index < 5) {
+                                     this.focusInput(index + 1);
+                                 }
+                             },
+                             handleKeyDown(index, event) {
+                                 // Handle arrow key navigation
+                                 if (event.key === 'ArrowRight' && index < 5) {
+                                     event.preventDefault();
+                                     this.focusInput(index + 1);
+                                 } else if (event.key === 'ArrowLeft' && index > 0) {
+                                     event.preventDefault();
+                                     this.focusInput(index - 1);
+                                 } else if (event.key === 'Backspace') {
+                                     // If current field is empty, move to previous and clear it
+                                     if (this.otp[index] === '' && index > 0) {
+                                         event.preventDefault();
+                                         this.otp[index - 1] = '';
+                                         this.updateOtp();
+                                         this.focusInput(index - 1);
+                                     } else if (this.otp[index] !== '') {
+                                         // Clear current field
+                                         this.otp[index] = '';
+                                         this.updateOtp();
+                                     }
+                                 } else if (event.key === 'Delete') {
+                                     // Clear current field
+                                     this.otp[index] = '';
+                                     this.updateOtp();
+                                 }
+                             },
+                             focusInput(index) {
+                                 if (index >= 0 && index < 6) {
+                                     this.currentIndex = index;
+                                     this.$refs['otp' + index].focus();
+                                 }
                              },
                              updateOtp() {
                                  $wire.set('otp', this.otp.join(''));
@@ -365,25 +414,36 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                  event.preventDefault();
                                  const paste = (event.clipboardData || window.clipboardData).getData('text');
                                  const numbers = paste.replace(/\D/g, '').split('').slice(0, 6);
+                                 
+                                 // Clear all inputs first
                                  for (let i = 0; i < 6; i++) {
-                                     this.otp[i] = numbers[i] || '';
+                                     this.otp[i] = '';
                                  }
+                                 
+                                 // Fill with pasted numbers
+                                 for (let i = 0; i < numbers.length && i < 6; i++) {
+                                     this.otp[i] = numbers[i];
+                                 }
+                                 
                                  this.updateOtp();
-                                 if (numbers.length > 0) {
-                                     this.$refs['otp' + Math.min(numbers.length - 1, 5)].focus();
-                                 }
+                                 
+                                 // Focus the next empty input or the last filled one
+                                 const nextIndex = Math.min(numbers.length, 5);
+                                 this.focusInput(nextIndex);
                              }
                          }">
                         <template x-for="(digit, index) in otp" :key="index">
                             <input 
                                 :x-ref="'otp' + index"
                                 type="text" 
+                                inputmode="numeric"
                                 maxlength="1"
                                 pattern="[0-9]"
                                 x-model="otp[index]"
-                                @input="focusNext(index)"
-                                @keydown.backspace="if (!otp[index]) focusPrev(index)"
+                                @input="handleInput(index, $event)"
+                                @keydown="handleKeyDown(index, $event)"
                                 @paste="handlePaste($event)"
+                                @focus="currentIndex = index"
                                 class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
                                 autocomplete="off"
                             />
@@ -467,13 +527,5 @@ document.addEventListener('livewire:initialized', () => {
         // Countdown is now handled by Alpine.js with proper entanglement
         console.log('Countdown started');
     });
-});
-
-// Auto-focus first OTP input when OTP form is shown
-document.addEventListener('livewire:updated', () => {
-    const firstOtpInput = document.querySelector('[x-ref="otp0"]');
-    if (firstOtpInput && document.querySelector('.space-y-6 form[wire\\:submit="verifyOTP"]')) {
-        setTimeout(() => firstOtpInput.focus(), 100);
-    }
 });
 </script>
