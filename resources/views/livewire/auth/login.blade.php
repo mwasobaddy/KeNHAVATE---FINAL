@@ -340,19 +340,60 @@ new #[Layout('components.layouts.auth')] class extends Component {
             <form wire:submit="verifyOTP" class="space-y-6">
                 <!-- OTP Input -->
                 <div>
-                    <flux:input
-                        wire:model="otp"
-                        label="Verification Code"
-                        type="text"
-                        required
-                        autofocus
-                        autocomplete="one-time-code"
-                        placeholder="000000"
-                        maxlength="6"
-                        pattern="[0-9]{6}"
-                        class="text-center text-2xl tracking-[0.5em] font-mono block w-full rounded-lg border-[#9B9EA4] dark:border-zinc-600 shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200] dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400"
-                    />
-                    <p class="mt-2 text-sm text-[#9B9EA4] dark:text-zinc-400">Enter the 6-digit code sent to <span class="font-medium text-[#231F20] dark:text-white">{{ $email }}</span></p>
+                    <label class="block text-sm font-medium text-[#231F20] dark:text-white mb-4">Verification Code</label>
+                    
+                    <!-- OTP Input Boxes -->
+                    <div class="flex justify-center space-x-3 mb-4" 
+                         x-data="{ 
+                             otp: ['', '', '', '', '', ''],
+                             focusNext(index) {
+                                 if (index < 5 && this.otp[index] !== '') {
+                                     this.$refs['otp' + (index + 1)].focus();
+                                 }
+                                 this.updateOtp();
+                             },
+                             focusPrev(index) {
+                                 if (index > 0) {
+                                     this.$refs['otp' + (index - 1)].focus();
+                                 }
+                                 this.updateOtp();
+                             },
+                             updateOtp() {
+                                 $wire.set('otp', this.otp.join(''));
+                             },
+                             handlePaste(event) {
+                                 event.preventDefault();
+                                 const paste = (event.clipboardData || window.clipboardData).getData('text');
+                                 const numbers = paste.replace(/\D/g, '').split('').slice(0, 6);
+                                 for (let i = 0; i < 6; i++) {
+                                     this.otp[i] = numbers[i] || '';
+                                 }
+                                 this.updateOtp();
+                                 if (numbers.length > 0) {
+                                     this.$refs['otp' + Math.min(numbers.length - 1, 5)].focus();
+                                 }
+                             }
+                         }">
+                        <template x-for="(digit, index) in otp" :key="index">
+                            <input 
+                                :x-ref="'otp' + index"
+                                type="text" 
+                                maxlength="1"
+                                pattern="[0-9]"
+                                x-model="otp[index]"
+                                @input="focusNext(index)"
+                                @keydown.backspace="if (!otp[index]) focusPrev(index)"
+                                @paste="handlePaste($event)"
+                                class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                                autocomplete="off"
+                            />
+                        </template>
+                    </div>
+                    
+                    <!-- Hidden input for Livewire -->
+                    <input type="hidden" wire:model="otp" />
+                    
+                    <p class="text-center text-sm text-[#9B9EA4] dark:text-zinc-400">Enter the 6-digit code sent to <span class="font-medium text-[#231F20] dark:text-white">{{ $email }}</span></p>
                 </div>
 
                 <!-- Action Buttons -->
@@ -373,17 +414,25 @@ new #[Layout('components.layouts.auth')] class extends Component {
                         </flux:button>
                         
                         @if ($resendCooldown > 0)
-                            <span class="text-sm text-[#9B9EA4] dark:text-zinc-400">
-                                Resend in <span x-data="{ countdown: @entangle('resendCooldown') }" 
-                                    x-init="
-                                        $watch('countdown', value => {
-                                            if (value > 0) {
-                                                setTimeout(() => countdown--, 1000)
-                                            }
-                                        })
-                                    " 
-                                    x-text="countdown"
-                                    class="font-medium text-[#FFF200] dark:text-yellow-400">{{ $resendCooldown }}</span>s
+                            <span class="text-sm text-[#9B9EA4] dark:text-zinc-400"
+                                  x-data="{ countdown: @entangle('resendCooldown').live }" 
+                                  x-init="
+                                      let timer = setInterval(() => {
+                                          if (countdown > 0) {
+                                              countdown--;
+                                          } else {
+                                              clearInterval(timer);
+                                          }
+                                      }, 1000);
+                                      
+                                      // Clean up on component destroy
+                                      $watch('countdown', value => {
+                                          if (value <= 0) {
+                                              clearInterval(timer);
+                                          }
+                                      });
+                                  ">
+                                Resend in <span x-text="countdown" class="font-medium text-[#FFF200] dark:text-yellow-400"></span>s
                             </span>
                         @else
                             <flux:button 
@@ -415,7 +464,16 @@ new #[Layout('components.layouts.auth')] class extends Component {
 <script>
 document.addEventListener('livewire:initialized', () => {
     Livewire.on('start-countdown', () => {
-        // Countdown is handled by Alpine.js in the template
+        // Countdown is now handled by Alpine.js with proper entanglement
+        console.log('Countdown started');
     });
+});
+
+// Auto-focus first OTP input when OTP form is shown
+document.addEventListener('livewire:updated', () => {
+    const firstOtpInput = document.querySelector('[x-ref="otp0"]');
+    if (firstOtpInput && document.querySelector('.space-y-6 form[wire\\:submit="verifyOTP"]')) {
+        setTimeout(() => firstOtpInput.focus(), 100);
+    }
 });
 </script>
