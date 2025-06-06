@@ -60,6 +60,14 @@ class ChallengeSubmission extends Model
     }
 
     /**
+     * Challenge-specific reviews for this submission
+     */
+    public function challengeReviews()
+    {
+        return $this->hasMany(ChallengeReview::class);
+    }
+
+    /**
      * Collaborations for this submission
      */
     public function collaborations()

@@ -59,7 +59,7 @@ class NotificationService
             'message' => $data['message'],
             'related_type' => $data['related_type'] ?? null,
             'related_id' => $data['related_id'] ?? null,
-            'metadata' => $this->buildMetadata($data),
+            'data' => json_encode($this->buildMetadata($data)),
             'read_at' => null,
         ]);
     }

@@ -276,8 +276,28 @@ class User extends Authenticatable
      */
     public function canReview($reviewable): bool
     {
-        // Users cannot review their own submissions
-        if (method_exists($reviewable, 'author') && $reviewable->author_id === $this->id) {
+        // Handle different types of reviewable entities
+        if (is_null($reviewable)) {
+            return false;
+        }
+
+        // For Challenge Submissions
+        if ($reviewable instanceof \App\Models\ChallengeSubmission) {
+            // Cannot review own submissions
+            if ($reviewable->participant_id === $this->id) {
+                return false;
+            }
+            
+            // Cannot review if user is a team member
+            if ($reviewable->team_members && in_array($this->id, $reviewable->team_members)) {
+                return false;
+            }
+            
+            return true;
+        }
+
+        // For Ideas (existing logic)
+        if (method_exists($reviewable, 'author_id') && $reviewable->author_id === $this->id) {
             return false;
         }
 

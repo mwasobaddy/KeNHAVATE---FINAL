@@ -38,7 +38,9 @@ return new class extends Migration
                 'otp_validation_failed',
                 'new_device_login',
                 'device_trusted',
-                'password_change'
+                'password_change',
+                'terms_accepted',
+                'terms_disagreed'
             ]);
             $table->string('entity_type')->nullable(); // Model class name
             $table->unsignedBigInteger('entity_id')->nullable(); // Model ID
