@@ -175,7 +175,7 @@
                             </div>
                         </div>
 
-                        <!-- Bottom Stats -->
+                        {{-- <!-- Bottom Stats -->
                         <div class="mt-8 grid grid-cols-2 gap-6">
                             <div class="text-center">
                                 <div class="text-2xl font-bold text-[#231F20] dark:text-white">500+</div>
@@ -185,7 +185,7 @@
                                 <div class="text-2xl font-bold text-[#231F20] dark:text-white">98%</div>
                                 <div class="text-[#9B9EA4] dark:text-zinc-400 text-sm">User Satisfaction</div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

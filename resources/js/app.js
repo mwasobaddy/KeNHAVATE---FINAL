@@ -9,7 +9,7 @@ window.gsap = gsap;
 // Initialize Flowbite components
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize any custom animations or components here
-    console.log('KeNHAVATE Innovation Portal initialized');
+    // console.log('KeNHAVATE Innovation Portal initialized');
 });
 
 // Livewire hooks for GSAP animations

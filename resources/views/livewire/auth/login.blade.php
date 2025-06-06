@@ -346,51 +346,63 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     <div class="flex justify-center space-x-3 mb-4" 
                          x-data="{ 
                              otp: ['', '', '', '', '', ''],
-                             currentIndex: 0,
                              init() {
                                  // Auto-focus first input when component initializes
                                  this.$nextTick(() => {
-                                     this.$refs['otp0'].focus();
+                                     this.$refs.otp0?.focus();
                                  });
                              },
                              handleInput(index, event) {
-                                 const value = event.target.value;
+                                 let value = event.target.value;
                                  
-                                 // Only allow single digit numbers
-                                 if (value.length > 1) {
-                                     event.target.value = value.slice(-1);
-                                     this.otp[index] = event.target.value;
-                                 } else if (/^[0-9]$/.test(value) || value === '') {
-                                     this.otp[index] = value;
-                                 } else {
-                                     // Reject non-numeric input
-                                     event.target.value = this.otp[index];
-                                     return;
+                                 // Only allow numeric input and single character
+                                 if (!/^[0-9]*$/.test(value)) {
+                                     // Remove non-numeric characters
+                                     value = value.replace(/[^0-9]/g, '');
                                  }
                                  
+                                 // Take only the last entered digit if multiple
+                                 if (value.length > 1) {
+                                     value = value.slice(-1);
+                                 }
+                                 
+                                 // Update the input value and model
+                                 event.target.value = value;
+                                 this.otp[index] = value;
                                  this.updateOtp();
                                  
                                  // Auto-advance to next input if digit was entered
-                                 if (value !== '' && index < 5) {
-                                     this.focusInput(index + 1);
+                                 if (value && index < 5) {
+                                     const nextInput = this.$refs['otp' + (index + 1)];
+                                     if (nextInput) {
+                                         nextInput.focus();
+                                     }
                                  }
                              },
                              handleKeyDown(index, event) {
+                                 // Prevent non-numeric input except for control keys
+                                 if (!/[0-9]/.test(event.key) && 
+                                     !['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+                                     event.preventDefault();
+                                     return;
+                                 }
+                                 
                                  // Handle arrow key navigation
                                  if (event.key === 'ArrowRight' && index < 5) {
                                      event.preventDefault();
-                                     this.focusInput(index + 1);
+                                     this.$refs['otp' + (index + 1)]?.focus();
                                  } else if (event.key === 'ArrowLeft' && index > 0) {
                                      event.preventDefault();
-                                     this.focusInput(index - 1);
+                                     this.$refs['otp' + (index - 1)]?.focus();
                                  } else if (event.key === 'Backspace') {
                                      // If current field is empty, move to previous and clear it
                                      if (this.otp[index] === '' && index > 0) {
                                          event.preventDefault();
                                          this.otp[index - 1] = '';
+                                         this.$refs['otp' + (index - 1)].value = '';
                                          this.updateOtp();
-                                         this.focusInput(index - 1);
-                                     } else if (this.otp[index] !== '') {
+                                         this.$refs['otp' + (index - 1)]?.focus();
+                                     } else {
                                          // Clear current field
                                          this.otp[index] = '';
                                          this.updateOtp();
@@ -398,13 +410,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                  } else if (event.key === 'Delete') {
                                      // Clear current field
                                      this.otp[index] = '';
+                                     event.target.value = '';
                                      this.updateOtp();
-                                 }
-                             },
-                             focusInput(index) {
-                                 if (index >= 0 && index < 6) {
-                                     this.currentIndex = index;
-                                     this.$refs['otp' + index].focus();
                                  }
                              },
                              updateOtp() {
@@ -413,41 +420,108 @@ new #[Layout('components.layouts.auth')] class extends Component {
                              handlePaste(event) {
                                  event.preventDefault();
                                  const paste = (event.clipboardData || window.clipboardData).getData('text');
-                                 const numbers = paste.replace(/\D/g, '').split('').slice(0, 6);
+                                 const numbers = paste.replace(/[^0-9]/g, '').split('').slice(0, 6);
                                  
                                  // Clear all inputs first
                                  for (let i = 0; i < 6; i++) {
                                      this.otp[i] = '';
+                                     const input = this.$refs['otp' + i];
+                                     if (input) input.value = '';
                                  }
                                  
                                  // Fill with pasted numbers
                                  for (let i = 0; i < numbers.length && i < 6; i++) {
                                      this.otp[i] = numbers[i];
+                                     const input = this.$refs['otp' + i];
+                                     if (input) input.value = numbers[i];
                                  }
                                  
                                  this.updateOtp();
                                  
                                  // Focus the next empty input or the last filled one
                                  const nextIndex = Math.min(numbers.length, 5);
-                                 this.focusInput(nextIndex);
+                                 this.$refs['otp' + nextIndex]?.focus();
                              }
                          }">
-                        <template x-for="(digit, index) in otp" :key="index">
-                            <input 
-                                :x-ref="'otp' + index"
-                                type="text" 
-                                inputmode="numeric"
-                                maxlength="1"
-                                pattern="[0-9]"
-                                x-model="otp[index]"
-                                @input="handleInput(index, $event)"
-                                @keydown="handleKeyDown(index, $event)"
-                                @paste="handlePaste($event)"
-                                @focus="currentIndex = index"
-                                class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
-                                autocomplete="off"
-                            />
-                        </template>
+                        <!-- Individual OTP inputs -->
+                        <input 
+                            x-ref="otp0"
+                            type="text" 
+                            inputmode="numeric"
+                            maxlength="1"
+                            pattern="[0-9]"
+                            x-model="otp[0]"
+                            @input="handleInput(0, $event)"
+                            @keydown="handleKeyDown(0, $event)"
+                            @paste="handlePaste($event)"
+                            class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                            autocomplete="off"
+                        />
+                        <input 
+                            x-ref="otp1"
+                            type="text" 
+                            inputmode="numeric"
+                            maxlength="1"
+                            pattern="[0-9]"
+                            x-model="otp[1]"
+                            @input="handleInput(1, $event)"
+                            @keydown="handleKeyDown(1, $event)"
+                            @paste="handlePaste($event)"
+                            class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                            autocomplete="off"
+                        />
+                        <input 
+                            x-ref="otp2"
+                            type="text" 
+                            inputmode="numeric"
+                            maxlength="1"
+                            pattern="[0-9]"
+                            x-model="otp[2]"
+                            @input="handleInput(2, $event)"
+                            @keydown="handleKeyDown(2, $event)"
+                            @paste="handlePaste($event)"
+                            class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                            autocomplete="off"
+                        />
+                        <input 
+                            x-ref="otp3"
+                            type="text" 
+                            inputmode="numeric"
+                            maxlength="1"
+                            pattern="[0-9]"
+                            x-model="otp[3]"
+                            @input="handleInput(3, $event)"
+                            @keydown="handleKeyDown(3, $event)"
+                            @paste="handlePaste($event)"
+                            class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                            autocomplete="off"
+                        />
+                        <input 
+                            x-ref="otp4"
+                            type="text" 
+                            inputmode="numeric"
+                            maxlength="1"
+                            pattern="[0-9]"
+                            x-model="otp[4]"
+                            @input="handleInput(4, $event)"
+                            @keydown="handleKeyDown(4, $event)"
+                            @paste="handlePaste($event)"
+                            class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                            autocomplete="off"
+                        />
+                        <input 
+                            x-ref="otp5"
+                            type="text" 
+                            inputmode="numeric"
+                            maxlength="1"
+                            pattern="[0-9]"
+                            x-model="otp[5]"
+                            @input="handleInput(5, $event)"
+                            @keydown="handleKeyDown(5, $event)"
+                            @paste="handlePaste($event)"
+                            class="w-14 h-14 text-center text-lg font-bold rounded-full border-2 border-[#9B9EA4] dark:border-zinc-600 focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-2 focus:ring-[#FFF200] dark:focus:ring-yellow-400 focus:ring-opacity-50 bg-white dark:bg-zinc-800/50 text-[#231F20] dark:text-white transition-all duration-200 hover:border-[#FFF200] dark:hover:border-yellow-400"
+                            autocomplete="off"
+                        />
                     </div>
                     
                     <!-- Hidden input for Livewire -->
@@ -521,11 +595,11 @@ new #[Layout('components.layouts.auth')] class extends Component {
     @endif
 </div>
 
-<script>
+{{-- <script>
 document.addEventListener('livewire:initialized', () => {
     Livewire.on('start-countdown', () => {
         // Countdown is now handled by Alpine.js with proper entanglement
         console.log('Countdown started');
     });
 });
-</script>
+</script> --}}
