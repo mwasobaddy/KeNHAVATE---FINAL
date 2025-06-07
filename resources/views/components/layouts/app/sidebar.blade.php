@@ -40,9 +40,7 @@
                     <flux:navlist.item icon="home" :href="$dashboardRoute" :current="request()->routeIs('dashboard*')" wire:navigate>Dashboard</flux:navlist.item>
                     <flux:navlist.item icon="light-bulb" :href="route('ideas.index')" :current="request()->routeIs('ideas.*')" wire:navigate>Ideas</flux:navlist.item>
                     <flux:navlist.item icon="trophy" :href="route('challenges.index')" :current="request()->routeIs('challenges.*') || request()->routeIs('challenge-reviews.*')" wire:navigate>Challenges</flux:navlist.item>
-                    @if(auth()->user()->activeCollaborations()->count() > 0 || auth()->user()->collaborations()->where('status', 'pending')->count() > 0)
-                        <flux:navlist.item icon="users" href="/collaboration/dashboard" :current="request()->is('collaboration/*')" wire:navigate>Collaboration</flux:navlist.item>
-                    @endif
+                    <flux:navlist.item icon="users" :href="route('collaboration.dashboard')" :current="request()->routeIs('collaboration.*') || request()->routeIs('community.*')" wire:navigate>Collaboration</flux:navlist.item>
                     @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>Reviews</flux:navlist.item>
                     @endif
@@ -60,10 +58,12 @@
                     </flux:navlist.group>
                 @endif
 
-                @can('manage_users')
+                @can('view_users')
                     <flux:navlist.group heading="Administration" class="grid">
-                        <flux:navlist.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>User Management</flux:navlist.item>
-                        <flux:navlist.item icon="shield-check" :href="route('admin.roles')" :current="request()->routeIs('admin.roles')" wire:navigate>Role Management</flux:navlist.item>
+                        <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.*')" wire:navigate>User Management</flux:navlist.item>
+                        @can('view_roles')
+                        <flux:navlist.item icon="shield-check" :href="route('roles.index')" :current="request()->routeIs('roles.*')" wire:navigate>Role Management</flux:navlist.item>
+                        @endcan
                     </flux:navlist.group>
                 @endcan
             </flux:navlist>
@@ -150,9 +150,7 @@
                     <flux:navlist.item icon="home" :href="$dashboardRoute" :current="request()->routeIs('dashboard*')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="light-bulb" :href="route('ideas.index')" :current="request()->routeIs('ideas.*')" wire:navigate>{{ __('Ideas') }}</flux:navlist.item>
                     <flux:navlist.item icon="trophy" :href="route('challenges.index')" :current="request()->routeIs('challenges.*') || request()->routeIs('challenge-reviews.*')" wire:navigate>{{ __('Challenges') }}</flux:navlist.item>
-                    @if(auth()->user()->activeCollaborations()->count() > 0 || auth()->user()->collaborations()->where('status', 'pending')->count() > 0)
-                        <flux:navlist.item icon="users" href="/collaboration/dashboard" :current="request()->is('collaboration/*')" wire:navigate>{{ __('Collaboration') }}</flux:navlist.item>
-                    @endif
+                    <flux:navlist.item icon="users" :href="route('collaboration.dashboard')" :current="request()->routeIs('collaboration.*') || request()->routeIs('community.*')" wire:navigate>{{ __('Collaboration') }}</flux:navlist.item>
                     @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
                     @endif
@@ -170,10 +168,12 @@
                     </flux:navlist.group>
                 @endif
 
-                @can('manage_users')
+                @can('view_users')
                     <flux:navlist.group :heading="__('Administration')" class="grid">
-                        <flux:navlist.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User Management') }}</flux:navlist.item>
-                        <flux:navlist.item icon="shield-check" :href="route('admin.roles')" :current="request()->routeIs('admin.roles')" wire:navigate>{{ __('Role Management') }}</flux:navlist.item>
+                        <flux:navlist.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.*')" wire:navigate>{{ __('User Management') }}</flux:navlist.item>
+                        @can('view_roles')
+                        <flux:navlist.item icon="shield-check" :href="route('roles.index')" :current="request()->routeIs('roles.*')" wire:navigate>{{ __('Role Management') }}</flux:navlist.item>
+                        @endcan
                     </flux:navlist.group>
                 @endcan
             </flux:navlist>

@@ -4,8 +4,12 @@ namespace App\Providers;
 
 use App\Models\Challenge;
 use App\Models\ChallengeSubmission;
+use App\Models\User;
 use App\Policies\ChallengePolicy;
 use App\Policies\ChallengeSubmissionPolicy;
+use App\Policies\UserPolicy;
+use App\Policies\RolePolicy;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -18,6 +22,8 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Challenge::class => ChallengePolicy::class,
         ChallengeSubmission::class => ChallengeSubmissionPolicy::class,
+        User::class => UserPolicy::class,
+        Role::class => RolePolicy::class,
     ];
 
     /**

@@ -101,341 +101,455 @@ new class extends Component {
     }
 }; ?>
 
-<div class="min-h-screen bg-gradient-to-br from-[#F8EBD5] via-white to-[#F8EBD5] py-8">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header Navigation -->
-        <div class="mb-8">
-            <div class="flex items-center gap-4 mb-6">
-                <flux:button 
-                    wire:navigate 
-                    href="{{ route('challenges.index') }}" 
-                    variant="subtle"
-                    class="text-[#9B9EA4] hover:text-[#231F20]"
-                >
-                    <flux:icon.arrow-left class="w-5 h-5 mr-2" />
-                    Back to Challenges
-                </flux:button>
-                
-                <!-- Action Buttons -->
-                <div class="ml-auto flex gap-3">
-                    @if($this->canEdit())
-                        <flux:button 
-                            wire:navigate 
-                            href="{{ route('challenges.edit', $challenge) }}" 
-                            variant="outline"
-                            class="border-[#9B9EA4] text-[#9B9EA4] hover:bg-[#9B9EA4]/10 rounded-xl"
-                        >
-                            <flux:icon.pencil class="w-4 h-4 mr-2" />
-                            Edit
-                        </flux:button>
-                    @endif
-                    
-                    @if($this->canViewSubmissions())
-                        <flux:button 
-                            wire:navigate 
-                            href="{{ route('challenges.submissions', $challenge) }}" 
-                            variant="outline"
-                            class="border-[#231F20] text-[#231F20] hover:bg-[#231F20]/10 rounded-xl"
-                        >
-                            <flux:icon.document-text class="w-4 h-4 mr-2" />
-                            View Submissions ({{ $challenge->submissions->count() }})
-                        </flux:button>
-                    @endif
-                    
-                    @if($this->canSubmit())
-                        <flux:button 
-                            wire:navigate 
-                            href="{{ route('challenges.submit', $challenge) }}" 
-                            variant="primary"
-                            class="bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl font-semibold px-6"
-                        >
-                            <flux:icon.plus class="w-4 h-4 mr-2" />
-                            Submit Solution
-                        </flux:button>
-                    @endif
-                </div>
-            </div>
-        </div>
+{{-- Modern Challenge Detail Page with Glass Morphism & Enhanced UI --}}
+<div class="min-h-screen relative overflow-hidden">
+    {{-- Animated Background Elements --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-72 h-72 bg-[#FFF200]/60 dark:bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-[#F8EBD5]/30 dark:bg-amber-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-[#FFF200]/40 dark:bg-yellow-400/5 rounded-full blur-2xl animate-pulse delay-500"></div>
+    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Challenge Header -->
-                <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 overflow-hidden">
-                    <!-- Challenge Image/Icon -->
-                    <div class="h-64 bg-gradient-to-br from-[#FFF200]/20 to-[#F8EBD5] relative overflow-hidden">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="text-8xl text-[#231F20]/20">
-                                @switch($challenge->category)
-                                    @case('technology')
-                                        🚀
-                                        @break
-                                    @case('sustainability')
-                                        🌱
-                                        @break
-                                    @case('safety')
-                                        🛡️
-                                        @break
-                                    @case('innovation')
-                                        💡
-                                        @break
-                                    @case('infrastructure')
-                                        🏗️
-                                        @break
-                                    @case('efficiency')
-                                        ⚡
-                                        @break
-                                    @default
-                                        🏗️
-                                @endswitch
-                            </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {{-- Enhanced Header Navigation with Glass Morphism --}}
+        <section aria-labelledby="navigation-heading" class="group">
+            <h2 id="navigation-heading" class="sr-only">Challenge Navigation</h2>
+            <div class="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl p-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    {{-- Back Navigation --}}
+                    <flux:button 
+                        wire:navigate 
+                        href="{{ route('challenges.index') }}" 
+                        variant="subtle"
+                        class="group/back inline-flex items-center text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-zinc-100 transition-colors duration-300"
+                    >
+                        <div class="w-8 h-8 rounded-full bg-[#9B9EA4]/10 dark:bg-zinc-600/20 flex items-center justify-center mr-3 group-hover/back:bg-[#231F20]/10 transition-colors duration-300">
+                            <flux:icon.arrow-left class="w-4 h-4" />
                         </div>
+                        <span class="font-medium">Back to Challenges</span>
+                    </flux:button>
+                    
+                    {{-- Action Buttons --}}
+                    <div class="flex flex-wrap gap-3">
+                        @if($this->canEdit())
+                            <flux:button 
+                                wire:navigate 
+                                href="{{ route('challenges.edit', $challenge) }}" 
+                                variant="outline"
+                                class="group/edit relative overflow-hidden rounded-xl border-[#9B9EA4] dark:border-zinc-600 text-[#9B9EA4] dark:text-zinc-400 hover:bg-[#9B9EA4]/10 dark:hover:bg-zinc-600/20 transition-all duration-300 transform hover:-translate-y-1"
+                            >
+                                <span class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/10 opacity-0 group-hover/edit:opacity-100 transition-opacity duration-300"></span>
+                                <div class="relative flex items-center">
+                                    <flux:icon.pencil class="w-4 h-4 mr-2" />
+                                    <span>Edit Challenge</span>
+                                </div>
+                            </flux:button>
+                        @endif
                         
-                        <!-- Status Badge -->
-                        <div class="absolute top-6 right-6">
-                            <span class="px-4 py-2 rounded-full text-sm font-medium {{ $this->getStatusBadgeClass() }}">
-                                {{ ucfirst($challenge->status) }}
-                            </span>
-                        </div>
+                        @if($this->canViewSubmissions())
+                            <flux:button 
+                                wire:navigate 
+                                href="{{ route('challenges.submissions', $challenge) }}" 
+                                variant="outline"
+                                class="group/view relative overflow-hidden rounded-xl border-[#231F20] dark:border-zinc-300 text-[#231F20] dark:text-zinc-300 hover:bg-[#231F20]/10 dark:hover:bg-zinc-300/10 transition-all duration-300 transform hover:-translate-y-1"
+                            >
+                                <span class="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-teal-500/10 opacity-0 group-hover/view:opacity-100 transition-opacity duration-300"></span>
+                                <div class="relative flex items-center">
+                                    <flux:icon.document-text class="w-4 h-4 mr-2" />
+                                    <span>View Submissions</span>
+                                    <span class="ml-2 px-2 py-1 bg-[#F8EBD5] dark:bg-zinc-700 text-[#231F20] dark:text-zinc-300 rounded-full text-xs font-semibold">
+                                        {{ $challenge->submissions->count() }}
+                                    </span>
+                                </div>
+                            </flux:button>
+                        @endif
                         
-                        <!-- Deadline Badge -->
-                        @if($challenge->deadline && $challenge->status === 'active')
-                            <div class="absolute top-6 left-6">
-                                <span class="px-4 py-2 rounded-full text-sm font-medium bg-white/90 text-[#231F20]">
-                                    {{ $this->getDaysRemaining() }}
-                                </span>
-                            </div>
+                        @if($this->canSubmit())
+                            <flux:button 
+                                wire:navigate 
+                                href="{{ route('challenges.submit', $challenge) }}" 
+                                variant="primary"
+                                class="group/submit relative overflow-hidden rounded-xl bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] font-semibold px-6 py-3 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                            >
+                                <span class="absolute inset-0 bg-gradient-to-r from-yellow-300/20 to-amber-300/20 opacity-0 group-hover/submit:opacity-100 transition-opacity duration-300"></span>
+                                <div class="relative flex items-center">
+                                    <flux:icon.plus class="w-4 h-4 mr-2" />
+                                    <span>Submit Solution</span>
+                                </div>
+                            </flux:button>
                         @endif
                     </div>
-                    
-                    <!-- Challenge Info -->
-                    <div class="p-8">
-                        <div class="mb-4">
-                            <span class="inline-block px-3 py-1 bg-[#F8EBD5] text-[#231F20] rounded-full text-sm font-medium mb-3">
-                                {{ ucfirst(str_replace('_', ' ', $challenge->category)) }}
-                            </span>
-                            <h1 class="text-3xl font-bold text-[#231F20] mb-3">{{ $challenge->title }}</h1>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {{-- Main Content --}}
+            <div class="xl:col-span-2 space-y-8">
+                {{-- Enhanced Challenge Header with Glass Morphism --}}
+                <div class="group relative overflow-hidden rounded-3xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                    {{-- Challenge Hero Section --}}
+                    <div class="relative h-80 bg-gradient-to-br from-[#FFF200]/20 via-[#F8EBD5]/30 to-[#FFF200]/10 dark:from-yellow-400/10 dark:via-amber-400/20 dark:to-yellow-400/5 overflow-hidden">
+                        {{-- Animated Background Pattern --}}
+                        <div class="absolute inset-0 opacity-20">
+                            <div class="absolute top-10 left-10 w-32 h-32 bg-[#FFF200]/30 dark:bg-yellow-400/20 rounded-full blur-2xl animate-pulse"></div>
+                            <div class="absolute bottom-10 right-10 w-40 h-40 bg-[#F8EBD5]/40 dark:bg-amber-400/15 rounded-full blur-3xl animate-pulse delay-700"></div>
                         </div>
                         
-                        <div class="prose prose-lg max-w-none text-[#231F20] mb-6">
+                        {{-- Category Icon --}}
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="relative">
+                                <div class="text-9xl opacity-30 dark:opacity-20 transform group-hover:scale-110 transition-transform duration-700">
+                                    @switch($challenge->category)
+                                        @case('technology')
+                                            🚀
+                                            @break
+                                        @case('sustainability')
+                                            🌱
+                                            @break
+                                        @case('safety')
+                                            🛡️
+                                            @break
+                                        @case('innovation')
+                                            💡
+                                            @break
+                                        @case('infrastructure')
+                                            🏗️
+                                            @break
+                                        @case('efficiency')
+                                            ⚡
+                                            @break
+                                        @default
+                                            🏗️
+                                    @endswitch
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {{-- Status & Deadline Badges --}}
+                        <div class="absolute top-6 left-6 right-6 flex justify-between">
+                            @if($challenge->deadline && $challenge->status === 'active')
+                                <div class="inline-flex items-center space-x-2 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 dark:border-zinc-700/50 shadow-lg">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                                    <span class="text-sm font-semibold text-[#231F20] dark:text-zinc-100">{{ $this->getDaysRemaining() }}</span>
+                                </div>
+                            @endif
+                            
+                            <div class="ml-auto">
+                                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm border border-white/20 dark:border-zinc-700/50 shadow-lg {{ $this->getStatusBadgeClass() }} dark:bg-opacity-90">
+                                    {{ ucfirst($challenge->status) }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- Challenge Information --}}
+                    <div class="p-8">
+                        {{-- Category & Title --}}
+                        <div class="mb-6">
+                            <span class="inline-flex items-center px-3 py-1 bg-[#F8EBD5] dark:bg-amber-400/20 text-[#231F20] dark:text-amber-300 rounded-full text-sm font-medium mb-4 border border-[#F8EBD5]/50 dark:border-amber-400/30">
+                                {{ ucfirst(str_replace('_', ' ', $challenge->category)) }}
+                            </span>
+                            <h1 class="text-4xl font-bold text-[#231F20] dark:text-zinc-100 mb-4 leading-tight">{{ $challenge->title }}</h1>
+                        </div>
+                        
+                        {{-- Description --}}
+                        <div class="prose prose-lg max-w-none text-[#231F20] dark:text-zinc-300 mb-8 leading-relaxed">
                             {!! nl2br(e($challenge->description)) !!}
                         </div>
                         
-                        <!-- Challenge Meta -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-[#9B9EA4]">
-                            <div class="flex items-center">
-                                <flux:icon.user class="w-4 h-4 mr-2" />
-                                <span>by {{ $challenge->author->name }}</span>
+                        {{-- Enhanced Meta Information --}}
+                        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="group/meta flex items-center space-x-3 p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                                    <flux:icon.user class="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-[#9B9EA4] dark:text-zinc-400 uppercase tracking-wide">Author</p>
+                                    <p class="text-sm font-semibold text-[#231F20] dark:text-zinc-100">{{ $challenge->author->name }}</p>
+                                </div>
                             </div>
                             
-                            <div class="flex items-center">
-                                <flux:icon.users class="w-4 h-4 mr-2" />
-                                <span>{{ $challenge->submissions->count() }} {{ Str::plural('submission', $challenge->submissions->count()) }}</span>
+                            <div class="group/meta flex items-center space-x-3 p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 rounded-xl flex items-center justify-center shadow-lg">
+                                    <flux:icon.users class="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-[#9B9EA4] dark:text-zinc-400 uppercase tracking-wide">Submissions</p>
+                                    <p class="text-sm font-semibold text-[#231F20] dark:text-zinc-100">{{ $challenge->submissions->count() }} {{ Str::plural('solution', $challenge->submissions->count()) }}</p>
+                                </div>
                             </div>
                             
-                            <div class="flex items-center">
-                                <flux:icon.calendar class="w-4 h-4 mr-2" />
-                                <span>Created {{ $challenge->created_at->format('M j, Y') }}</span>
+                            <div class="group/meta flex items-center space-x-3 p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
+                                    <flux:icon.calendar class="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-[#9B9EA4] dark:text-zinc-400 uppercase tracking-wide">Created</p>
+                                    <p class="text-sm font-semibold text-[#231F20] dark:text-zinc-100">{{ $challenge->created_at->format('M j, Y') }}</p>
+                                </div>
                             </div>
                             
                             @if($challenge->deadline)
-                                <div class="flex items-center">
-                                    <flux:icon.clock class="w-4 h-4 mr-2" />
-                                    <span>Due {{ Carbon::parse($challenge->deadline)->format('M j, Y') }}</span>
+                                <div class="group/meta flex items-center space-x-3 p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
+                                        <flux:icon.clock class="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-medium text-[#9B9EA4] dark:text-zinc-400 uppercase tracking-wide">Deadline</p>
+                                        <p class="text-sm font-semibold text-[#231F20] dark:text-zinc-100">{{ Carbon::parse($challenge->deadline)->format('M j, Y') }}</p>
+                                    </div>
                                 </div>
                             @endif
                         </div>
                     </div>
                 </div>
 
-                <!-- User Submission Status -->
+                {{-- User Submission Status --}}
                 @if($userSubmission)
-                    <div class="bg-blue-50/70 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/50 p-6">
-                        <div class="flex items-start gap-4">
-                            <div class="p-2 bg-blue-100 rounded-lg">
-                                <flux:icon.check-circle class="w-6 h-6 text-blue-600" />
+                    <div class="group relative overflow-hidden rounded-2xl bg-blue-50/70 dark:bg-blue-900/20 backdrop-blur-xl border border-blue-200/50 dark:border-blue-700/50 shadow-xl p-6">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-600/10 dark:from-blue-400/10 dark:to-blue-500/20"></div>
+                        <div class="relative flex items-start gap-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                <flux:icon.check-circle class="w-6 h-6 text-white" />
                             </div>
                             <div class="flex-1">
-                                <h3 class="text-lg font-semibold text-blue-900 mb-2">Your Submission</h3>
-                                <p class="text-blue-700 mb-3">You have successfully submitted a solution to this challenge.</p>
-                                <div class="text-sm text-blue-600">
-                                    <strong>Submitted:</strong> {{ $userSubmission->created_at->format('M j, Y \a\t g:i A') }}<br>
-                                    <strong>Status:</strong> {{ ucfirst($userSubmission->status) }}
+                                <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-2">Your Submission Confirmed</h3>
+                                <p class="text-blue-700 dark:text-blue-300 mb-4 leading-relaxed">You have successfully submitted a solution to this challenge and are now part of the innovation competition.</p>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <flux:icon.calendar class="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                        <span class="text-blue-600 dark:text-blue-400">
+                                            <strong>Submitted:</strong> {{ $userSubmission->created_at->format('M j, Y \a\t g:i A') }}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <flux:icon.check class="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                                        <span class="text-blue-600 dark:text-blue-400">
+                                            <strong>Status:</strong> {{ ucfirst($userSubmission->status) }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endif
 
-                <!-- Requirements Section -->
-                <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-semibold text-[#231F20]">Challenge Requirements</h2>
-                        <flux:button 
-                            type="button"
-                            wire:click="toggleRequirements"
-                            variant="subtle"
-                            size="sm"
-                            class="text-[#9B9EA4] hover:text-[#231F20]"
-                        >
-                            <flux:icon.chevron-down class="w-4 h-4 transform transition-transform {{ $showRequirements ? 'rotate-180' : '' }}" />
-                        </flux:button>
-                    </div>
-                    
-                    <div class="{{ $showRequirements ? 'block' : 'hidden' }}">
-                        <ul class="space-y-3">
-                            @foreach($challenge->requirements as $requirement)
-                                <li class="flex items-start gap-3">
-                                    <div class="p-1 bg-[#FFF200]/20 rounded-full mt-1">
-                                        <flux:icon.check class="w-3 h-3 text-[#231F20]" />
+                {{-- Enhanced Requirements Section --}}
+                <div class="group relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] dark:from-yellow-400 dark:to-amber-400 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <flux:icon.clipboard-document-list class="w-5 h-5 text-[#231F20]" />
+                                </div>
+                                <h2 class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Challenge Requirements</h2>
+                            </div>
+                            <flux:button 
+                                type="button"
+                                wire:click="toggleRequirements"
+                                variant="subtle"
+                                size="sm"
+                                class="group/toggle text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-zinc-100 transition-colors duration-300"
+                            >
+                                <flux:icon.chevron-down class="w-5 h-5 transform transition-transform duration-300 {{ $showRequirements ? 'rotate-180' : '' }}" />
+                            </flux:button>
+                        </div>
+                        
+                        <div class="{{ $showRequirements ? 'block' : 'hidden' }} transition-all duration-300">
+                            <div class="space-y-4">
+                                @foreach($challenge->requirements as $index => $requirement)
+                                    <div class="group/req flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                        <div class="w-8 h-8 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] dark:from-yellow-400 dark:to-amber-400 rounded-full flex items-center justify-center shadow-lg mt-1 flex-shrink-0">
+                                            <span class="text-[#231F20] font-bold text-sm">{{ $index + 1 }}</span>
+                                        </div>
+                                        <p class="text-[#231F20] dark:text-zinc-100 leading-relaxed">{{ $requirement }}</p>
                                     </div>
-                                    <span class="text-[#231F20]">{{ $requirement }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
+                                @endforeach
+                            </div>
+                        </div>
+                        
+                        @if(!$showRequirements)
+                            <div class="text-center p-4 rounded-xl bg-gradient-to-r from-[#F8EBD5]/30 to-[#FFF200]/20 dark:from-amber-400/10 dark:to-yellow-400/10 border border-[#F8EBD5]/50 dark:border-amber-400/30">
+                                <p class="text-[#9B9EA4] dark:text-zinc-400 text-sm">Click to view {{ count($challenge->requirements) }} detailed requirements</p>
+                            </div>
+                        @endif
                     </div>
-                    
-                    @if(!$showRequirements)
-                        <p class="text-[#9B9EA4] text-sm">Click to view {{ count($challenge->requirements) }} requirements</p>
-                    @endif
                 </div>
 
-                <!-- Judging Criteria Section -->
-                <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-xl font-semibold text-[#231F20]">Judging Criteria</h2>
-                        <flux:button 
-                            type="button"
-                            wire:click="toggleJudgingCriteria"
-                            variant="subtle"
-                            size="sm"
-                            class="text-[#9B9EA4] hover:text-[#231F20]"
-                        >
-                            <flux:icon.chevron-down class="w-4 h-4 transform transition-transform {{ $showJudgingCriteria ? 'rotate-180' : '' }}" />
-                        </flux:button>
-                    </div>
-                    
-                    <div class="{{ $showJudgingCriteria ? 'block' : 'hidden' }}">
-                        <div class="prose prose-sm max-w-none text-[#231F20]">
-                            {!! nl2br(e($challenge->judging_criteria)) !!}
+                {{-- Enhanced Judging Criteria Section --}}
+                <div class="group relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <flux:icon.scale class="w-5 h-5 text-white" />
+                                </div>
+                                <h2 class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Judging Criteria</h2>
+                            </div>
+                            <flux:button 
+                                type="button"
+                                wire:click="toggleJudgingCriteria"
+                                variant="subtle"
+                                size="sm"
+                                class="group/toggle text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-zinc-100 transition-colors duration-300"
+                            >
+                                <flux:icon.chevron-down class="w-5 h-5 transform transition-transform duration-300 {{ $showJudgingCriteria ? 'rotate-180' : '' }}" />
+                            </flux:button>
                         </div>
+                        
+                        <div class="{{ $showJudgingCriteria ? 'block' : 'hidden' }} transition-all duration-300">
+                            <div class="p-4 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm">
+                                <div class="prose prose-lg max-w-none text-[#231F20] dark:text-zinc-100 leading-relaxed">
+                                    {!! nl2br(e($challenge->judging_criteria)) !!}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @if(!$showJudgingCriteria)
+                            <div class="text-center p-4 rounded-xl bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200/50 dark:border-purple-700/30">
+                                <p class="text-[#9B9EA4] dark:text-zinc-400 text-sm">Click to view detailed judging criteria and evaluation process</p>
+                            </div>
+                        @endif
                     </div>
-                    
-                    @if(!$showJudgingCriteria)
-                        <p class="text-[#9B9EA4] text-sm">Click to view judging criteria and evaluation process</p>
-                    @endif
                 </div>
             </div>
 
-            <!-- Sidebar -->
+            {{-- Enhanced Sidebar --}}
             <div class="space-y-6">
-                <!-- Challenge Statistics -->
-                <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-                    <h3 class="text-lg font-semibold text-[#231F20] mb-4">Challenge Stats</h3>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[#9B9EA4]">Total Submissions</span>
-                            <span class="text-[#231F20] font-semibold">{{ $challenge->submissions->count() }}</span>
-                        </div>
-                        
-                        <div class="flex items-center justify-between">
-                            <span class="text-[#9B9EA4]">Participants</span>
-                            <span class="text-[#231F20] font-semibold">{{ $challenge->submissions->unique('author_id')->count() }}</span>
-                        </div>
-                        
-                        @if($challenge->deadline)
-                            <div class="flex items-center justify-between">
-                                <span class="text-[#9B9EA4]">Time Remaining</span>
-                                <span class="text-[#231F20] font-semibold">{{ $this->getDaysRemaining() }}</span>
+                {{-- Challenge Statistics with Glass Morphism --}}
+                <div class="group relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                    <div class="p-6">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 dark:from-blue-400 dark:to-indigo-400 rounded-2xl flex items-center justify-center shadow-lg">
+                                <flux:icon.chart-bar class="w-5 h-5 text-white" />
                             </div>
-                        @endif
+                            <h3 class="text-lg font-bold text-[#231F20] dark:text-zinc-100">Challenge Statistics</h3>
+                        </div>
                         
-                        <div class="flex items-center justify-between">
-                            <span class="text-[#9B9EA4]">Created</span>
-                            <span class="text-[#231F20] font-semibold">{{ $challenge->created_at->diffForHumans() }}</span>
+                        <div class="space-y-4">
+                            <div class="group/stat flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                <span class="text-[#9B9EA4] dark:text-zinc-400 font-medium">Total Submissions</span>
+                                <span class="text-[#231F20] dark:text-zinc-100 font-bold text-xl">{{ $challenge->submissions->count() }}</span>
+                            </div>
+                            
+                            <div class="group/stat flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                <span class="text-[#9B9EA4] dark:text-zinc-400 font-medium">Participants</span>
+                                <span class="text-[#231F20] dark:text-zinc-100 font-bold text-xl">{{ $challenge->submissions->unique('author_id')->count() }}</span>
+                            </div>
+                            
+                            @if($challenge->deadline)
+                                <div class="group/stat flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                    <span class="text-[#9B9EA4] dark:text-zinc-400 font-medium">Time Remaining</span>
+                                    <span class="text-[#231F20] dark:text-zinc-100 font-bold text-xl">{{ $this->getDaysRemaining() }}</span>
+                                </div>
+                            @endif
+                            
+                            <div class="group/stat flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300">
+                                <span class="text-[#9B9EA4] dark:text-zinc-400 font-medium">Created</span>
+                                <span class="text-[#231F20] dark:text-zinc-100 font-bold">{{ $challenge->created_at->diffForHumans() }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Prize Information -->
+                {{-- Prize Information with Enhanced Design --}}
                 @if($challenge->prize_description)
-                    <div class="bg-gradient-to-br from-[#FFF200]/10 to-[#F8EBD5]/50 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="p-2 bg-[#FFF200]/20 rounded-lg">
-                                <flux:icon.gift class="w-6 h-6 text-[#231F20]" />
-                            </div>
-                            <h3 class="text-lg font-semibold text-[#231F20]">Prize & Recognition</h3>
-                        </div>
-                        
-                        <p class="text-[#231F20]">{{ $challenge->prize_description }}</p>
-                    </div>
-                @endif
-
-                <!-- Recent Submissions -->
-                @if($challenge->submissions->count() > 0)
-                    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold text-[#231F20]">Recent Submissions</h3>
-                            @if($this->canViewSubmissions())
-                                <flux:button 
-                                    wire:navigate 
-                                    href="{{ route('challenges.submissions', $challenge) }}" 
-                                    variant="subtle"
-                                    size="sm"
-                                    class="text-[#9B9EA4] hover:text-[#231F20]"
-                                >
-                                    View All
-                                </flux:button>
-                            @endif
-                        </div>
-                        
-                        <div class="space-y-3">
-                            @foreach($challenge->submissions->take(3) as $submission)
-                                <div class="flex items-center gap-3 p-3 bg-[#F8EBD5]/30 rounded-lg">
-                                    <div class="w-8 h-8 bg-[#FFF200]/30 rounded-full flex items-center justify-center">
-                                        <span class="text-[#231F20] font-medium text-sm">{{ substr($submission->author->name, 0, 1) }}</span>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-[#231F20] font-medium text-sm truncate">{{ $submission->author->name }}</p>
-                                        <p class="text-[#9B9EA4] text-xs">{{ $submission->created_at->diffForHumans() }}</p>
-                                    </div>
+                    <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FFF200]/20 via-[#F8EBD5]/30 to-[#FFF200]/10 dark:from-yellow-400/10 dark:via-amber-400/20 dark:to-yellow-400/5 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#FFF200]/10 to-[#F8EBD5]/20 dark:from-yellow-400/5 dark:to-amber-400/10"></div>
+                        <div class="relative p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] dark:from-yellow-400 dark:to-amber-400 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <flux:icon.gift class="w-6 h-6 text-[#231F20]" />
                                 </div>
-                            @endforeach
+                                <h3 class="text-lg font-bold text-[#231F20] dark:text-zinc-100">Prize & Recognition</h3>
+                            </div>
+                            
+                            <p class="text-[#231F20] dark:text-zinc-100 leading-relaxed">{{ $challenge->prize_description }}</p>
                         </div>
                     </div>
                 @endif
 
-                <!-- Call to Action -->
+                {{-- Recent Submissions with Enhanced Cards --}}
+                @if($challenge->submissions->count() > 0)
+                    <div class="group relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                        <flux:icon.users class="w-5 h-5 text-white" />
+                                    </div>
+                                    <h3 class="text-lg font-bold text-[#231F20] dark:text-zinc-100">Recent Submissions</h3>
+                                </div>
+                                @if($this->canViewSubmissions())
+                                    <flux:button 
+                                        wire:navigate 
+                                        href="{{ route('challenges.submissions', $challenge) }}" 
+                                        variant="subtle"
+                                        size="sm"
+                                        class="text-[#9B9EA4] dark:text-zinc-400 hover:text-[#231F20] dark:hover:text-zinc-100 transition-colors duration-300"
+                                    >
+                                        View All
+                                    </flux:button>
+                                @endif
+                            </div>
+                            
+                            <div class="space-y-4">
+                                @foreach($challenge->submissions->take(3) as $submission)
+                                    <div class="group/submission flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                                        <div class="w-12 h-12 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] dark:from-yellow-400 dark:to-amber-400 rounded-xl flex items-center justify-center shadow-lg">
+                                            <span class="text-[#231F20] font-bold">{{ substr($submission->author->name, 0, 1) }}</span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-[#231F20] dark:text-zinc-100 font-semibold truncate">{{ $submission->author->name }}</p>
+                                            <div class="flex items-center space-x-2 text-xs text-[#9B9EA4] dark:text-zinc-400">
+                                                <flux:icon.clock class="w-3 h-3" />
+                                                <span>{{ $submission->created_at->diffForHumans() }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Enhanced Call to Action --}}
                 @if($this->canSubmit())
-                    <div class="bg-gradient-to-br from-[#FFF200]/20 to-[#F8EBD5] backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
-                        <div class="text-4xl mb-4">🚀</div>
-                        <h3 class="text-lg font-semibold text-[#231F20] mb-2">Ready to Innovate?</h3>
-                        <p class="text-[#9B9EA4] text-sm mb-4">Submit your solution and join the innovation community!</p>
-                        
-                        <flux:button 
-                            wire:navigate 
-                            href="{{ route('challenges.submit', $challenge) }}" 
-                            variant="primary"
-                            class="w-full bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl font-semibold py-3"
-                        >
-                            Submit Your Solution
-                        </flux:button>
+                    <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FFF200]/30 via-[#F8EBD5]/40 to-[#FFF200]/20 dark:from-yellow-400/20 dark:via-amber-400/30 dark:to-yellow-400/10 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl text-center">
+                        <div class="absolute inset-0 bg-gradient-to-br from-[#FFF200]/20 to-[#F8EBD5]/30 dark:from-yellow-400/10 dark:to-amber-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative p-8">
+                            <div class="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-500">🚀</div>
+                            <h3 class="text-xl font-bold text-[#231F20] dark:text-zinc-100 mb-3">Ready to Innovate?</h3>
+                            <p class="text-[#9B9EA4] dark:text-zinc-400 mb-6 leading-relaxed">Submit your solution and join the innovation community at KeNHAVATE!</p>
+                            
+                            <flux:button 
+                                wire:navigate 
+                                href="{{ route('challenges.submit', $challenge) }}" 
+                                variant="primary"
+                                class="w-full bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl font-bold py-4 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                            >
+                                Submit Your Solution
+                            </flux:button>
+                        </div>
                     </div>
                 @elseif(!Auth::check())
-                    <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
-                        <div class="text-4xl mb-4">🔐</div>
-                        <h3 class="text-lg font-semibold text-[#231F20] mb-2">Join the Challenge</h3>
-                        <p class="text-[#9B9EA4] text-sm mb-4">Sign in to submit your innovative solution!</p>
-                        
-                        <flux:button 
-                            wire:navigate 
-                            href="{{ route('login') }}" 
-                            variant="primary"
-                            class="w-full bg-[#231F20] hover:bg-gray-800 text-white rounded-xl font-semibold py-3"
-                        >
-                            Sign In to Participate
-                        </flux:button>
+                    <div class="group relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl text-center">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/10 dark:from-blue-400/10 dark:to-indigo-400/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative p-8">
+                            <div class="text-6xl mb-4 transform group-hover:scale-110 transition-transform duration-500">🔐</div>
+                            <h3 class="text-xl font-bold text-[#231F20] dark:text-zinc-100 mb-3">Join the Challenge</h3>
+                            <p class="text-[#9B9EA4] dark:text-zinc-400 mb-6 leading-relaxed">Sign in to submit your innovative solution and compete with fellow innovators!</p>
+                            
+                            <flux:button 
+                                wire:navigate 
+                                href="{{ route('login') }}" 
+                                variant="primary"
+                                class="w-full bg-[#231F20] hover:bg-gray-800 text-white rounded-xl font-bold py-4 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                            >
+                                Sign In to Participate
+                            </flux:button>
+                        </div>
                     </div>
                 @endif
             </div>

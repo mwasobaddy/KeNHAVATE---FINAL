@@ -263,100 +263,180 @@ new class extends Component
     }
 }; ?>
 
-<div class="min-h-screen bg-gradient-to-br from-[#F8EBD5] via-[#F8EBD5] to-[#E8D5C5] py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-[#231F20] mb-2">Challenge Reviews</h1>
-                    <p class="text-[#9B9EA4] text-lg">Review and evaluate challenge submissions</p>
-                </div>
-                
-                <div class="mt-4 sm:mt-0 flex items-center space-x-3">
-                    <div class="flex items-center space-x-2 text-sm text-[#9B9EA4]">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span>{{ now()->format('M d, Y • g:i A') }}</span>
-                    </div>
+<div class="min-h-screen relative overflow-hidden">
+    {{-- Animated Background Elements --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none bg-gradient-to-br from-[#F8EBD5] via-[#F8EBD5] to-[#E8D5C5]">
+        <div class="absolute top-20 left-20 w-72 h-72 bg-[#FFF200]/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-[#F8EBD5]/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-[#FFF200]/10 rounded-full blur-2xl animate-pulse delay-500"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {{-- Header --}}
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-[#231F20] mb-2">Challenge Reviews</h1>
+                <p class="text-[#9B9EA4] text-lg">Review and evaluate challenge submissions</p>
+            </div>
+            
+            <div class="mt-4 sm:mt-0 flex items-center space-x-3">
+                <div class="flex items-center space-x-2 text-sm text-[#9B9EA4]">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>{{ now()->format('M d, Y • g:i A') }}</span>
                 </div>
             </div>
         </div>
 
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-blue-100">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                        </svg>
+        {{-- Enhanced Statistics Cards with Glass Morphism --}}
+        <section aria-labelledby="stats-heading" class="group">
+            <h2 id="stats-heading" class="sr-only">Review Statistics</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {{-- Pending Reviews Card --}}
+                <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 ease-out">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-blue-600/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <div class="relative p-6">
+                        <div class="relative mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute -inset-2 bg-blue-500/20 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-sm font-semibold text-[#9B9EA4] mb-2 uppercase tracking-wider">Pending Reviews</p>
+                            <p class="text-4xl font-bold text-[#231F20] mb-3 group-hover/card:text-blue-600 transition-colors duration-300">{{ $statistics['total_pending'] }}</p>
+                            
+                            <div class="inline-flex items-center space-x-2 text-xs font-medium text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                <span>Awaiting review</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-[#231F20]">{{ $statistics['total_pending'] }}</p>
-                        <p class="text-[#9B9EA4] text-sm">Pending Reviews</p>
+                </div>
+
+                {{-- Assigned to Me Card --}}
+                <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 ease-out">
+                    <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-green-600/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <div class="relative p-6">
+                        <div class="relative mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute -inset-2 bg-green-500/20 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-sm font-semibold text-[#9B9EA4] mb-2 uppercase tracking-wider">Assigned to Me</p>
+                            <p class="text-4xl font-bold text-[#231F20] mb-3 group-hover/card:text-green-600 transition-colors duration-300">{{ $statistics['my_assigned'] }}</p>
+                            
+                            <div class="inline-flex items-center space-x-2 text-xs font-medium text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                                </svg>
+                                <span>Your reviews</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Completed Today Card --}}
+                <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 ease-out">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-purple-600/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <div class="relative p-6">
+                        <div class="relative mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute -inset-2 bg-purple-500/20 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-sm font-semibold text-[#9B9EA4] mb-2 uppercase tracking-wider">Completed Today</p>
+                            <p class="text-4xl font-bold text-[#231F20] mb-3 group-hover/card:text-purple-600 transition-colors duration-300">{{ $statistics['completed_today'] }}</p>
+                            
+                            <div class="inline-flex items-center space-x-2 text-xs font-medium text-purple-600 bg-purple-50 px-3 py-1.5 rounded-full">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Today's progress</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Urgent Reviews Card --}}
+                <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 ease-out">
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-red-600/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                    
+                    <div class="relative p-6">
+                        <div class="relative mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="absolute -inset-2 bg-red-500/20 rounded-2xl blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
+                        </div>
+                        
+                        <div>
+                            <p class="text-sm font-semibold text-[#9B9EA4] mb-2 uppercase tracking-wider">Urgent Reviews</p>
+                            <p class="text-4xl font-bold text-[#231F20] mb-3 group-hover/card:text-red-600 transition-colors duration-300">{{ $statistics['urgent_reviews'] }}</p>
+                            
+                            @if($statistics['urgent_reviews'] > 0)
+                                <div class="inline-flex items-center space-x-2 text-xs font-medium text-red-600 bg-red-50 px-3 py-1.5 rounded-full">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
+                                    <span>Needs immediate attention</span>
+                                </div>
+                            @else
+                                <div class="inline-flex items-center space-x-2 text-xs font-medium text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
+                                    <span>No urgent reviews</span>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-green-100">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        {{-- Enhanced Filters with Glass Morphism --}}
+        <div class="relative overflow-hidden rounded-3xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#FFF200]/10 via-[#F8EBD5]/5 to-transparent rounded-full -mr-48 -mt-48 blur-3xl"></div>
+            
+            <div class="relative z-10 p-6">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] rounded-2xl flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6 text-[#231F20]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                         </svg>
                     </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-[#231F20]">{{ $statistics['my_assigned'] }}</p>
-                        <p class="text-[#9B9EA4] text-sm">Assigned to Me</p>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#231F20]">Filter Submissions</h3>
+                        <p class="text-[#9B9EA4] text-sm">Refine the list of challenge submissions</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-purple-100">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-[#231F20]">{{ $statistics['completed_today'] }}</p>
-                        <p class="text-[#9B9EA4] text-sm">Completed Today</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-red-100">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-2xl font-bold text-[#231F20]">{{ $statistics['urgent_reviews'] }}</p>
-                        <p class="text-[#9B9EA4] text-sm">Urgent Reviews</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg mb-8">
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-4">
-                    <!-- Search -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                    {{-- Search --}}
                     <div>
                         <label class="block text-sm font-medium text-[#231F20] mb-2">Search</label>
                         <input wire:model.live="search" 
-                               type="text" 
-                               placeholder="Search submissions..."
-                               class="w-full px-3 py-2 border border-[#9B9EA4]/30 rounded-lg bg-white/90 text-[#231F20] placeholder-[#9B9EA4] focus:ring-2 focus:ring-[#FFF200]/20 focus:border-[#FFF200] transition-colors">
+                            type="text" 
+                            placeholder="Search submissions..."
+                            class="w-full px-3 py-2 border border-[#9B9EA4]/30 rounded-lg bg-white/90 text-[#231F20] placeholder-[#9B9EA4] focus:ring-2 focus:ring-[#FFF200]/20 focus:border-[#FFF200] transition-colors">
                     </div>
 
-                    <!-- Status Filter -->
+                    {{-- Status Filter --}}
                     <div>
                         <label class="block text-sm font-medium text-[#231F20] mb-2">Status</label>
                         <select wire:model.live="statusFilter" 
@@ -370,7 +450,7 @@ new class extends Component
                         </select>
                     </div>
 
-                    <!-- Challenge Filter -->
+                    {{-- Challenge Filter --}}
                     <div>
                         <label class="block text-sm font-medium text-[#231F20] mb-2">Challenge</label>
                         <select wire:model.live="challengeFilter" 
@@ -382,7 +462,7 @@ new class extends Component
                         </select>
                     </div>
 
-                    <!-- Priority Filter -->
+                    {{-- Priority Filter --}}
                     <div>
                         <label class="block text-sm font-medium text-[#231F20] mb-2">Priority</label>
                         <select wire:model.live="priorityFilter" 
@@ -395,12 +475,12 @@ new class extends Component
                         </select>
                     </div>
 
-                    <!-- My Reviews Only -->
+                    {{-- My Reviews Only --}}
                     <div class="flex items-end">
                         <label class="flex items-center space-x-2 cursor-pointer">
                             <input wire:model.live="showMyReviewsOnly" 
-                                   type="checkbox" 
-                                   class="w-4 h-4 text-[#FFF200] border-[#9B9EA4] rounded focus:ring-[#FFF200]/20">
+                                type="checkbox" 
+                                class="w-4 h-4 text-[#FFF200] border-[#9B9EA4] rounded focus:ring-[#FFF200]/20">
                             <span class="text-sm text-[#231F20]">My reviews only</span>
                         </label>
                     </div>
@@ -408,8 +488,8 @@ new class extends Component
             </div>
         </div>
 
-        <!-- Reviews Table -->
-        <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg overflow-hidden">
+        {{-- Enhanced Reviews Table --}}
+        <div class="relative overflow-hidden rounded-3xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-[#231F20]/5 border-b border-[#9B9EA4]/20">
@@ -467,7 +547,7 @@ new class extends Component
                                 $isMyReview = $submission->assigned_reviewer_id === auth()->id();
                                 $hasMyReview = $submission->reviews->isNotEmpty();
                             @endphp
-                            <tr class="hover:bg-[#FFF200]/5 transition-colors">
+                            <tr class="group hover:bg-[#FFF200]/5 transition-colors">
                                 <td class="px-6 py-4">
                                     <div>
                                         <h3 class="font-semibold text-[#231F20] mb-1">{{ $submission->title }}</h3>
@@ -566,10 +646,12 @@ new class extends Component
                             <tr>
                                 <td colspan="8" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
-                                        <svg class="w-12 h-12 text-[#9B9EA4] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                        </svg>
-                                        <h3 class="text-lg font-medium text-[#231F20] mb-2">No submissions found</h3>
+                                        <div class="w-16 h-16 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                            <svg class="w-8 h-8 text-[#231F20]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-lg font-bold text-[#231F20] mb-2">No submissions found</h3>
                                         <p class="text-[#9B9EA4]">No challenge submissions match your current filters.</p>
                                     </div>
                                 </td>
@@ -579,7 +661,7 @@ new class extends Component
                 </table>
             </div>
 
-            <!-- Pagination -->
+            {{-- Enhanced Pagination --}}
             @if($submissions->hasPages())
                 <div class="px-6 py-4 border-t border-[#9B9EA4]/20">
                     {{ $submissions->links() }}

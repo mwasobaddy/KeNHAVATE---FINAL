@@ -392,14 +392,18 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
             <div class="bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 rounded-2xl p-6 shadow-xl">
                 <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Administration</h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <a href="{{ route('admin.users') }}" class="group flex flex-col items-center p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                    @can('view_users')
+                    <a href="{{ route('users.index') }}" class="group flex flex-col items-center p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
                         <flux:icon.users class="w-6 h-6 text-purple-600 dark:text-purple-400 mb-2" />
                         <span class="text-xs font-medium text-purple-900 dark:text-purple-100 text-center">User Management</span>
                     </a>
-                    <a href="{{ route('admin.roles') }}" class="group flex flex-col items-center p-4 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                    @endcan
+                    @can('view_roles')
+                    <a href="{{ route('roles.index') }}" class="group flex flex-col items-center p-4 rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
                         <flux:icon.shield-check class="w-6 h-6 text-indigo-600 dark:text-indigo-400 mb-2" />
                         <span class="text-xs font-medium text-indigo-900 dark:text-indigo-100 text-center">Role Management</span>
                     </a>
+                    @endcan
                 </div>
             </div>
             
