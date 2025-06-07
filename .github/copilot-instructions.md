@@ -129,15 +129,14 @@ For KeNHA staff-specific features:
 Always provide this role hierarchy to Copilot:
 
 ```php
-// KeNHAVATE Role Hierarchy (8 distinct roles):
+// KeNHAVATE Role Hierarchy (7 distinct roles):
 // 1. Developer - System administration, requires password setup
 // 2. Administrator - User management, full idea oversight
 // 3. Board Member - Final approval authority, strategic decisions
 // 4. Manager - First-stage reviews, challenge creation
 // 5. Subject Matter Expert (SME) - Technical evaluation, collaboration guidance
 // 6. Challenge Reviewer - Challenge-specific reviews only
-// 7. Idea Reviewer - Both stages of idea review process
-// 8. User - Base role, idea submission and collaboration
+// 7. User - Base role, idea submission and collaboration
 
 // Each role has specific dashboard requirements and permission sets
 // No user can review their own submissions (conflict of interest rule)

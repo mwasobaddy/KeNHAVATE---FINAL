@@ -71,7 +71,7 @@ new #[Layout('components.layouts.app', title: 'Ideas')] class extends Component
             });
 
         // If user is not admin/manager, only show their own ideas unless they're reviewers
-        if (!auth()->user()->hasAnyRole(['admin', 'developer', 'manager', 'idea_reviewer', 'sme', 'board_member'])) {
+        if (!auth()->user()->hasAnyRole([administrator, 'developer', 'manager', 'sme', 'board_member'])) {
             $query->where('author_id', auth()->id());
         }
 
@@ -93,7 +93,7 @@ new #[Layout('components.layouts.app', title: 'Ideas')] class extends Component
         return [
             'ideas' => $ideas,
             'stages' => $stages,
-            'can_create' => auth()->user()->hasAnyRole(['user', 'manager', 'admin', 'sme', 'developer'])
+            'can_create' => auth()->user()->hasAnyRole(['user', 'manager', administrator, 'sme', 'developer'])
         ];
     }
 }; ?>

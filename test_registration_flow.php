@@ -99,7 +99,6 @@ foreach ($users as $user) {
         'admin', 'administrator' => 'livewire.dashboard.admin-dashboard',
         'board_member' => 'livewire.dashboard.board-member-dashboard',
         'sme' => 'livewire.dashboard.sme-dashboard',
-        'idea_reviewer' => 'livewire.dashboard.idea-reviewer-dashboard',
         'challenge_reviewer' => 'livewire.dashboard.challenge-reviewer-dashboard',
         default => 'livewire.dashboard.user-dashboard'
     };

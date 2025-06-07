@@ -165,7 +165,7 @@ new class extends Component {
         $comment = Comment::findOrFail($commentId);
         
         // Check authorization
-        if ($comment->author_id !== auth()->id() && !auth()->user()->hasRole(['admin', 'developer'])) {
+        if ($comment->author_id !== auth()->id() && !auth()->user()->hasRole([administrator, 'developer'])) {
             abort(403);
         }
 
@@ -243,7 +243,7 @@ new class extends Component {
                         </div>
                     </div>
                     
-                    @if($comment->author_id === auth()->id() || auth()->user()?->hasRole(['admin', 'developer']))
+                    @if($comment->author_id === auth()->id() || auth()->user()?->hasRole([administrator, 'developer']))
                         <button
                             wire:click="deleteComment({{ $comment->id }})"
                             wire:confirm="Are you sure you want to delete this comment?"
@@ -346,7 +346,7 @@ new class extends Component {
                                         </div>
                                     </div>
                                     
-                                    @if($reply->author_id === auth()->id() || auth()->user()?->hasRole(['admin', 'developer']))
+                                    @if($reply->author_id === auth()->id() || auth()->user()?->hasRole([administrator, 'developer']))
                                         <button
                                             wire:click="deleteComment({{ $reply->id }})"
                                             wire:confirm="Are you sure you want to delete this reply?"

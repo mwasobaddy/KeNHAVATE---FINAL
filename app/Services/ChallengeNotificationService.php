@@ -52,7 +52,7 @@ class ChallengeNotificationService
     {
         // Get all users who can participate but haven't submitted
         $eligibleUsers = User::whereHas('roles', function ($query) {
-            $query->whereIn('name', ['user', 'manager', 'sme', 'challenge_reviewer', 'idea_reviewer']);
+            $query->whereIn('name', ['user', 'manager', 'sme', 'challenge_reviewer']);
         })->whereDoesntHave('challengeSubmissions', function ($query) use ($challenge) {
             $query->where('challenge_id', $challenge->id);
         })->where('id', '!=', $challenge->author_id)->get();
@@ -86,7 +86,7 @@ class ChallengeNotificationService
     {
         // Get all users who can participate but haven't submitted
         $eligibleUsers = User::whereHas('roles', function ($query) {
-            $query->whereIn('name', ['user', 'manager', 'sme', 'challenge_reviewer', 'idea_reviewer']);
+            $query->whereIn('name', ['user', 'manager', 'sme', 'challenge_reviewer']);
         })->whereDoesntHave('challengeSubmissions', function ($query) use ($challenge) {
             $query->where('challenge_id', $challenge->id);
         })->where('id', '!=', $challenge->author_id)->get();
@@ -316,7 +316,7 @@ class ChallengeNotificationService
         $roles = [];
         switch ($newPhase) {
             case 'active':
-                $roles = ['user', 'manager', 'sme', 'challenge_reviewer', 'idea_reviewer'];
+                $roles = ['user', 'manager', 'sme', 'challenge_reviewer'];
                 break;
             case 'review':
             case 'judging':
@@ -324,7 +324,7 @@ class ChallengeNotificationService
                 break;
             case 'completed':
             case 'cancelled':
-                $roles = ['user', 'manager', 'sme', 'challenge_reviewer', 'idea_reviewer', 'administrator'];
+                $roles = ['user', 'manager', 'sme', 'challenge_reviewer', 'administrator'];
                 break;
             default:
                 $roles = ['administrator', 'developer'];

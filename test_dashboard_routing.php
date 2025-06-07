@@ -44,7 +44,6 @@ try {
         'developer' => 'dashboard.admin',
         'administrator' => 'dashboard.admin',
         'challenge_reviewer' => 'dashboard.challenge-reviewer',
-        'idea_reviewer' => 'dashboard.idea-reviewer',
     ];
 
     foreach ($testCases as $role => $expectedRoute) {
@@ -59,8 +58,7 @@ try {
         'manager-dashboard.blade.php',
         'sme-dashboard.blade.php',
         'board-member-dashboard.blade.php',
-        'challenge-reviewer-dashboard.blade.php',
-        'idea-reviewer-dashboard.blade.php'
+        'challenge-reviewer-dashboard.blade.php'
     ];
 
     foreach ($dashboardFiles as $file) {

@@ -24,34 +24,34 @@ class IdeaWorkflowService
      */
     protected array $stageTransitions = [
         'draft' => ['submitted' => ['user']],
-        'submitted' => ['manager_review' => ['manager', 'admin']],
+        'submitted' => ['manager_review' => ['manager', 'administrator']],
         'manager_review' => [
-            'sme_review' => ['manager', 'admin'],
-            'rejected' => ['manager', 'admin'],
-            'needs_revision' => ['manager', 'admin']
+            'sme_review' => ['manager', 'administrator'],
+            'rejected' => ['manager', 'administrator'],
+            'needs_revision' => ['manager', 'administrator']
         ],
         'sme_review' => [
-            'collaboration' => ['sme', 'admin'],
-            'board_review' => ['sme', 'admin'],
-            'rejected' => ['sme', 'admin'],
-            'needs_revision' => ['sme', 'admin']
+            'collaboration' => ['sme', 'administrator'],
+            'board_review' => ['sme', 'administrator'],
+            'rejected' => ['sme', 'administrator'],
+            'needs_revision' => ['sme', 'administrator']
         ],
         'collaboration' => [
-            'board_review' => ['sme', 'admin'],
-            'rejected' => ['sme', 'admin']
+            'board_review' => ['sme', 'administrator'],
+            'rejected' => ['sme', 'administrator']
         ],
         'board_review' => [
-            'implementation' => ['board_member', 'admin'],
-            'rejected' => ['board_member', 'admin'],
-            'needs_revision' => ['board_member', 'admin']
+            'implementation' => ['board_member', 'administrator'],
+            'rejected' => ['board_member', 'administrator'],
+            'needs_revision' => ['board_member', 'administrator']
         ],
         'implementation' => [
-            'completed' => ['manager', 'admin'],
-            'archived' => ['manager', 'admin']
+            'completed' => ['manager', 'administrator'],
+            'archived' => ['manager', 'administrator']
         ],
-        'completed' => ['archived' => ['admin']],
-        'needs_revision' => ['draft' => ['user'], 'archived' => ['admin']],
-        'rejected' => ['archived' => ['admin']]
+        'completed' => ['archived' => ['administrator']],
+        'needs_revision' => ['draft' => ['user'], 'archived' => ['administrator']],
+        'rejected' => ['archived' => ['administrator']]
     ];
 
     /**
@@ -136,7 +136,7 @@ class IdeaWorkflowService
 
         // Check if idea is locked during review
         if (in_array($currentStage, ['manager_review', 'sme_review', 'board_review', 'collaboration']) && 
-            !$user->hasRole(['manager', 'sme', 'board_member', 'admin'])) {
+            !$user->hasRole(['manager', 'sme', 'board_member', 'administrator'])) {
             throw ValidationException::withMessages([
                 'locked' => 'Idea is currently under review and cannot be modified'
             ]);
@@ -452,7 +452,7 @@ class IdeaWorkflowService
         }
 
         // Validate that the user is the author or has admin permissions
-        if ($user->id !== $idea->author_id && !$user->hasRole('admin')) {
+        if ($user->id !== $idea->author_id && !$user->hasRole('administrator')) {
             throw ValidationException::withMessages([
                 'authorization' => 'You can only submit your own ideas'
             ]);

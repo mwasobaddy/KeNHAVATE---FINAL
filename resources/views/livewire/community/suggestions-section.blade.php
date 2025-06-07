@@ -173,7 +173,7 @@ new class extends Component {
         }
 
         // Check if user has appropriate role
-        return auth()->user()->hasAnyRole(['manager', 'sme', 'admin', 'developer']);
+        return auth()->user()->hasAnyRole(['manager', 'sme', administrator, 'developer']);
     }
 
     private function notifyStakeholders($suggestion)

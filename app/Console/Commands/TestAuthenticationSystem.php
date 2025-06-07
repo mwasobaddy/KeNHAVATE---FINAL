@@ -66,7 +66,7 @@ class TestAuthenticationSystem extends Command
     {
         $this->info('Setting up roles for testing...');
         
-        $roles = ['user', 'admin', 'manager', 'board_member', 'sme', 'challenge_reviewer', 'idea_reviewer', 'developer'];
+        $roles = ['user', 'administrator', 'manager', 'board_member', 'sme', 'challenge_reviewer', 'developer'];
         
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);

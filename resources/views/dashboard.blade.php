@@ -6,7 +6,6 @@
         'manager'        => route('dashboard.manager'),
         'sme'            => route('dashboard.sme'),
         'challenge_reviewer' => route('dashboard.challenge-reviewer'),
-        'idea_reviewer'  => route('dashboard.idea-reviewer'),
         default          => route('dashboard.user'),
     };
 @endphp

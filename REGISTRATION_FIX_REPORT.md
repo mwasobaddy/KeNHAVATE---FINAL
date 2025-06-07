@@ -160,7 +160,7 @@ The dashboard routing logic in `/resources/views/dashboard.blade.php` correctly 
     @livewire('dashboard.user-dashboard')
 @elseif(auth()->user()->hasRole('manager'))
     @livewire('dashboard.manager-dashboard')
-@elseif(auth()->user()->hasRole(['admin', 'administrator']))
+@elseif(auth()->user()->hasRole(['administrator']))
     @livewire('dashboard.admin-dashboard')
 // ... other roles
 @endif

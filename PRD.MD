@@ -35,7 +35,7 @@ KeNHAVATE is a comprehensive innovation portal designed for Kenya National Highw
 ### Core Features ✅ **ALL CORE FEATURES COMPLETE**
 - ✅ **Idea Management System**: Complete submission, review, and approval workflow
 - ✅ **Multi-stage Review Process**: Manager → SME → Board approval workflow
-- ✅ **Role-Based Dashboard System**: 8 specialized dashboards with modern glass morphism design
+- ✅ **Role-Based Dashboard System**: 7 specialized dashboards with modern glass morphism design
 - ✅ **Comprehensive Notifications**: Real-time updates across all user types  
 - ✅ **Modern Glass Morphism UI**: Complete responsive design with KeNHAVATE branding
 - ✅ **Security & Audit System**: Comprehensive logging and device tracking
@@ -64,7 +64,7 @@ KeNHAVATE is a comprehensive innovation portal designed for Kenya National Highw
 - ✅ **Responsive Design**: Mobile-first approach with complete responsive breakpoints
 - ✅ **Dark Mode Support**: Automatic theme switching with user preferences
 - ✅ **GSAP Animations**: Advanced interactive elements and smooth transitions
-- ✅ **Role-Specific Dashboards**: 8 specialized dashboards with unique layouts and metrics
+- ✅ **Role-Specific Dashboards**: 7 specialized dashboards with unique layouts and metrics
 
 ### Required Components ✅ **ALL COMPLETE**
 - ✅ **Tables**: Sortable columns (Flowbite) - Complete implementation
@@ -226,12 +226,7 @@ KeNHAVATE is a comprehensive innovation portal designed for Kenya National Highw
 - ✅ **Dashboard**: Challenge submission reviews and collaboration metrics
 - ✅ **Scope**: Challenge-specific review process (cannot review own submissions)
 
-#### 7. Idea Reviewer ✅ **IMPLEMENTED**
-- ✅ **Review Scope**: Both stages of idea review process
-- ✅ **Dashboard**: Ideas reviewed and personal submission statistics
-- ✅ **Restrictions**: Cannot review own submissions
-
-#### 8. User (Base Role) ✅ **IMPLEMENTED**
+#### 7. User (Base Role) ✅ **IMPLEMENTED**
 - ✅ **Core Functions**: Submit ideas, participate in challenges, collaborate
 - ✅ **Submissions**: Unlimited idea and challenge submissions
 - ✅ **Collaboration**: Request and accept collaboration invitations

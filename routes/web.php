@@ -23,7 +23,6 @@ Route::middleware(['auth', 'verified', 'terms.accepted'])->group(function () {
     Volt::route('dashboard/manager', 'dashboard.manager-dashboard')->middleware('role:manager')->name('dashboard.manager');
     Volt::route('dashboard/sme', 'dashboard.sme-dashboard')->middleware('role:sme')->name('dashboard.sme');
     Volt::route('dashboard/challenge-reviewer', 'dashboard.challenge-reviewer-dashboard')->middleware('role:challenge_reviewer')->name('dashboard.challenge-reviewer');
-    Volt::route('dashboard/idea-reviewer', 'dashboard.idea-reviewer-dashboard')->middleware('role:idea_reviewer')->name('dashboard.idea-reviewer');
 });
 
 Route::middleware(['auth', 'terms.accepted'])->group(function () {
@@ -40,8 +39,8 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Volt::route('ideas/{idea}/edit', 'ideas.edit')->name('ideas.edit');
     
     // Reviews Management
-    Volt::route('reviews', 'reviews.index')->name('reviews.index')->middleware('role:manager|sme|board_member|idea_reviewer|administrator|developer');
-    Volt::route('reviews/idea/{idea}', 'reviews.review-idea')->name('reviews.idea')->middleware('role:manager|sme|board_member|idea_reviewer|administrator|developer');
+    Volt::route('reviews', 'reviews.index')->name('reviews.index')->middleware('role:manager|sme|board_member|administrator|developer');
+    Volt::route('reviews/idea/{idea}', 'reviews.review-idea')->name('reviews.idea')->middleware('role:manager|sme|board_member|administrator|developer');
     
     // Challenge Competition System
     Volt::route('challenges', 'challenges.index')->name('challenges.index');

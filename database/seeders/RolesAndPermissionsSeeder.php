@@ -12,15 +12,14 @@ class RolesAndPermissionsSeeder extends Seeder
     /**
      * KeNHAVATE Innovation Portal - Role and Permission Seeder
      * 
-     * Creates 8 distinct roles with comprehensive permission matrix:
+     * Creates 7 distinct roles with comprehensive permission matrix:
      * 1. Developer - System administration
      * 2. Administrator - User management, full oversight
      * 3. Board Member - Final approval authority
      * 4. Manager - First-stage reviews, challenge creation
      * 5. Subject Matter Expert (SME) - Technical evaluation
      * 6. Challenge Reviewer - Challenge-specific reviews
-     * 7. Idea Reviewer - Idea review process
-     * 8. User - Base role, submissions and collaboration
+     * 7. User - Base role, submissions and collaboration
      */
     public function run(): void
     {
@@ -112,7 +111,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->createManagerRole();
         $this->createSMERole();
         $this->createChallengeReviewerRole();
-        $this->createIdeaReviewerRole();
         $this->createUserRole();
     }
 
@@ -270,33 +268,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'create_ideas',
             'edit_own_ideas',
             'delete_own_ideas',
-            'send_messages',
-            'edit_own_profile',
-            'view_profiles',
-            'view_leaderboards',
-        ];
-
-        $role->givePermissionTo($permissions);
-    }
-
-    private function createIdeaReviewerRole()
-    {
-        $role = Role::create([
-            'name' => 'idea_reviewer',
-            'guard_name' => 'web'
-        ]);
-
-        $permissions = [
-            'conduct_manager_reviews',
-            'conduct_sme_reviews',
-            'review_ideas',
-            'view_review_assignments',
-            'view_all_ideas',
-            'create_ideas',
-            'edit_own_ideas',
-            'delete_own_ideas',
-            'accept_collaboration',
-            'view_collaboration_requests',
             'send_messages',
             'edit_own_profile',
             'view_profiles',

@@ -16,7 +16,6 @@
                     'manager' => route('dashboard.manager'),
                     'sme' => route('dashboard.sme'),
                     'challenge_reviewer' => route('dashboard.challenge-reviewer'),
-                    'idea_reviewer' => route('dashboard.idea-reviewer'),
                     default => route('dashboard.user'),
                 };
             @endphp
@@ -35,7 +34,6 @@
                             'manager' => route('dashboard.manager'),
                             'sme' => route('dashboard.sme'),
                             'challenge_reviewer' => route('dashboard.challenge-reviewer'),
-                            'idea_reviewer' => route('dashboard.idea-reviewer'),
                             default => route('dashboard.user'),
                         };
                     @endphp
@@ -45,7 +43,7 @@
                     @if(auth()->user()->activeCollaborations()->count() > 0 || auth()->user()->collaborations()->where('status', 'pending')->count() > 0)
                         <flux:navlist.item icon="users" href="/collaboration/dashboard" :current="request()->is('collaboration/*')" wire:navigate>Collaboration</flux:navlist.item>
                     @endif
-                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'administrator', 'developer']))
+                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>Reviews</flux:navlist.item>
                     @endif
                 </flux:navlist.group>
@@ -127,7 +125,6 @@
                             'manager' => route('dashboard.manager'),
                             'sme' => route('dashboard.sme'),
                             'challenge_reviewer' => route('dashboard.challenge-reviewer'),
-                            'idea_reviewer' => route('dashboard.idea-reviewer'),
                             default => route('dashboard.user'),
                         };
                     @endphp
@@ -137,7 +134,7 @@
                     @if(auth()->user()->activeCollaborations()->count() > 0 || auth()->user()->collaborations()->where('status', 'pending')->count() > 0)
                         <flux:navlist.item icon="users" href="/collaboration/dashboard" :current="request()->is('collaboration/*')" wire:navigate>{{ __('Collaboration') }}</flux:navlist.item>
                     @endif
-                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'administrator', 'developer']))
+                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
                     @endif
                 </flux:navlist.group>

@@ -140,7 +140,7 @@ new class extends Component {
                     <p class="text-[#9B9EA4] text-lg">Solve real-world highway infrastructure problems and win exciting prizes</p>
                 </div>
                 
-                @if(auth()->user()->hasRole(['manager', 'admin', 'developer']))
+                @if(auth()->user()->hasRole(['manager', 'administrator', 'developer']))
                     <flux:button 
                         wire:navigate 
                         href="{{ route('challenges.create') }}" 
@@ -318,7 +318,7 @@ new class extends Component {
                         <h3 class="text-xl font-semibold text-[#231F20] mb-2">No challenges found</h3>
                         <p class="text-[#9B9EA4] mb-6">Try adjusting your search criteria or check back later for new challenges.</p>
                         
-                        @if(auth()->user()->hasRole(['manager', 'admin', 'developer']))
+                        @if(auth()->user()->hasRole(['manager', 'administrator', 'developer']))
                             <flux:button 
                                 wire:navigate 
                                 href="{{ route('challenges.create') }}" 

@@ -14,15 +14,14 @@ class UserSeeder extends Seeder
     /**
      * KeNHAVATE Innovation Portal - User Seeder
      * 
-     * Creates test users for all 8 roles in the system:
+     * Creates test users for all 7 roles in the system:
      * 1. Developer - Kelvin Wanjohi (kelvinramsiel)
      * 2. Administrator - Fake admin user
      * 3. Board Member - Fake board members
      * 4. Manager - Fake managers
      * 5. Subject Matter Expert (SME) - Fake SMEs
      * 6. Challenge Reviewer - Fake challenge reviewers
-     * 7. Idea Reviewer - Fake idea reviewers
-     * 8. User - Regular users
+     * 7. User - Regular users
      */
     public function run(): void
     {
@@ -38,7 +37,6 @@ class UserSeeder extends Seeder
         $this->createManagers();
         $this->createSMEs();
         $this->createChallengeReviewers();
-        $this->createIdeaReviewers();
         $this->createRegularUsers();
         $this->createTestAccountStatusUsers();
         $this->createKenhaStaffUsers();
@@ -59,7 +57,6 @@ class UserSeeder extends Seeder
             'manager',
             'sme',
             'challenge_reviewer',
-            'idea_reviewer',
             'user'
         ];
 
@@ -293,44 +290,6 @@ class UserSeeder extends Seeder
     }
 
     /**
-     * Create Idea Reviewer users
-     */
-    private function createIdeaReviewers(): void
-    {
-        $reviewers = [
-            [
-                'first_name' => 'Patrick',
-                'last_name' => 'Otieno',
-                'email' => 'patrick.otieno@kenha.co.ke',
-                'staff_number' => 'KNH016',
-                'job_title' => 'Idea Review Specialist',
-                'department' => 'Innovation & Strategy',
-            ],
-            [
-                'first_name' => 'Mary',
-                'last_name' => 'Nyong',
-                'email' => 'mary.nyong@kenha.co.ke',
-                'staff_number' => 'KNH017',
-                'job_title' => 'Innovation Assessment Officer',
-                'department' => 'Quality Assurance',
-            ],
-            [
-                'first_name' => 'Samuel',
-                'last_name' => 'Kiplagat',
-                'email' => 'samuel.kiplagat@kenha.co.ke',
-                'staff_number' => 'KNH018',
-                'job_title' => 'Technical Review Officer',
-                'department' => 'Technical Services',
-            ]
-        ];
-
-        foreach ($reviewers as $reviewerData) {
-            $user = $this->createUserWithStaffProfile($reviewerData, 'idea_reviewer');
-            $this->command->info("✅ Created Idea Reviewer: {$user->first_name} {$user->last_name}");
-        }
-    }
-
-    /**
      * Create regular User accounts (non-staff)
      */
     private function createRegularUsers(): void
@@ -452,7 +411,7 @@ class UserSeeder extends Seeder
 
         foreach ($staffUsers as $user) {
             // Assign random roles (excluding developer)
-            $roles = ['administrator', 'manager', 'sme', 'challenge_reviewer', 'idea_reviewer', 'user'];
+            $roles = ['administrator', 'manager', 'sme', 'challenge_reviewer', 'user'];
             $randomRole = fake()->randomElement($roles);
             $user->assignRole($randomRole);
 
@@ -532,7 +491,6 @@ class UserSeeder extends Seeder
             'manager' => 'Managers',
             'sme' => 'Subject Matter Experts',
             'challenge_reviewer' => 'Challenge Reviewers',
-            'idea_reviewer' => 'Idea Reviewers',
             'user' => 'Regular Users'
         ];
 

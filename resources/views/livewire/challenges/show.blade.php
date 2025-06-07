@@ -87,7 +87,7 @@ new class extends Component {
     public function canEdit()
     {
         return Auth::check() && (
-            Auth::user()->hasRole(['admin', 'developer']) ||
+            Auth::user()->hasRole([administrator, 'developer']) ||
             (Auth::user()->hasRole('manager') && $this->challenge->author_id === Auth::id())
         );
     }
@@ -95,7 +95,7 @@ new class extends Component {
     public function canViewSubmissions()
     {
         return Auth::check() && (
-            Auth::user()->hasRole(['admin', 'developer', 'manager', 'challenge_reviewer']) ||
+            Auth::user()->hasRole(['administrator', 'developer', 'manager', 'challenge_reviewer']) ||
             $this->challenge->author_id === Auth::id()
         );
     }

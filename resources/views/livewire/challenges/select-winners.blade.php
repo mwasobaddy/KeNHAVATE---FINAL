@@ -31,7 +31,7 @@ new class extends Component
     public function mount(Challenge $challenge): void
     {
         // Authorization check - only managers and admins can select winners
-        if (!auth()->user()->hasAnyRole(['manager', 'admin', 'developer'])) {
+        if (!auth()->user()->hasAnyRole(['manager', administrator, 'developer'])) {
             abort(403, 'Unauthorized access to winner selection.');
         }
 

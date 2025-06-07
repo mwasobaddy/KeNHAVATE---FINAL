@@ -230,20 +230,20 @@ new class extends Component {
     private function canInvite()
     {
         return $this->idea->author_id === auth()->id() 
-            || auth()->user()->hasAnyRole(['manager', 'sme', 'admin', 'developer']);
+            || auth()->user()->hasAnyRole(['manager', 'sme', administrator, 'developer']);
     }
 
     private function canRemoveCollaborator($collaboration)
     {
         return $this->idea->author_id === auth()->id() 
             || $collaboration->collaborator_id === auth()->id()
-            || auth()->user()->hasAnyRole(['admin', 'developer']);
+            || auth()->user()->hasAnyRole([administrator, 'developer']);
     }
 
     private function canUpdateRole($collaboration)
     {
         return $this->idea->author_id === auth()->id() 
-            || auth()->user()->hasAnyRole(['admin', 'developer']);
+            || auth()->user()->hasAnyRole([administrator, 'developer']);
     }
 
     private function sendInvitationNotification($user, $collaboration)

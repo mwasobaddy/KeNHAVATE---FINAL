@@ -28,12 +28,12 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
         }
         
         // Admins and developers can view all ideas
-        if ($user->hasAnyRole(['admin', 'developer'])) {
+        if ($user->hasAnyRole([administrator, 'developer'])) {
             return true;
         }
         
         // Reviewers can view ideas in review stages
-        if ($user->hasAnyRole(['manager', 'sme', 'idea_reviewer', 'board_member'])) {
+        if ($user->hasAnyRole(['manager', 'sme', 'board_member'])) {
             return in_array($this->idea->current_stage, [
                 'submitted', 'manager_review', 'sme_review', 'board_review', 'implementation', 'completed'
             ]);
@@ -406,7 +406,7 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
                         </section>
 
                         {{-- Collaboration Management --}}
-                        @if($idea->collaboration_enabled || auth()->user()->hasAnyRole(['admin', 'developer', 'manager', 'sme']))
+                        @if($idea->collaboration_enabled || auth()->user()->hasAnyRole([administrator, 'developer', 'manager', 'sme']))
                             <section aria-labelledby="collaboration-heading" class="group space-y-6">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 dark:from-violet-400 dark:to-violet-500 rounded-xl flex items-center justify-center shadow-lg">

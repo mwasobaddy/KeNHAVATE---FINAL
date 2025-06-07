@@ -177,7 +177,7 @@ new class extends Component {
         // Send notifications
         // Notify challenge author/managers
         app(App\Services\NotificationService::class)->sendToRoles(
-            ['manager', 'admin', 'challenge_reviewer'],
+            ['manager', administrator, 'challenge_reviewer'],
             'challenge_submission',
             [
                 'title' => 'New Challenge Submission',

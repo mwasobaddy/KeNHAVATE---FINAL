@@ -12,7 +12,7 @@ class ChallengePolicy
      * KeNHAVATE Innovation Portal - Challenge Authorization Policy
      * 
      * Implements granular permission checking for challenge operations based on:
-     * - Role-based access control (8 distinct roles)
+     * - Role-based access control (7 distinct roles)
      * - Business logic rules and conflict of interest prevention
      * - Challenge lifecycle states and ownership rules
      * - Security requirements and audit compliance
@@ -134,7 +134,7 @@ class ChallengePolicy
         }
         
         // All roles can participate except the challenge author
-        return $user->hasAnyRole(['user', 'manager', 'sme', 'challenge_reviewer', 'idea_reviewer', 'administrator', 'developer']);
+        return $user->hasAnyRole(['user', 'manager', 'sme', 'challenge_reviewer', 'administrator', 'developer']);
     }
 
     /**

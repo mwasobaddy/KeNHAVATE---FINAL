@@ -99,7 +99,7 @@ new class extends Component {
         
         // Send notification to administrators
         app(App\Services\NotificationService::class)->sendToRoles(
-            ['admin', 'developer'],
+            ['administrator', 'developer'],
             'challenge_created',
             [
                 'title' => 'New Challenge Created',

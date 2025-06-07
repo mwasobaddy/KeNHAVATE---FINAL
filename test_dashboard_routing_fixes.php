@@ -16,8 +16,7 @@ $dashboardRoutes = [
     'dashboard.manager',
     'dashboard.sme',
     'dashboard.board-member',
-    'dashboard.challenge-reviewer',
-    'dashboard.idea-reviewer'
+    'dashboard.challenge-reviewer'
 ];
 
 $registeredRoutes = [];
@@ -46,8 +45,7 @@ $roleTests = [
     'manager' => 'dashboard.manager',
     'sme' => 'dashboard.sme',
     'board_member' => 'dashboard.board-member',
-    'challenge_reviewer' => 'dashboard.challenge-reviewer',
-    'idea_reviewer' => 'dashboard.idea-reviewer'
+    'challenge_reviewer' => 'dashboard.challenge-reviewer'
 ];
 
 foreach ($roleTests as $role => $expectedRoute) {
@@ -57,7 +55,6 @@ foreach ($roleTests as $role => $expectedRoute) {
         'manager' => '/dashboard/manager',
         'sme' => '/dashboard/sme',
         'challenge_reviewer' => '/dashboard/challenge-reviewer',
-        'idea_reviewer' => '/dashboard/idea-reviewer',
         default => '/dashboard/user',
     };
     
@@ -112,7 +109,6 @@ function getDashboardRouteForRole($role) {
         'manager' => route('dashboard.manager'),
         'sme' => route('dashboard.sme'),
         'challenge_reviewer' => route('dashboard.challenge-reviewer'),
-        'idea_reviewer' => route('dashboard.idea-reviewer'),
         default => route('dashboard.user'),
     };
 }
