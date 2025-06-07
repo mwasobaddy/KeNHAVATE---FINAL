@@ -45,7 +45,7 @@
                     @if(auth()->user()->activeCollaborations()->count() > 0 || auth()->user()->collaborations()->where('status', 'pending')->count() > 0)
                         <flux:navlist.item icon="users" href="/collaboration/dashboard" :current="request()->is('collaboration/*')" wire:navigate>Collaboration</flux:navlist.item>
                     @endif
-                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'admin', 'developer']))
+                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>Reviews</flux:navlist.item>
                     @endif
                 </flux:navlist.group>
@@ -137,7 +137,7 @@
                     @if(auth()->user()->activeCollaborations()->count() > 0 || auth()->user()->collaborations()->where('status', 'pending')->count() > 0)
                         <flux:navlist.item icon="users" href="/collaboration/dashboard" :current="request()->is('collaboration/*')" wire:navigate>{{ __('Collaboration') }}</flux:navlist.item>
                     @endif
-                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'admin']))
+                    @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
                     @endif
                 </flux:navlist.group>
