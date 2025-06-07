@@ -65,6 +65,15 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Volt::route('gamification/leaderboard', 'gamification.leaderboard')->name('gamification.leaderboard');
     Volt::route('gamification/points', 'gamification.points')->name('gamification.points');
     Volt::route('gamification/achievements', 'gamification.achievements')->name('gamification.achievements');
+    
+    // Analytics & Reporting (Manager and above)
+    Volt::route('analytics', 'analytics.advanced-dashboard')->name('analytics.dashboard')->middleware('role:manager|board_member|administrator|developer');
+    
+    // Administration (Developer and Administrator only)
+    Route::middleware(['permission:manage_users'])->group(function () {
+        Volt::route('admin/users', 'admin.user-management')->name('admin.users');
+        Volt::route('admin/roles', 'admin.role-management')->name('admin.roles');
+    });
 });
 
 require __DIR__.'/auth.php';

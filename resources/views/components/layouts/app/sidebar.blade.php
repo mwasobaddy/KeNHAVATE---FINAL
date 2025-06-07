@@ -53,6 +53,19 @@
                     <flux:navlist.item icon="star" :href="route('gamification.points')" :current="request()->routeIs('gamification.points')" wire:navigate>Points & History</flux:navlist.item>
                     <flux:navlist.item icon="shield-check" :href="route('gamification.achievements')" :current="request()->routeIs('gamification.achievements')" wire:navigate>Achievements</flux:navlist.item>
                 </flux:navlist.group>
+
+                @if(auth()->user()->hasAnyRole(['manager', 'board_member', 'administrator', 'developer']))
+                    <flux:navlist.group heading="Analytics" class="grid">
+                        <flux:navlist.item icon="chart-bar" :href="route('analytics.dashboard')" :current="request()->routeIs('analytics.*')" wire:navigate>Advanced Analytics</flux:navlist.item>
+                    </flux:navlist.group>
+                @endif
+
+                @can('manage_users')
+                    <flux:navlist.group heading="Administration" class="grid">
+                        <flux:navlist.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>User Management</flux:navlist.item>
+                        <flux:navlist.item icon="shield-check" :href="route('admin.roles')" :current="request()->routeIs('admin.roles')" wire:navigate>Role Management</flux:navlist.item>
+                    </flux:navlist.group>
+                @endcan
             </flux:navlist>
 
             <flux:spacer />
@@ -150,6 +163,19 @@
                     <flux:navlist.item icon="star" :href="route('gamification.points')" :current="request()->routeIs('gamification.points')" wire:navigate>{{ __('Points & History') }}</flux:navlist.item>
                     <flux:navlist.item icon="shield-check" :href="route('gamification.achievements')" :current="request()->routeIs('gamification.achievements')" wire:navigate>{{ __('Achievements') }}</flux:navlist.item>
                 </flux:navlist.group>
+
+                @if(auth()->user()->hasAnyRole(['manager', 'board_member', 'administrator', 'developer']))
+                    <flux:navlist.group :heading="__('Analytics')" class="grid">
+                        <flux:navlist.item icon="chart-bar" :href="route('analytics.dashboard')" :current="request()->routeIs('analytics.*')" wire:navigate>{{ __('Advanced Analytics') }}</flux:navlist.item>
+                    </flux:navlist.group>
+                @endif
+
+                @can('manage_users')
+                    <flux:navlist.group :heading="__('Administration')" class="grid">
+                        <flux:navlist.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')" wire:navigate>{{ __('User Management') }}</flux:navlist.item>
+                        <flux:navlist.item icon="shield-check" :href="route('admin.roles')" :current="request()->routeIs('admin.roles')" wire:navigate>{{ __('Role Management') }}</flux:navlist.item>
+                    </flux:navlist.group>
+                @endcan
             </flux:navlist>
 
             <flux:spacer />
