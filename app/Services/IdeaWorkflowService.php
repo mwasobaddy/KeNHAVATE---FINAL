@@ -371,7 +371,7 @@ class IdeaWorkflowService
         }
 
         if (empty($stages)) {
-            return collect();
+            return new \Illuminate\Database\Eloquent\Collection();
         }
 
         return Idea::whereIn('current_stage', $stages)
