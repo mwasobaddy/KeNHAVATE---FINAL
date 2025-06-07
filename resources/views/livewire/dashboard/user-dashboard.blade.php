@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\User;
 use App\Models\Idea;
 use App\Models\Challenge;
+use App\Services\AchievementService;
 
 new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class extends Component
 {
@@ -17,6 +18,7 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
     public function with(): array
     {
         $user = auth()->user();
+        $achievementService = app(AchievementService::class);
         
         return [
             'myIdeas' => Idea::where('author_id', $user->id)->latest()->take(5)->get(),
@@ -35,6 +37,13 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
                     ->where('current_stage', 'completed')
                     ->count(),
                 'collaboration_invites' => 0, // TODO: Implement when collaboration features are ready
+            ],
+            'gamification' => [
+                'total_points' => $user->totalPoints(),
+                'monthly_points' => $user->monthlyPoints(),
+                'ranking_position' => $user->getRankingPosition(),
+                'achievements_count' => $achievementService->getUserAchievements($user)->count(),
+                'next_milestone' => $achievementService->getNextMilestone($user),
             ],
             'user' => $user
         ];
@@ -95,6 +104,21 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
         {{-- Enhanced Statistics Cards with Glass Morphism --}}
         <section aria-labelledby="stats-heading" class="group">
             <h2 id="stats-heading" class="sr-only">Dashboard Statistics</h2>
+            
+            {{-- Gamification Integration - Points Widget and Leaderboard Row --}}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                {{-- Points Widget --}}
+                <div class="lg:col-span-2">
+                    <livewire:components.points-widget />
+                </div>
+                
+                {{-- Mini Leaderboard --}}
+                <div class="lg:col-span-1">
+                    <livewire:components.leaderboard :mini="true" />
+                </div>
+            </div>
+            
+            {{-- Original Statistics Cards --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {{-- Total Ideas Card --}}
                 <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 ease-out">
@@ -628,4 +652,7 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
             <div class="absolute w-1 h-1 bg-[#FFF200] dark:bg-yellow-400 rounded-full animate-ping" style="bottom: 20%; left: 80%; animation-delay: 2s;"></div>
         </div>
     </div>
+    
+    {{-- Gamification Achievement Notifications --}}
+    <livewire:components.achievement-notifications />
 </div>

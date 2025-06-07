@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Idea;
 use App\Models\Review;
 use App\Models\Collaboration;
+use App\Services\AchievementService;
 
 new #[Layout('components.layouts.app', title: 'SME Dashboard')] class extends Component
 {
@@ -107,6 +108,16 @@ new #[Layout('components.layouts.app', title: 'SME Dashboard')] class extends Co
 }; ?>
 
 <div class="space-y-6">
+    {{-- Gamification Integration for SME Dashboard --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="lg:col-span-2">
+            <livewire:components.points-widget />
+        </div>
+        <div class="lg:col-span-1">
+            <livewire:components.leaderboard :mini="true" :role-filter="'sme'" />
+        </div>
+    </div>
+
     {{-- Welcome Section --}}
     <div class="bg-[#F8EBD5] rounded-lg p-6 border border-[#9B9EA4]/20">
         <h2 class="text-2xl font-bold text-[#231F20] mb-2">Welcome, {{ auth()->user()->first_name }}!</h2>
@@ -298,4 +309,7 @@ new #[Layout('components.layouts.app', title: 'SME Dashboard')] class extends Co
             @endforelse
         </div>
     </div>
+    
+    {{-- Gamification Achievement Notifications --}}
+    <livewire:components.achievement-notifications />
 </div>

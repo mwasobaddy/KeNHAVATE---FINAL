@@ -5,12 +5,16 @@ use App\Models\User;
 use App\Models\Idea;
 use App\Models\Challenge;
 use App\Models\Review;
+use App\Services\AchievementService;
 
 new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends Component
 {
     
     public function with(): array
     {
+        $user = auth()->user();
+        $achievementService = app(AchievementService::class);
+        
         return [
             'totalUsers' => User::count(),
             'totalIdeas' => Idea::count(),
@@ -21,6 +25,15 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
                 'ideas_this_month' => Idea::whereMonth('created_at', now()->month)->count(),
                 'challenges_this_month' => Challenge::whereMonth('created_at', now()->month)->count(),
                 'active_collaborations' => 0, // TODO: Implement when collaboration features are ready
+            ],
+            'gamification' => [
+                'total_points_awarded' => \App\Models\UserPoint::sum('points'),
+                'top_performers' => User::withSum('userPoints', 'points')
+                    ->orderBy('user_points_sum_points', 'desc')
+                    ->take(5)
+                    ->get(),
+                'daily_activity' => \App\Models\UserPoint::whereDate('created_at', today())->sum('points'),
+                'achievement_distribution' => $achievementService->getAchievementDistribution(),
             ]
         ];
     }
@@ -37,6 +50,12 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
     </div>
 
     <div class="relative z-10 md:p-6 space-y-8 max-w-7xl mx-auto">
+        {{-- Gamification System Overview for Admin --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <livewire:components.leaderboard :admin-view="true" />
+            <livewire:components.points-widget />
+        </div>
+
         {{-- Enhanced Statistics Cards with Glass Morphism --}}
         <section aria-labelledby="stats-heading" class="group">
             <h2 id="stats-heading" class="sr-only">Administration Statistics</h2>
@@ -205,7 +224,6 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
                                 <div class="w-16 h-16 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] dark:from-yellow-400 dark:to-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                                     <svg class="w-8 h-8 text-[#231F20]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
-                                    </svg>
                                 </div>
                                 
                                 <h4 class="text-lg font-bold text-[#231F20] dark:text-zinc-100 mb-2">No Users Registered</h4>
@@ -347,7 +365,6 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
                                 <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
                                 </div>
                                 <span class="text-[#231F20] dark:text-zinc-100 font-semibold text-lg">System Settings</span>
@@ -369,5 +386,8 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
                 </div>
             </div>
         </section>
+        
+        {{-- Gamification Achievement Notifications --}}
+        <livewire:components.achievement-notifications />
     </div>
 </div>

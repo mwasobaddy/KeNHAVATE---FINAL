@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Idea;
 use App\Models\Challenge;
 use App\Models\Review;
+use App\Services\AchievementService;
 
 new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extends Component
 {
@@ -11,6 +12,7 @@ new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extend
     public function with(): array
     {
         $user = auth()->user();
+        $achievementService = app(AchievementService::class);
         
         return [
             'pendingReviews' => Idea::where('current_stage', 'manager_review')->latest()->take(5)->get(),
@@ -28,6 +30,14 @@ new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extend
                 'reviews_completed_today' => Review::where('reviewer_id', $user->id)
                     ->whereDate('completed_at', today())
                     ->count(),
+            ],
+            'gamification' => [
+                'total_points' => $user->totalPoints(),
+                'monthly_points' => $user->monthlyPoints(),
+                'ranking_position' => $user->getRankingPosition(),
+                'achievements_count' => $achievementService->getUserAchievements($user)->count(),
+                'review_streak' => $user->userPoints()->reviewStreak()->count(),
+                'challenges_created_count' => $user->userPoints()->challengeCreation()->count(),
             ]
         ];
     }
@@ -36,6 +46,19 @@ new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extend
 
 
 <div class="space-y-6">
+    {{-- Gamification Integration for Manager Dashboard --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        {{-- Manager Points Widget --}}
+        <div class="lg:col-span-2">
+            <livewire:components.points-widget />
+        </div>
+        
+        {{-- Manager Leaderboard (Department focus) --}}
+        <div class="lg:col-span-1">
+            <livewire:components.leaderboard :mini="true" :department-filter="true" />
+        </div>
+    </div>
+
     <!-- Manager Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Pending Reviews -->
@@ -218,4 +241,7 @@ new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extend
             </div>
         </div>
     </div>
+    
+    {{-- Gamification Achievement Notifications --}}
+    <livewire:components.achievement-notifications />
 </div>

@@ -200,6 +200,103 @@ class User extends Authenticatable
     }
 
     /**
+     * Monthly points earned
+     */
+    public function monthlyPoints(): int
+    {
+        return $this->points()
+            ->whereYear('created_at', now()->year)
+            ->whereMonth('created_at', now()->month)
+            ->sum('points');
+    }
+
+    /**
+     * Yearly points earned
+     */
+    public function yearlyPoints(): int
+    {
+        return $this->points()
+            ->whereYear('created_at', now()->year)
+            ->sum('points');
+    }
+
+    /**
+     * Weekly points earned
+     */
+    public function weeklyPoints(): int
+    {
+        return $this->points()
+            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->sum('points');
+    }
+
+    /**
+     * Today's points earned
+     */
+    public function todayPoints(): int
+    {
+        return $this->points()
+            ->whereDate('created_at', today())
+            ->sum('points');
+    }
+
+    /**
+     * Get points breakdown by action type
+     */
+    public function pointsBreakdown(): array
+    {
+        return $this->points()
+            ->selectRaw('action, SUM(points) as total, COUNT(*) as count')
+            ->groupBy('action')
+            ->orderByDesc('total')
+            ->get()
+            ->mapWithKeys(function ($item) {
+                return [$item->action => [
+                    'total' => $item->total,
+                    'count' => $item->count,
+                ]];
+            })->toArray();
+    }
+
+    /**
+     * Get user's ranking position
+     */
+    public function getRankingPosition(string $period = 'all'): int
+    {
+        $userPoints = match($period) {
+            'monthly' => $this->monthlyPoints(),
+            'yearly' => $this->yearlyPoints(),
+            'weekly' => $this->weeklyPoints(),
+            default => $this->totalPoints(),
+        };
+
+        $query = User::query();
+        
+        if ($period === 'monthly') {
+            $query->withSum(['points' => function($q) {
+                $q->whereYear('created_at', now()->year)
+                  ->whereMonth('created_at', now()->month);
+            }], 'points');
+            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+        } elseif ($period === 'yearly') {
+            $query->withSum(['points' => function($q) {
+                $q->whereYear('created_at', now()->year);
+            }], 'points');
+            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+        } elseif ($period === 'weekly') {
+            $query->withSum(['points' => function($q) {
+                $q->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+            }], 'points');
+            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+        } else {
+            $query->withSum('points', 'points');
+            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+        }
+
+        return $higherCount + 1;
+    }
+
+    /**
      * Devices associated with this user
      */
     public function devices()

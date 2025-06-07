@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Staff;
 use App\Services\OTPService;
 use App\Services\AuditService;
+use App\Services\GamificationService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,11 +33,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     protected OTPService $otpService;
     protected AuditService $auditService;
+    protected GamificationService $gamificationService;
 
-    public function boot(OTPService $otpService, AuditService $auditService): void
+    public function boot(OTPService $otpService, AuditService $auditService, GamificationService $gamificationService): void
     {
         $this->otpService = $otpService;
         $this->auditService = $auditService;
+        $this->gamificationService = $gamificationService;
     }
 
     public function mount(): void
@@ -167,6 +170,16 @@ new #[Layout('components.layouts.auth')] class extends Component {
             // Assign appropriate role
             $role = 'user'; // All users get 'user' role by default, regardless of email domain
             $user->assignRole($role);
+
+            // Award first-time signup points (gamification integration)
+            $signupPoints = $this->gamificationService->awardFirstTimeSignup($user);
+            
+            // Store points notification for display after login
+            session()->flash('points_notification', [
+                'points' => $signupPoints->points,
+                'message' => $signupPoints->description,
+                'type' => 'first_signup'
+            ]);
 
             // Log registration
             $this->auditService->log(

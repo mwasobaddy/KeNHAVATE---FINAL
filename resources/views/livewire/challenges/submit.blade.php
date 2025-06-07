@@ -162,8 +162,22 @@ new class extends Component {
             'attachments' => $uploadedFiles,
             'team_submission' => $this->team_submission,
             'team_members' => $this->team_submission ? $this->team_members : null,
-            'status' => 'submitted',
+            'status' => 'draft',
         ]);
+        
+        // Use ChallengeWorkflowService to submit solution (includes gamification)
+        $challengeWorkflowService = app(\App\Services\ChallengeWorkflowService::class);
+        $challengeWorkflowService->submitSolution($submission, auth()->user());
+        
+        // Check for points notification in session
+        if (session()->has('points_awarded')) {
+            $pointsData = session()->get('points_awarded');
+            session()->flash('points_notification', [
+                'points' => $pointsData['points'],
+                'message' => $pointsData['message'],
+                'type' => $pointsData['type'] ?? 'challenge_participation'
+            ]);
+        }
         
         // Log the action
         app(App\Services\AuditService::class)->log(

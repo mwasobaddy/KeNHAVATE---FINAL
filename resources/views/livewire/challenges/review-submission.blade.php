@@ -114,50 +114,35 @@ new #[Layout('layouts.app')] #[Title('Review Submission')] class extends Compone
         ]);
 
         try {
-            DB::transaction(function () {
-                // Create or update review
-                $review = ChallengeReview::updateOrCreate(
-                    [
-                        'challenge_submission_id' => $this->submission->id,
-                        'reviewer_id' => auth()->id(),
-                    ],
-                    [
-                        'score' => $this->score,
-                        'feedback' => $this->feedback,
-                        'recommendation' => $this->recommendation,
-                        'criteria_scores' => $this->criteriaScores,
-                        'strengths_weaknesses' => $this->strengthsWeaknesses,
-                        'reviewed_at' => now(),
-                    ]
-                );
+            // Use ChallengeWorkflowService for integrated review processing
+            $challengeWorkflowService = app(\App\Services\ChallengeWorkflowService::class);
+            
+            $review = $challengeWorkflowService->submitReview(
+                $this->submission,
+                auth()->user(),
+                [
+                    'score' => $this->score,
+                    'feedback' => $this->feedback,
+                    'recommendation' => $this->recommendation,
+                    'criteria_scores' => $this->criteriaScores,
+                    'strengths_weaknesses' => $this->strengthsWeaknesses,
+                ]
+            );
 
-                // Update submission status based on review
-                $this->updateSubmissionStatus();
+            // Send notification to submitter
+            app(\App\Services\NotificationService::class)->sendNotification(
+                $this->submission->participant,
+                'submission_reviewed',
+                [
+                    'title' => 'Your Submission Has Been Reviewed',
+                    'message' => "Your submission '{$this->submission->title}' for challenge '{$this->submission->challenge->title}' has been reviewed with a score of {$this->score}/100.",
+                    'related_id' => $this->submission->id,
+                    'related_type' => 'ChallengeSubmission',
+                ]
+            );
 
-                // Log audit trail
-                app(AuditService::class)->log(
-                    'submission_reviewed',
-                    'ChallengeSubmission',
-                    $this->submission->id,
-                    $this->existingReview ? ['score' => $this->existingReview->score] : null,
-                    ['score' => $this->score, 'recommendation' => $this->recommendation]
-                );
-
-                // Send notification to submitter
-                app(NotificationService::class)->sendNotification(
-                    $this->submission->author,
-                    'submission_reviewed',
-                    [
-                        'title' => 'Your Submission Has Been Reviewed',
-                        'message' => "Your submission '{$this->submission->title}' for challenge '{$this->submission->challenge->title}' has been reviewed with a score of {$this->score}/100.",
-                        'related_id' => $this->submission->id,
-                        'related_type' => 'ChallengeSubmission',
-                    ]
-                );
-
-                // Update existing review reference
-                $this->existingReview = $review;
-            });
+            // Update existing review reference
+            $this->existingReview = $review;
 
             session()->flash('success', 'Review submitted successfully.');
             
@@ -166,30 +151,6 @@ new #[Layout('layouts.app')] #[Title('Review Submission')] class extends Compone
             
         } catch (\Exception $e) {
             session()->flash('error', 'Failed to submit review: ' . $e->getMessage());
-        }
-    }
-
-    private function updateSubmissionStatus()
-    {
-        // Count total reviews needed vs received
-        $totalReviews = $this->submission->reviews()->count();
-        $requiredReviews = 2; // Minimum reviews needed for a decision
-        
-        if ($totalReviews >= $requiredReviews) {
-            $averageScore = $this->submission->reviews()->avg('score');
-            $approvalCount = $this->submission->reviews()->where('recommendation', 'approve')->count();
-            $rejectionCount = $this->submission->reviews()->where('recommendation', 'reject')->count();
-            
-            // Decision logic
-            if ($approvalCount > $rejectionCount && $averageScore >= 70) {
-                $this->submission->update(['status' => 'approved']);
-            } elseif ($rejectionCount > $approvalCount || $averageScore < 50) {
-                $this->submission->update(['status' => 'rejected']);
-            } else {
-                $this->submission->update(['status' => 'needs_revision']);
-            }
-        } else {
-            $this->submission->update(['status' => 'under_review']);
         }
     }
 

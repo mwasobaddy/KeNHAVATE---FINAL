@@ -2,6 +2,7 @@
 
 use App\Services\OTPService;
 use App\Services\AuditService;
+use App\Services\DailyLoginService;
 use App\Models\User;
 use App\Models\UserDevice;
 use Illuminate\Auth\Events\Lockout;
@@ -29,11 +30,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     protected OTPService $otpService;
     protected AuditService $auditService;
+    protected DailyLoginService $dailyLoginService;
 
-    public function boot(OTPService $otpService, AuditService $auditService): void
+    public function boot(OTPService $otpService, AuditService $auditService, DailyLoginService $dailyLoginService): void
     {
         $this->otpService = $otpService;
         $this->auditService = $auditService;
+        $this->dailyLoginService = $dailyLoginService;
     }
 
     public function mount(): void
@@ -163,13 +166,25 @@ new #[Layout('components.layouts.auth')] class extends Component {
                 ['login_method' => 'otp', 'ip_address' => request()->ip()]
             );
 
+            // Award daily login points (gamification integration)
+            $pointsAwarded = $this->dailyLoginService->processLogin($user);
+            if ($pointsAwarded) {
+                // Show points notification after login
+                session()->flash('points_notification', [
+                    'points' => $pointsAwarded->points,
+                    'message' => $pointsAwarded->description,
+                    'type' => 'daily_login'
+                ]);
+            }
+
             // Clear rate limiter
             RateLimiter::clear($this->throttleKey());
             
             // Login the user
             Auth::login($user, $this->remember);
             Session::regenerate();
-            // update the column terms_accepted in users table
+            
+            // Update terms acceptance status
             $user->update(['terms_accepted' => false]);
 
             // Check if user has accepted terms

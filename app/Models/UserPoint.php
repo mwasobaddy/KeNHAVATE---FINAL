@@ -13,18 +13,15 @@ class UserPoint extends Model
 
     protected $fillable = [
         'user_id',
+        'action',
         'points',
-        'action_type',
         'description',
         'related_type',
         'related_id',
-        'multiplier',
-        'bonus_reason',
     ];
 
     protected $casts = [
         'points' => 'integer',
-        'multiplier' => 'decimal:2',
     ];
 
     /**
@@ -60,27 +57,11 @@ class UserPoint extends Model
     }
 
     /**
-     * Check if this is a bonus award
-     */
-    public function isBonus(): bool
-    {
-        return !is_null($this->bonus_reason);
-    }
-
-    /**
-     * Get calculated points with multiplier
-     */
-    public function getCalculatedPointsAttribute(): int
-    {
-        return (int) ($this->points * ($this->multiplier ?? 1));
-    }
-
-    /**
      * Get points by action type
      */
     public function scopeByAction($query, string $action)
     {
-        return $query->where('action_type', $action);
+        return $query->where('action', $action);
     }
 
     /**
@@ -100,14 +81,6 @@ class UserPoint extends Model
     }
 
     /**
-     * Get bonus points
-     */
-    public function scopeBonus($query)
-    {
-        return $query->whereNotNull('bonus_reason');
-    }
-
-    /**
      * Get points for a specific user
      */
     public function scopeForUser($query, int $userId)
@@ -116,11 +89,27 @@ class UserPoint extends Model
     }
 
     /**
+     * Get points from daily login
+     */
+    public function scopeFromDailyLogin($query)
+    {
+        return $query->where('action', 'daily_login');
+    }
+
+    /**
+     * Get points from account creation
+     */
+    public function scopeFromAccountCreation($query)
+    {
+        return $query->where('action', 'account_creation');
+    }
+
+    /**
      * Get points from idea submissions
      */
     public function scopeFromIdeaSubmission($query)
     {
-        return $query->where('action_type', 'idea_submission');
+        return $query->where('action', 'idea_submission');
     }
 
     /**
@@ -128,7 +117,7 @@ class UserPoint extends Model
      */
     public function scopeFromChallengeParticipation($query)
     {
-        return $query->where('action_type', 'challenge_participation');
+        return $query->where('action', 'challenge_participation');
     }
 
     /**
@@ -136,7 +125,7 @@ class UserPoint extends Model
      */
     public function scopeFromCollaboration($query)
     {
-        return $query->where('action_type', 'collaboration');
+        return $query->where('action', 'collaboration_contribution');
     }
 
     /**
@@ -144,7 +133,15 @@ class UserPoint extends Model
      */
     public function scopeFromReviewCompletion($query)
     {
-        return $query->where('action_type', 'review_completion');
+        return $query->where('action', 'review_completion');
+    }
+
+    /**
+     * Get points from idea approval
+     */
+    public function scopeFromIdeaApproval($query)
+    {
+        return $query->where('action', 'idea_approved');
     }
 
     /**
@@ -152,15 +149,15 @@ class UserPoint extends Model
      */
     public function scopeFromChallengeWin($query)
     {
-        return $query->where('action_type', 'challenge_win');
+        return $query->where('action', 'challenge_winner');
     }
 
     /**
-     * Get points from idea implementation
+     * Get bonus award points
      */
-    public function scopeFromIdeaImplementation($query)
+    public function scopeFromBonusAward($query)
     {
-        return $query->where('action_type', 'idea_implementation');
+        return $query->where('action', 'bonus_award');
     }
 
     /**
@@ -186,5 +183,21 @@ class UserPoint extends Model
     public function scopeCurrentYear($query)
     {
         return $query->whereYear('created_at', now()->year);
+    }
+
+    /**
+     * Get points for today
+     */
+    public function scopeToday($query)
+    {
+        return $query->whereDate('created_at', today());
+    }
+
+    /**
+     * Get points for this week
+     */
+    public function scopeThisWeek($query)
+    {
+        return $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
     }
 }

@@ -7,16 +7,25 @@ use App\Models\User;
 use App\Models\Review;
 use App\Models\AuditLog;
 use App\Services\NotificationService;
+use App\Services\GamificationService;
+use App\Services\ReviewTrackingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class IdeaWorkflowService
 {
     protected NotificationService $notificationService;
+    protected GamificationService $gamificationService;
+    protected ReviewTrackingService $reviewTrackingService;
 
-    public function __construct(NotificationService $notificationService)
-    {
+    public function __construct(
+        NotificationService $notificationService,
+        GamificationService $gamificationService,
+        ReviewTrackingService $reviewTrackingService
+    ) {
         $this->notificationService = $notificationService;
+        $this->gamificationService = $gamificationService;
+        $this->reviewTrackingService = $reviewTrackingService;
     }
 
     /**
@@ -213,6 +222,9 @@ class IdeaWorkflowService
             case 'implementation':
                 // Set implementation start date
                 $idea->update(['implementation_started_at' => now()]);
+                
+                // Award idea approval bonus to the author
+                $this->gamificationService->awardIdeaApproved($idea->author, $idea);
                 break;
                 
             case 'completed':
@@ -409,6 +421,9 @@ class IdeaWorkflowService
                 'feedback' => $feedback
             ]);
 
+            // Process review for gamification and bonuses
+            $this->reviewTrackingService->processIdeaReview($review);
+
             // Transition to next stage based on decision
             if ($decision === 'approved') {
                 $nextStage = $this->getApprovedNextStage($idea->current_stage);
@@ -464,6 +479,15 @@ class IdeaWorkflowService
                 'validation' => 'Idea must have both title and description to be submitted'
             ]);
         }
+
+        // Award points for idea submission (gamification integration)
+        $this->gamificationService->awardIdeaSubmission($user, $idea);
+
+        // Check for innovation milestone achievement (every 5th idea)
+        $this->gamificationService->checkInnovationMilestone($user);
+
+        // Check for weekend warrior bonus
+        $this->gamificationService->checkWeekendBonus($user, $idea);
 
         // Transition to submitted stage
         return $this->transitionStage($idea, 'submitted', $user, 'Idea submitted for review');

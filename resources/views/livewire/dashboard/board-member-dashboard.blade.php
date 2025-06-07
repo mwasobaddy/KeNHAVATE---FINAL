@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\Idea;
 use App\Models\Review;
 use App\Models\Challenge;
+use App\Services\AchievementService;
 
 
 new #[Layout('components.layouts.app', title: 'Board Member Dashboard')] class extends Component
@@ -114,6 +115,16 @@ new #[Layout('components.layouts.app', title: 'Board Member Dashboard')] class e
     </div>
 
     <div class="relative z-10 md:p-6 space-y-8 max-w-7xl mx-auto">
+        {{-- Gamification Integration for Board Member Dashboard --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="lg:col-span-2">
+                <livewire:components.points-widget />
+            </div>
+            <div class="lg:col-span-1">
+                <livewire:components.leaderboard :mini="true" :role-filter="'board_member'" />
+            </div>
+        </div>
+
         {{-- Welcome Header with Personalized Greeting --}}
         <div class="group relative overflow-hidden rounded-3xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
             {{-- Gradient Overlay --}}
@@ -362,5 +373,8 @@ new #[Layout('components.layouts.app', title: 'Board Member Dashboard')] class e
                 </div>
             </div>
         </div>
+        
+        {{-- Gamification Achievement Notifications --}}
+        <livewire:components.achievement-notifications />
     </div>
 </div>

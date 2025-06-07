@@ -93,7 +93,7 @@ new #[Layout('components.layouts.app', title: 'Ideas')] class extends Component
         return [
             'ideas' => $ideas,
             'stages' => $stages,
-            'can_create' => auth()->user()->hasAnyRole(['user', 'manager', administrator, 'sme', 'developer'])
+            'can_create' => auth()->user()->hasAnyRole(['user', 'manager', 'administrator', 'sme', 'developer'])
         ];
     }
 }; ?>
