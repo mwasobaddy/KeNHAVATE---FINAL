@@ -4,11 +4,17 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
+use App\Services\AuditService;
 
 new #[Layout('components.layouts.app', title: 'Role Management')] class extends Component {
     use WithPagination;
 
     public $search = '';
+    public $showDeleteModal = false;
+    public $roleToDelete = null;
+    public $password = '';
+    public $passwordError = '';
 
     public function mount()
     {
@@ -49,6 +55,87 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
     {
         $this->resetPage();
     }
+
+    public function confirmDelete($roleId)
+    {
+        $role = Role::findOrFail($roleId);
+        
+        // Authorization check
+        $this->authorize('delete', $role);
+        
+        // Additional business rule: prevent deleting system roles
+        if (in_array($role->name, ['developer', 'administrator'])) {
+            session()->flash('error', 'System roles cannot be deleted for security reasons.');
+            return;
+        }
+
+        // Check if role has users assigned
+        if ($role->users()->count() > 0) {
+            session()->flash('error', 'Cannot delete role that has users assigned. Please reassign users first.');
+            return;
+        }
+
+        $this->roleToDelete = $role;
+        $this->showDeleteModal = true;
+        $this->password = '';
+        $this->passwordError = '';
+    }
+
+    public function deleteRole()
+    {
+        // Validate password
+        if (empty($this->password)) {
+            $this->passwordError = 'Password is required to confirm deletion.';
+            return;
+        }
+
+        // Verify current user's password
+        if (!Hash::check($this->password, auth()->user()->password)) {
+            $this->passwordError = 'Incorrect password. Please try again.';
+            return;
+        }
+
+        try {
+            // Delete the role
+            $roleName = $this->roleToDelete->name;
+            $roleId = $this->roleToDelete->id;
+            $this->roleToDelete->delete();
+
+            // Log the audit trail using AuditService
+            app(AuditService::class)->log(
+                'role_deleted',
+                'role',
+                $roleId,
+                [
+                    'role_name' => $roleName,
+                    'permissions_count' => $this->roleToDelete->permissions()->count()
+                ],
+                [
+                    'deleted' => true,
+                    'deleted_by' => auth()->user()->id,
+                    'deleted_at' => now()->toISOString()
+                ]
+            );
+
+            // Close modal and reset state
+            $this->closeDeleteModal();
+            
+            // Success message
+            session()->flash('success', "Role '{$roleName}' has been successfully deleted.");
+            
+        } catch (\Exception $e) {
+            $this->passwordError = 'An error occurred while deleting the role. Please try again.';
+            \Log::error('Role deletion failed: ' . $e->getMessage());
+        }
+    }
+
+    public function closeDeleteModal()
+    {
+        $this->showDeleteModal = false;
+        $this->roleToDelete = null;
+        $this->password = '';
+        $this->passwordError = '';
+    }
 }; ?>
 
 <div class="min-h-screen relative overflow-hidden">
@@ -87,13 +174,13 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                 {{-- Action Buttons --}}
                 <div class="flex items-center space-x-4">
                     @can('create', \Spatie\Permission\Models\Role::class)
-                    <flux:button 
-                        wire:navigate 
-                        href="{{ route('roles.create') }}" 
+                    <flux:button
+                        icon="plus"
+                        wire:navigate
+                        href="{{ route('roles.create') }}"
                         variant="primary"
                         class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     >
-                        <flux:icon.plus class="w-4 h-4 mr-2" />
                         Create Role
                     </flux:button>
                     @endcan
@@ -234,7 +321,7 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                                         href="{{ route('roles.show', $role) }}" 
                                         variant="ghost" 
                                         size="sm"
-                                        class="bg-white/70 dark:bg-zinc-700/70 backdrop-blur-sm hover:bg-white/90 dark:hover:bg-zinc-600/70 text-[#231F20] dark:text-white border border-white/30 dark:border-zinc-600/30 rounded-lg transition-all duration-300"
+                                        class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-800/50 dark:hover:to-indigo-800/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/50 rounded-lg transition-all duration-300 hover:shadow-md py-5"
                                     >
                                         <flux:icon.eye class="w-4 h-4" />
                                     </flux:button>
@@ -247,11 +334,23 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                                         href="{{ route('roles.edit', $role) }}" 
                                         variant="ghost" 
                                         size="sm"
-                                        class="bg-white/70 dark:bg-zinc-700/70 backdrop-blur-sm hover:bg-white/90 dark:hover:bg-zinc-600/70 text-blue-600 dark:text-blue-400 border border-white/30 dark:border-zinc-600/30 rounded-lg transition-all duration-300"
+                                        class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-800/50 dark:hover:to-emerald-800/50 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-700/50 rounded-lg transition-all duration-300 hover:shadow-md py-5"
                                     >
                                         <flux:icon.pencil class="w-4 h-4" />
                                     </flux:button>
                                     @endif
+                                    @endcan
+
+                                    {{-- Delete Role Button --}}
+                                    @can('delete', $role)
+                                    <flux:button 
+                                        wire:click="confirmDelete('{{ $role->id }}')" 
+                                        variant="ghost" 
+                                        size="sm"
+                                        class="bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 hover:from-red-100 hover:to-rose-100 dark:hover:from-red-800/50 dark:hover:to-rose-800/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-700/50 rounded-lg transition-all duration-300 hover:shadow-md py-5"
+                                    >
+                                        <flux:icon.trash class="w-4 h-4" />
+                                    </flux:button>
                                     @endcan
                                 </div>
                             </td>
@@ -301,6 +400,83 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
             </div>
             @endif
         </div>
+
+        {{-- Password Confirmation Modal --}}
+        <flux:modal wire:model="showDeleteModal" class="max-w-md">
+            <div class="">
+                {{-- Modal Header --}}
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <flux:icon.shield-exclamation class="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-[#231F20] dark:text-white">Confirm Role Deletion</h3>
+                        <p class="text-sm text-[#9B9EA4] dark:text-zinc-400">This action cannot be undone</p>
+                    </div>
+                </div>
+
+                {{-- Warning Message --}}
+                <div class="bg-red-50/70 dark:bg-red-900/30 border border-red-200/50 dark:border-red-700/50 rounded-xl p-4 mb-6">
+                    <div class="flex items-start space-x-3">
+                        <flux:icon.exclamation-triangle class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5" />
+                        <div>
+                            <h4 class="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
+                                Delete Role: {{ $roleToDelete ? ucwords(str_replace('-', ' ', $roleToDelete->name)) : '' }}
+                            </h4>
+                            <p class="text-sm text-red-700 dark:text-red-300">
+                                You are about to permanently delete this role. All permissions associated with this role will be removed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Password Input --}}
+                <div class="mb-6">
+                    <flux:field>
+                        <flux:label>Enter your password to confirm deletion</flux:label>
+                        <flux:input 
+                            wire:model="password" 
+                            type="password" 
+                            placeholder="Enter your current password"
+                            class="bg-white/90 dark:bg-zinc-700/90 backdrop-blur-sm border border-[#9B9EA4]/30 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                            wire:keydown.enter="deleteRole"
+                        />
+                        @if($passwordError)
+                        <flux:error>{{ $passwordError }}</flux:error>
+                        @endif
+                    </flux:field>
+                </div>
+
+                {{-- Action Buttons --}}
+                <div class="flex items-center justify-end space-x-4">
+                    <flux:button 
+                        wire:click="closeDeleteModal" 
+                        variant="ghost"
+                        class="bg-gray-50 dark:bg-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-600 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-zinc-600 rounded-lg px-6 py-2.5 font-semibold transition-all duration-300"
+                    >
+                        Cancel
+                    </flux:button>
+                    
+                    <flux:button
+                        icon="trash"
+                        wire:click="deleteRole" 
+                        variant="danger"
+                        class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                        wire:loading.attr="disabled"
+                        wire:target="deleteRole"
+                    >
+                        <span wire:loading.remove wire:target="deleteRole">Delete Role</span>
+                        <span wire:loading wire:target="deleteRole" class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Deleting...
+                        </span>
+                    </flux:button>
+                </div>
+            </div>
+        </flux:modal>
 
         {{-- Success/Error Messages --}}
         @if(session('success'))

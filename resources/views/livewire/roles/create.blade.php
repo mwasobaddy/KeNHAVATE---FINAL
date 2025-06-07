@@ -46,7 +46,7 @@ new #[Layout('components.layouts.app', title: 'Create Role')] class extends Comp
 
             // Log the action
             app(AuditService::class)->log(
-                'role_creation',
+                'role_created',
                 'Role',
                 $role->id,
                 null,
@@ -60,6 +60,11 @@ new #[Layout('components.layouts.app', title: 'Create Role')] class extends Comp
             return redirect()->route('roles.index');
 
         } catch (\Exception $e) {
+            // Log the error in laravel's log
+            \Log::error('Role creation failed: ' . $e->getMessage(), [
+                'name' => $this->name,
+                'selectedPermissions' => $this->selectedPermissions
+            ]);
             session()->flash('error', 'Failed to create role. Please try again.');
         }
     }
@@ -215,21 +220,25 @@ new #[Layout('components.layouts.app', title: 'Create Role')] class extends Comp
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-4 pt-8 border-t border-white/20 dark:border-zinc-700/50">
                     <flux:button 
+                        icon="plus"
+                        wire:loading.attr="disabled"
+                        wire:target="save"
                         type="submit" 
                         variant="primary" 
                         class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     >
-                        <flux:icon.plus class="w-5 h-5 mr-2" />
                         Create Role
                     </flux:button>
                     
                     <flux:button 
+                        icon="x-mark"
+                        wire:loading.attr="disabled"
+                        wire:target="cancel"
                         type="button" 
                         wire:click="cancel" 
                         variant="ghost" 
                         class="w-full sm:w-auto bg-white/70 dark:bg-zinc-700/70 backdrop-blur-sm hover:bg-white/90 dark:hover:bg-zinc-600/70 text-[#231F20] dark:text-white px-8 py-3 rounded-xl font-semibold border border-white/30 dark:border-zinc-600/30 transition-all duration-300"
                     >
-                        <flux:icon.x-mark class="w-5 h-5 mr-2" />
                         Cancel
                     </flux:button>
                 </div>
