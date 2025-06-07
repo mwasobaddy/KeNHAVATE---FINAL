@@ -70,8 +70,8 @@ new #[Layout('components.layouts.app', title: 'Ideas')] class extends Component
                 $q->where('current_stage', $this->stage_filter);
             });
 
-        // If user is not admin/manager, only show their own ideas unless they're reviewers
-        if (!auth()->user()->hasAnyRole([administrator, 'developer', 'manager', 'sme', 'board_member'])) {
+        // If user is not administrator/manager, only show their own ideas unless they're reviewers
+        if (!auth()->user()->hasAnyRole(['administrator', 'developer', 'manager', 'sme', 'board_member'])) {
             $query->where('author_id', auth()->id());
         }
 
