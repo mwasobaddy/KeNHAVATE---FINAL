@@ -405,6 +405,74 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
                             </div>
                         </section>
 
+                        {{-- Collaboration Management --}}
+                        @if($idea->collaboration_enabled || auth()->user()->hasAnyRole(['admin', 'developer', 'manager', 'sme']))
+                            <section aria-labelledby="collaboration-heading" class="group space-y-6">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 dark:from-violet-400 dark:to-violet-500 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                        </svg>
+                                    </div>
+                                    <h2 id="collaboration-heading" class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Collaboration</h2>
+                                </div>
+                                
+                                <div class="ml-14">
+                                    @livewire('community.collaboration-management', ['idea' => $idea])
+                                </div>
+                            </section>
+                        @endif
+
+                        {{-- Comments & Discussion --}}
+                        <section aria-labelledby="comments-heading" class="group space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-600 dark:from-cyan-400 dark:to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                </div>
+                                <h2 id="comments-heading" class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Discussion</h2>
+                            </div>
+                            
+                            <div class="ml-14">
+                                @livewire('community.comments-section', ['commentable' => $idea])
+                            </div>
+                        </section>
+
+                        {{-- Suggestions & Improvements --}}
+                        <section aria-labelledby="suggestions-heading" class="group space-y-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 dark:from-teal-400 dark:to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
+                                </div>
+                                <h2 id="suggestions-heading" class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Suggestions & Improvements</h2>
+                            </div>
+                            
+                            <div class="ml-14">
+                                @livewire('community.suggestions-section', ['suggestable' => $idea])
+                            </div>
+                        </section>
+
+                        {{-- Version Comparison --}}
+                        @if($idea->collaboration_enabled && auth()->user()->can('collaborate', $idea))
+                            <section aria-labelledby="versions-heading" class="group space-y-6">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-indigo-600 dark:from-indigo-400 dark:to-indigo-500 rounded-xl flex items-center justify-center shadow-lg">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                        </svg>
+                                    </div>
+                                    <h2 id="versions-heading" class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Version History</h2>
+                                </div>
+                                
+                                <div class="ml-14">
+                                    @livewire('community.version-comparison', ['idea' => $idea])
+                                </div>
+                            </section>
+                        @endif
+
                         {{-- Review History --}}
                         @if($idea->reviews->count() > 0)
                             <section aria-labelledby="reviews-heading" class="group space-y-6">

@@ -53,11 +53,14 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     Volt::route('challenges/{challenge}/leaderboard', 'challenges.leaderboard')->name('challenges.leaderboard');
     
     // Challenge Reviews
-    Volt::route('challenge-reviews', 'challenges.reviews')->name('challenge-reviews.index')->middleware('role:manager|challenge_reviewer|sme|admin');
-    Volt::route('challenge-reviews/{submission}', 'challenges.review-submission')->name('challenge-reviews.review')->middleware('role:manager|challenge_reviewer|sme|admin');
+    Volt::route('challenge-reviews', 'challenges.reviews')->name('challenge-reviews.index')->middleware('role:manager|challenge_reviewer|sme|admin|developer');
+    Volt::route('challenge-reviews/{submission}', 'challenges.review-submission')->name('challenge-reviews.review')->middleware('role:manager|challenge_reviewer|sme|admin|developer');
     
     // Challenge Winner Selection
     Volt::route('challenges/{challenge}/winners', 'challenges.select-winners')->name('challenges.select-winners')->middleware('role:manager|admin|developer');
+    
+    // Collaboration Dashboard
+    Volt::route('collaboration/dashboard', 'collaboration.dashboard')->name('collaboration.dashboard');
 });
 
 require __DIR__.'/auth.php';

@@ -13,6 +13,11 @@ class Idea extends Model
     protected $fillable = [
         'title',
         'description',
+        'problem_statement',
+        'proposed_solution',
+        'expected_benefits',
+        'implementation_plan',
+        'attachments',
         'category_id',
         'business_case',
         'expected_impact',
@@ -26,16 +31,34 @@ class Idea extends Model
         'last_stage_change',
         'last_reviewer_id',
         'implementation_started_at',
+        'manager_review_started_at',
+        'manager_review_completed_at',
+        'sme_review_started_at',
+        'sme_review_completed_at',
+        'board_review_started_at',
+        'board_review_completed_at',
+        'collaboration_started_at',
+        'assigned_manager_id',
+        'assigned_sme_id',
+        'assigned_board_member_id',
     ];
 
     protected function casts(): array
     {
         return [
+            'attachments' => 'array',
             'collaboration_enabled' => 'boolean',
             'submitted_at' => 'datetime',
             'completed_at' => 'datetime',
             'last_stage_change' => 'datetime',
             'implementation_started_at' => 'datetime',
+            'manager_review_started_at' => 'datetime',
+            'manager_review_completed_at' => 'datetime',
+            'sme_review_started_at' => 'datetime',
+            'sme_review_completed_at' => 'datetime',
+            'board_review_started_at' => 'datetime',
+            'board_review_completed_at' => 'datetime',
+            'collaboration_started_at' => 'datetime',
         ];
     }
 
@@ -84,7 +107,31 @@ class Idea extends Model
      */
     public function collaborations()
     {
-        return $this->hasMany(Collaboration::class);
+        return $this->morphMany(Collaboration::class, 'collaborable');
+    }
+
+    /**
+     * Comments for this idea
+     */
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /**
+     * Suggestions for this idea
+     */
+    public function suggestions()
+    {
+        return $this->morphMany(Suggestion::class, 'suggestable');
+    }
+
+    /**
+     * Versions for this idea
+     */
+    public function versions()
+    {
+        return $this->hasMany(IdeaVersion::class);
     }
 
     /**

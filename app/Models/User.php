@@ -342,4 +342,96 @@ class User extends Authenticatable
                    ->whereIn('status', ['accepted', 'active'])
                    ->exists();
     }
+
+    /**
+     * Comments authored by this user
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'author_id');
+    }
+
+    /**
+     * Comment votes by this user
+     */
+    public function commentVotes()
+    {
+        return $this->hasMany(CommentVote::class);
+    }
+
+    /**
+     * Suggestions authored by this user
+     */
+    public function suggestions()
+    {
+        return $this->hasMany(Suggestion::class, 'author_id');
+    }
+
+    /**
+     * Suggestion votes by this user
+     */
+    public function suggestionVotes()
+    {
+        return $this->hasMany(SuggestionVote::class);
+    }
+
+    /**
+     * Check if user has voted on a specific comment
+     */
+    public function hasVotedOnComment(Comment $comment): bool
+    {
+        return $this->commentVotes()->where('comment_id', $comment->id)->exists();
+    }
+
+    /**
+     * Get user's vote on a specific comment
+     */
+    public function getCommentVote(Comment $comment)
+    {
+        return $this->commentVotes()->where('comment_id', $comment->id)->first();
+    }
+
+    /**
+     * Check if user has voted on a specific suggestion
+     */
+    public function hasVotedOnSuggestion(Suggestion $suggestion): bool
+    {
+        return $this->suggestionVotes()->where('suggestion_id', $suggestion->id)->exists();
+    }
+
+    /**
+     * Get user's vote on a specific suggestion
+     */
+    public function getSuggestionVote(Suggestion $suggestion)
+    {
+        return $this->suggestionVotes()->where('suggestion_id', $suggestion->id)->first();
+    }
+
+    /**
+     * Get user's reputation score based on community interactions
+     */
+    public function getReputationScore(): int
+    {
+        $commentUpvotes = $this->comments()->sum('upvotes_count');
+        $suggestionUpvotes = $this->suggestions()->sum('upvotes_count');
+        $acceptedSuggestions = $this->suggestions()->where('status', 'accepted')->count() * 10;
+        $implementedSuggestions = $this->suggestions()->where('status', 'implemented')->count() * 20;
+        
+        return $commentUpvotes + $suggestionUpvotes + $acceptedSuggestions + $implementedSuggestions;
+    }
+
+    /**
+     * Get user's community activity summary
+     */
+    public function getCommunityActivitySummary(): array
+    {
+        return [
+            'comments_count' => $this->comments()->count(),
+            'suggestions_count' => $this->suggestions()->count(),
+            'accepted_suggestions' => $this->suggestions()->where('status', 'accepted')->count(),
+            'implemented_suggestions' => $this->suggestions()->where('status', 'implemented')->count(),
+            'reputation_score' => $this->getReputationScore(),
+            'collaborations_count' => $this->activeCollaborations()->count(),
+        ];
+    }
 }

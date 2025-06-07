@@ -5,36 +5,44 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Collaboration extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
-        'idea_id',
+        'collaborable_type',
+        'collaborable_id',
         'collaborator_id',
         'invited_by',
         'status',
-        'contribution_type',
-        'contribution_description',
+        'role',
+        'invitation_message',
+        'contribution_summary',
         'invited_at',
         'responded_at',
-        'joined_at',
     ];
 
     protected $casts = [
         'invited_at' => 'datetime',
         'responded_at' => 'datetime',
-        'joined_at' => 'datetime',
     ];
 
     /**
-     * Get the idea being collaborated on
+     * Get the parent collaborable model (idea or challenge submission)
+     */
+    public function collaborable()
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * Get the idea being collaborated on (if applicable)
      */
     public function idea(): BelongsTo
     {
-        return $this->belongsTo(Idea::class);
+        return $this->belongsTo(Idea::class, 'collaborable_id')
+                    ->where('collaborable_type', 'App\\Models\\Idea');
     }
 
     /**
