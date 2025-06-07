@@ -594,12 +594,12 @@ new #[Layout('components.layouts.app', title: 'Advanced Analytics Dashboard')] c
                                 @foreach(array_slice($gamification['point_distribution'], 0, 8) as $activity)
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm font-medium text-[#231F20] dark:text-white capitalize">
-                                            {{ str_replace('_', ' ', $activity['reason']) }}
+                                            {{ str_replace('_', ' ', $activity['reason'] ?? 'Unknown Activity') }}
                                         </span>
                                         <div class="flex items-center space-x-3">
-                                            <span class="text-xs text-[#9B9EA4]">{{ $activity['count'] }}x</span>
+                                            <span class="text-xs text-[#9B9EA4]">{{ $activity['count'] ?? 0 }}x</span>
                                             <span class="text-sm font-bold text-[#231F20] dark:text-white">
-                                                {{ number_format($activity['total_points']) }} pts
+                                                {{ number_format($activity['total_points'] ?? 0) }} pts
                                             </span>
                                         </div>
                                     </div>
@@ -613,13 +613,13 @@ new #[Layout('components.layouts.app', title: 'Advanced Analytics Dashboard')] c
                         <div class="bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 rounded-2xl p-6 shadow-xl">
                             <h3 class="text-xl font-bold text-[#231F20] dark:text-white mb-6">Achievement Distribution</h3>
                             <div class="space-y-4">
-                                @foreach($gamification['achievement_stats'] as $achievement => $count)
+                                @foreach($gamification['achievement_stats'] as $achievement => $data)
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm font-medium text-[#231F20] dark:text-white">
-                                            {{ $achievement }}
+                                            {{ is_array($data) ? ($data['name'] ?? $achievement) : $achievement }}
                                         </span>
                                         <span class="text-sm font-bold text-[#231F20] dark:text-white">
-                                            {{ $count }} users
+                                            {{ is_array($data) ? ($data['count'] ?? 0) : $data }} users
                                         </span>
                                     </div>
                                 @endforeach

@@ -408,9 +408,12 @@ class AnalyticsService
     private function getReviewerPerformance(): array
     {
         return User::join('reviews', 'users.id', '=', 'reviews.reviewer_id')
-            ->select('users.name', DB::raw('count(*) as review_count'), 
-                    DB::raw('avg(reviews.rating) as avg_rating'))
-            ->groupBy('users.id', 'users.name')
+            ->select(
+                DB::raw("TRIM(users.first_name || ' ' || users.last_name) as name"),
+                DB::raw('count(*) as review_count'), 
+                DB::raw('avg(reviews.overall_score) as avg_rating')
+            )
+            ->groupBy('users.id', 'users.first_name', 'users.last_name')
             ->orderBy('review_count', 'desc')
             ->take(10)
             ->get()
@@ -435,7 +438,7 @@ class AnalyticsService
     private function getInnovationScores(): array
     {
         return [
-            'avg_idea_rating' => Review::avg('rating') ?? 0,
+            'avg_idea_rating' => Review::avg('overall_score') ?? 0,
             'implementation_rate' => $this->getImplementationRate(),
             'innovation_index' => $this->calculateInnovationIndex(),
         ];
@@ -459,7 +462,7 @@ class AnalyticsService
     {
         // Complex calculation based on multiple factors
         $ideaCount = Idea::count();
-        $avgRating = Review::avg('rating') ?? 0;
+        $avgRating = Review::avg('overall_score') ?? 0;
         $implementationRate = $this->getImplementationRate();
         $userEngagement = $this->getActiveUsers(30);
         
@@ -551,10 +554,17 @@ class AnalyticsService
      */
     private function getPointDistribution(): array
     {
-        return UserPoint::select('reason', DB::raw('sum(points) as total_points'), DB::raw('count(*) as count'))
-            ->groupBy('reason')
+        return UserPoint::select('action', DB::raw('sum(points) as total_points'), DB::raw('count(*) as count'))
+            ->groupBy('action')
             ->orderBy('total_points', 'desc')
             ->get()
+            ->map(function($item) {
+                return [
+                    'reason' => $item->action,
+                    'total_points' => $item->total_points,
+                    'count' => $item->count
+                ];
+            })
             ->toArray();
     }
 
@@ -695,7 +705,7 @@ class AnalyticsService
     {
         return [
             'total' => Review::whereBetween('created_at', $dateRange)->count(),
-            'avg_rating' => Review::whereBetween('created_at', $dateRange)->avg('rating') ?? 0,
+            'avg_rating' => Review::whereBetween('created_at', $dateRange)->avg('overall_score') ?? 0,
         ];
     }
 

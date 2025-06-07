@@ -37,11 +37,19 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_audit_logs',
             
             // User Management
+            'view_users',
             'create_users',
             'edit_users',
             'delete_users',
             'ban_users',
             'view_all_users',
+            
+            // Role Management  
+            'view_roles',
+            'create_roles',
+            'edit_roles',
+            'delete_roles',
+            'assign_roles',
             
             // Idea Management
             'create_ideas',
@@ -62,6 +70,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'approve_challenges',
             'reject_challenges',
             'manage_challenge_winners',
+            'participate_challenges',
+            'select_winners',
             
             // Review Process
             'conduct_manager_reviews',
@@ -101,7 +111,7 @@ class RolesAndPermissionsSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
         // Create roles and assign permissions
@@ -116,29 +126,35 @@ class RolesAndPermissionsSeeder extends Seeder
 
     private function createDeveloperRole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'developer',
             'guard_name' => 'web'
         ]);
 
         // Developers have all permissions (system administration)
-        $role->givePermissionTo(Permission::all());
+        $role->syncPermissions(Permission::all());
     }
 
     private function createAdministratorRole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'administrator',
             'guard_name' => 'web'
         ]);
 
         $permissions = [
             'manage_users',
+            'view_users',
             'create_users',
             'edit_users',
             'delete_users',
             'ban_users',
             'view_all_users',
+            'view_roles',
+            'create_roles',
+            'edit_roles',
+            'delete_roles',
+            'assign_roles',
             'view_all_ideas',
             'view_all_challenges',
             'manage_review_workflow',
@@ -159,12 +175,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'send_messages',
         ];
 
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 
     private function createBoardMemberRole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'board_member',
             'guard_name' => 'web'
         ]);
@@ -187,22 +203,29 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_leaderboards',
         ];
 
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 
     private function createManagerRole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'manager',
             'guard_name' => 'web'
         ]);
 
         $permissions = [
+            'view_users',
+            'create_users',
+            'edit_users',
+            'ban_users',
+            'view_roles',
+            'assign_roles',
             'create_challenges',
             'edit_challenges',
             'delete_challenges',
             'view_all_challenges',
             'manage_challenge_winners',
+            'select_winners',
             'conduct_manager_reviews',
             'review_ideas',
             'view_review_assignments',
@@ -222,12 +245,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_leaderboards',
         ];
 
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 
     private function createSMERole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'sme',
             'guard_name' => 'web'
         ]);
@@ -250,12 +273,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_leaderboards',
         ];
 
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 
     private function createChallengeReviewerRole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'challenge_reviewer',
             'guard_name' => 'web'
         ]);
@@ -274,12 +297,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_leaderboards',
         ];
 
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 
     private function createUserRole()
     {
-        $role = Role::create([
+        $role = Role::firstOrCreate([
             'name' => 'user',
             'guard_name' => 'web'
         ]);
@@ -288,6 +311,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'create_ideas',
             'edit_own_ideas',
             'delete_own_ideas',
+            'participate_challenges',
             'accept_collaboration',
             'view_collaboration_requests',
             'send_messages',
@@ -296,6 +320,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_leaderboards',
         ];
 
-        $role->givePermissionTo($permissions);
+        $role->syncPermissions($permissions);
     }
 }
