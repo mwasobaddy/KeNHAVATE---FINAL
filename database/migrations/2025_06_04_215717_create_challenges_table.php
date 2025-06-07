@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->string('category');
             $table->text('problem_statement');
             $table->text('evaluation_criteria');
             $table->json('prizes')->nullable(); // JSON for multiple prize tiers

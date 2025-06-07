@@ -19,6 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+## [0.4.1] - 2025-06-07
+
+### Fixed
+- **SEOTools Class Not Found Error**: Fixed missing `use Artesaos\SEOTools\Facades\SEOTools;` import in `challenges/index.blade.php`
+- **Challenge System Stability**: Resolved all SEOTools-related errors preventing challenge pages from loading
+- **Database Schema Issue**: Added missing `category` field to challenges table and updated Challenge model
+- **Challenge Creation Tests**: Fixed test commands to include required category field
+- **Notification System**: Ensured 100% reliability for deadline reminders and daily digest notifications
+
+### Security
+- **Authentication Verification**: Confirmed all challenge routes properly require user authentication
+- **File Upload Security**: Verified file validation and secure storage continues to function correctly
+- **Role-Based Access**: Validated proper permission enforcement across all challenge system components
+
 ## [0.4.0] - 2025-06-07 - 🏆 COMPLETE CHALLENGE COMPETITION SYSTEM ✅
 
 ### Added

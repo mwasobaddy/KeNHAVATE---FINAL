@@ -106,52 +106,52 @@ new class extends Component {
         <!-- Header Navigation -->
         <div class="mb-8">
             <div class="flex items-center gap-4 mb-6">
-                <x-flux:button 
+                <flux:button 
                     wire:navigate 
                     href="{{ route('challenges.index') }}" 
                     variant="subtle"
                     class="text-[#9B9EA4] hover:text-[#231F20]"
                 >
-                    <x-flux:icon.arrow-left class="w-5 h-5 mr-2" />
+                    <flux:icon.arrow-left class="w-5 h-5 mr-2" />
                     Back to Challenges
-                </x-flux:button>
+                </flux:button>
                 
                 <!-- Action Buttons -->
                 <div class="ml-auto flex gap-3">
                     @if($this->canEdit())
-                        <x-flux:button 
+                        <flux:button 
                             wire:navigate 
                             href="{{ route('challenges.edit', $challenge) }}" 
                             variant="outline"
                             class="border-[#9B9EA4] text-[#9B9EA4] hover:bg-[#9B9EA4]/10 rounded-xl"
                         >
-                            <x-flux:icon.pencil class="w-4 h-4 mr-2" />
+                            <flux:icon.pencil class="w-4 h-4 mr-2" />
                             Edit
-                        </x-flux:button>
+                        </flux:button>
                     @endif
                     
                     @if($this->canViewSubmissions())
-                        <x-flux:button 
+                        <flux:button 
                             wire:navigate 
                             href="{{ route('challenges.submissions', $challenge) }}" 
                             variant="outline"
                             class="border-[#231F20] text-[#231F20] hover:bg-[#231F20]/10 rounded-xl"
                         >
-                            <x-flux:icon.document-text class="w-4 h-4 mr-2" />
+                            <flux:icon.document-text class="w-4 h-4 mr-2" />
                             View Submissions ({{ $challenge->submissions->count() }})
-                        </x-flux:button>
+                        </flux:button>
                     @endif
                     
                     @if($this->canSubmit())
-                        <x-flux:button 
+                        <flux:button 
                             wire:navigate 
                             href="{{ route('challenges.submit', $challenge) }}" 
                             variant="primary"
                             class="bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl font-semibold px-6"
                         >
-                            <x-flux:icon.plus class="w-4 h-4 mr-2" />
+                            <flux:icon.plus class="w-4 h-4 mr-2" />
                             Submit Solution
-                        </x-flux:button>
+                        </flux:button>
                     @endif
                 </div>
             </div>
@@ -224,23 +224,23 @@ new class extends Component {
                         <!-- Challenge Meta -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-[#9B9EA4]">
                             <div class="flex items-center">
-                                <x-flux:icon.user class="w-4 h-4 mr-2" />
+                                <flux:icon.user class="w-4 h-4 mr-2" />
                                 <span>by {{ $challenge->author->name }}</span>
                             </div>
                             
                             <div class="flex items-center">
-                                <x-flux:icon.users class="w-4 h-4 mr-2" />
+                                <flux:icon.users class="w-4 h-4 mr-2" />
                                 <span>{{ $challenge->submissions->count() }} {{ Str::plural('submission', $challenge->submissions->count()) }}</span>
                             </div>
                             
                             <div class="flex items-center">
-                                <x-flux:icon.calendar class="w-4 h-4 mr-2" />
+                                <flux:icon.calendar class="w-4 h-4 mr-2" />
                                 <span>Created {{ $challenge->created_at->format('M j, Y') }}</span>
                             </div>
                             
                             @if($challenge->deadline)
                                 <div class="flex items-center">
-                                    <x-flux:icon.clock class="w-4 h-4 mr-2" />
+                                    <flux:icon.clock class="w-4 h-4 mr-2" />
                                     <span>Due {{ Carbon::parse($challenge->deadline)->format('M j, Y') }}</span>
                                 </div>
                             @endif
@@ -253,7 +253,7 @@ new class extends Component {
                     <div class="bg-blue-50/70 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/50 p-6">
                         <div class="flex items-start gap-4">
                             <div class="p-2 bg-blue-100 rounded-lg">
-                                <x-flux:icon.check-circle class="w-6 h-6 text-blue-600" />
+                                <flux:icon.check-circle class="w-6 h-6 text-blue-600" />
                             </div>
                             <div class="flex-1">
                                 <h3 class="text-lg font-semibold text-blue-900 mb-2">Your Submission</h3>
@@ -271,15 +271,15 @@ new class extends Component {
                 <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-semibold text-[#231F20]">Challenge Requirements</h2>
-                        <x-flux:button 
+                        <flux:button 
                             type="button"
                             wire:click="toggleRequirements"
                             variant="subtle"
                             size="sm"
                             class="text-[#9B9EA4] hover:text-[#231F20]"
                         >
-                            <x-flux:icon.chevron-down class="w-4 h-4 transform transition-transform {{ $showRequirements ? 'rotate-180' : '' }}" />
-                        </x-flux:button>
+                            <flux:icon.chevron-down class="w-4 h-4 transform transition-transform {{ $showRequirements ? 'rotate-180' : '' }}" />
+                        </flux:button>
                     </div>
                     
                     <div class="{{ $showRequirements ? 'block' : 'hidden' }}">
@@ -287,7 +287,7 @@ new class extends Component {
                             @foreach($challenge->requirements as $requirement)
                                 <li class="flex items-start gap-3">
                                     <div class="p-1 bg-[#FFF200]/20 rounded-full mt-1">
-                                        <x-flux:icon.check class="w-3 h-3 text-[#231F20]" />
+                                        <flux:icon.check class="w-3 h-3 text-[#231F20]" />
                                     </div>
                                     <span class="text-[#231F20]">{{ $requirement }}</span>
                                 </li>
@@ -304,15 +304,15 @@ new class extends Component {
                 <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-xl font-semibold text-[#231F20]">Judging Criteria</h2>
-                        <x-flux:button 
+                        <flux:button 
                             type="button"
                             wire:click="toggleJudgingCriteria"
                             variant="subtle"
                             size="sm"
                             class="text-[#9B9EA4] hover:text-[#231F20]"
                         >
-                            <x-flux:icon.chevron-down class="w-4 h-4 transform transition-transform {{ $showJudgingCriteria ? 'rotate-180' : '' }}" />
-                        </x-flux:button>
+                            <flux:icon.chevron-down class="w-4 h-4 transform transition-transform {{ $showJudgingCriteria ? 'rotate-180' : '' }}" />
+                        </flux:button>
                     </div>
                     
                     <div class="{{ $showJudgingCriteria ? 'block' : 'hidden' }}">
@@ -363,7 +363,7 @@ new class extends Component {
                     <div class="bg-gradient-to-br from-[#FFF200]/10 to-[#F8EBD5]/50 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="p-2 bg-[#FFF200]/20 rounded-lg">
-                                <x-flux:icon.gift class="w-6 h-6 text-[#231F20]" />
+                                <flux:icon.gift class="w-6 h-6 text-[#231F20]" />
                             </div>
                             <h3 class="text-lg font-semibold text-[#231F20]">Prize & Recognition</h3>
                         </div>
@@ -378,7 +378,7 @@ new class extends Component {
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-semibold text-[#231F20]">Recent Submissions</h3>
                             @if($this->canViewSubmissions())
-                                <x-flux:button 
+                                <flux:button 
                                     wire:navigate 
                                     href="{{ route('challenges.submissions', $challenge) }}" 
                                     variant="subtle"
@@ -386,7 +386,7 @@ new class extends Component {
                                     class="text-[#9B9EA4] hover:text-[#231F20]"
                                 >
                                     View All
-                                </x-flux:button>
+                                </flux:button>
                             @endif
                         </div>
                         
@@ -413,14 +413,14 @@ new class extends Component {
                         <h3 class="text-lg font-semibold text-[#231F20] mb-2">Ready to Innovate?</h3>
                         <p class="text-[#9B9EA4] text-sm mb-4">Submit your solution and join the innovation community!</p>
                         
-                        <x-flux:button 
+                        <flux:button 
                             wire:navigate 
                             href="{{ route('challenges.submit', $challenge) }}" 
                             variant="primary"
                             class="w-full bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl font-semibold py-3"
                         >
                             Submit Your Solution
-                        </x-flux:button>
+                        </flux:button>
                     </div>
                 @elseif(!Auth::check())
                     <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 text-center">
@@ -428,14 +428,14 @@ new class extends Component {
                         <h3 class="text-lg font-semibold text-[#231F20] mb-2">Join the Challenge</h3>
                         <p class="text-[#9B9EA4] text-sm mb-4">Sign in to submit your innovative solution!</p>
                         
-                        <x-flux:button 
+                        <flux:button 
                             wire:navigate 
                             href="{{ route('login') }}" 
                             variant="primary"
                             class="w-full bg-[#231F20] hover:bg-gray-800 text-white rounded-xl font-semibold py-3"
                         >
                             Sign In to Participate
-                        </x-flux:button>
+                        </flux:button>
                     </div>
                 @endif
             </div>

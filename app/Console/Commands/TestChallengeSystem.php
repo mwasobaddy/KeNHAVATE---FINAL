@@ -153,6 +153,7 @@ class TestChallengeSystem extends Command
             $challengeData = [
                 'title' => 'Test Challenge ' . now()->timestamp,
                 'description' => 'This is a comprehensive test challenge to validate the challenge creation system.',
+                'category' => 'technology',
                 'problem_statement' => 'Develop an innovative solution to improve highway maintenance efficiency.',
                 'evaluation_criteria' => 'Innovation (40%), Feasibility (30%), Impact (30%)',
                 'created_by' => $manager->id,
@@ -520,6 +521,7 @@ class TestChallengeSystem extends Command
             $expiredChallenge = Challenge::create([
                 'title' => 'Test Expired Challenge ' . now()->timestamp,
                 'description' => 'Test challenge for workflow validation',
+                'category' => 'infrastructure',
                 'problem_statement' => 'Test problem statement for workflow validation',
                 'evaluation_criteria' => 'Innovation (50%), Feasibility (50%)',
                 'created_by' => $manager->id,

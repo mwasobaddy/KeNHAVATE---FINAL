@@ -132,15 +132,15 @@ new class extends Component {
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center gap-4 mb-4">
-                <x-flux:button 
+                <flux:button 
                     wire:navigate 
                     href="{{ route('challenges.index') }}" 
                     variant="subtle"
                     class="text-[#9B9EA4] hover:text-[#231F20]"
                 >
-                    <x-flux:icon.arrow-left class="w-5 h-5 mr-2" />
+                    <flux:icon.arrow-left class="w-5 h-5 mr-2" />
                     Back to Challenges
-                </x-flux:button>
+                </flux:button>
             </div>
             
             <h1 class="text-3xl font-bold text-[#231F20] mb-2">Create Innovation Challenge</h1>
@@ -155,21 +155,21 @@ new class extends Component {
                 
                 <div class="space-y-4">
                     <div>
-                        <x-flux:field>
-                            <x-flux:label>Challenge Title</x-flux:label>
-                            <x-flux:input 
+                        <flux:field>
+                            <flux:label>Challenge Title</flux:label>
+                            <flux:input 
                                 wire:model="title" 
                                 placeholder="Enter a compelling challenge title..."
                                 class="rounded-xl border-[#9B9EA4]/30"
                             />
-                            <x-flux:error name="title" />
-                        </x-flux:field>
+                            <flux:error name="title" />
+                        </flux:field>
                     </div>
                     
                     <div>
-                        <x-flux:field>
-                            <x-flux:label>Category</x-flux:label>
-                            <x-flux:select wire:model="category" class="rounded-xl border-[#9B9EA4]/30">
+                        <flux:field>
+                            <flux:label>Category</flux:label>
+                            <flux:select wire:model="category" class="rounded-xl border-[#9B9EA4]/30">
                                 <option value="">Select a category</option>
                                 <option value="technology">Technology & Innovation</option>
                                 <option value="sustainability">Sustainability & Environment</option>
@@ -177,22 +177,22 @@ new class extends Component {
                                 <option value="innovation">Process Innovation</option>
                                 <option value="infrastructure">Infrastructure Development</option>
                                 <option value="efficiency">Efficiency & Optimization</option>
-                            </x-flux:select>
-                            <x-flux:error name="category" />
-                        </x-flux:field>
+                            </flux:select>
+                            <flux:error name="category" />
+                        </flux:field>
                     </div>
                     
                     <div>
-                        <x-flux:field>
-                            <x-flux:label>Challenge Description</x-flux:label>
-                            <x-flux:textarea 
+                        <flux:field>
+                            <flux:label>Challenge Description</flux:label>
+                            <flux:textarea 
                                 wire:model="description" 
                                 rows="6"
                                 placeholder="Provide a detailed description of the challenge, including the problem statement, objectives, and expected outcomes..."
                                 class="rounded-xl border-[#9B9EA4]/30"
                             />
-                            <x-flux:error name="description" />
-                        </x-flux:field>
+                            <flux:error name="description" />
+                        </flux:field>
                     </div>
                 </div>
             </div>
@@ -201,23 +201,23 @@ new class extends Component {
             <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-xl font-semibold text-[#231F20]">Challenge Requirements</h2>
-                    <x-flux:button 
+                    <flux:button 
                         type="button"
                         wire:click="addRequirement"
                         variant="primary"
                         size="sm"
                         class="bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl"
                     >
-                        <x-flux:icon.plus class="w-4 h-4 mr-1" />
+                        <flux:icon.plus class="w-4 h-4 mr-1" />
                         Add Requirement
-                    </x-flux:button>
+                    </flux:button>
                 </div>
                 
                 <div class="space-y-3">
                     @foreach($requirements as $index => $requirement)
                         <div class="flex gap-3">
                             <div class="flex-1">
-                                <x-flux:input 
+                                <flux:input 
                                     wire:model="requirements.{{ $index }}" 
                                     placeholder="Enter requirement {{ $index + 1 }}..."
                                     class="rounded-xl border-[#9B9EA4]/30"
@@ -228,15 +228,15 @@ new class extends Component {
                             </div>
                             
                             @if(count($requirements) > 1)
-                                <x-flux:button 
+                                <flux:button 
                                     type="button"
                                     wire:click="removeRequirement({{ $index }})"
                                     variant="danger"
                                     size="sm"
                                     class="px-3 rounded-xl"
                                 >
-                                    <x-flux:icon.trash class="w-4 h-4" />
-                                </x-flux:button>
+                                    <flux:icon.trash class="w-4 h-4" />
+                                </flux:button>
                             @endif
                         </div>
                     @endforeach
@@ -254,15 +254,15 @@ new class extends Component {
                     <h2 class="text-xl font-semibold text-[#231F20] mb-4">Judging Criteria</h2>
                     
                     <div>
-                        <x-flux:field>
-                            <x-flux:textarea 
+                        <flux:field>
+                            <flux:textarea 
                                 wire:model="judging_criteria" 
                                 rows="6"
                                 placeholder="Describe how submissions will be evaluated (e.g., innovation, feasibility, impact, presentation quality)..."
                                 class="rounded-xl border-[#9B9EA4]/30"
                             />
-                            <x-flux:error name="judging_criteria" />
-                        </x-flux:field>
+                            <flux:error name="judging_criteria" />
+                        </flux:field>
                     </div>
                 </div>
                 
@@ -273,17 +273,17 @@ new class extends Component {
                         <h2 class="text-xl font-semibold text-[#231F20] mb-4">Timeline</h2>
                         
                         <div>
-                            <x-flux:field>
-                                <x-flux:label>Submission Deadline</x-flux:label>
-                                <x-flux:input 
+                            <flux:field>
+                                <flux:label>Submission Deadline</flux:label>
+                                <flux:input 
                                     type="date"
                                     wire:model="deadline" 
                                     min="{{ now()->addDays(7)->toDateString() }}"
                                     class="rounded-xl border-[#9B9EA4]/30"
                                 />
-                                <x-flux:error name="deadline" />
-                                <x-flux:description>Minimum 7 days from today</x-flux:description>
-                            </x-flux:field>
+                                <flux:error name="deadline" />
+                                <flux:description>Minimum 7 days from today</flux:description>
+                            </flux:field>
                         </div>
                     </div>
                     
@@ -292,15 +292,15 @@ new class extends Component {
                         <h2 class="text-xl font-semibold text-[#231F20] mb-4">Prize & Recognition</h2>
                         
                         <div>
-                            <x-flux:field>
-                                <x-flux:textarea 
+                            <flux:field>
+                                <flux:textarea 
                                     wire:model="prize_description" 
                                     rows="3"
                                     placeholder="Describe the prizes, recognition, or opportunities for winners (optional)..."
                                     class="rounded-xl border-[#9B9EA4]/30"
                                 />
-                                <x-flux:error name="prize_description" />
-                            </x-flux:field>
+                                <flux:error name="prize_description" />
+                            </flux:field>
                         </div>
                     </div>
                 </div>
@@ -309,7 +309,7 @@ new class extends Component {
             <!-- Form Actions -->
             <div class="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
                 <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                    <x-flux:button 
+                    <flux:button 
                         type="button"
                         wire:click="saveDraft"
                         variant="outline"
@@ -318,9 +318,9 @@ new class extends Component {
                     >
                         <span wire:loading.remove wire:target="saveDraft">Save as Draft</span>
                         <span wire:loading wire:target="saveDraft">Saving...</span>
-                    </x-flux:button>
+                    </flux:button>
                     
-                    <x-flux:button 
+                    <flux:button 
                         type="button"
                         wire:click="publish"
                         variant="primary"
@@ -329,7 +329,7 @@ new class extends Component {
                     >
                         <span wire:loading.remove wire:target="publish">Publish Challenge</span>
                         <span wire:loading wire:target="publish">Publishing...</span>
-                    </x-flux:button>
+                    </flux:button>
                 </div>
                 
                 <p class="text-sm text-[#9B9EA4] mt-3 text-center">

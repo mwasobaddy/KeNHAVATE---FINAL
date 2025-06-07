@@ -333,7 +333,7 @@ When generating UI components:
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     {{-- Search bar --}}
     <div class="pb-4 bg-white">
-        <x-flux:input 
+        <flux:input 
             wire:model.live="search" 
             placeholder="Search ideas..." 
             class="w-full"

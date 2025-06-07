@@ -322,7 +322,7 @@ new #[Layout('layouts.app')] #[Title('Challenge Submissions')] class extends Com
                 <div class="flex flex-col sm:flex-row gap-4 flex-1">
                     <!-- Search -->
                     <div class="flex-1">
-                        <x-flux:input 
+                        <flux:input 
                             wire:model.live.debounce.500ms="search"
                             placeholder="Search submissions..."
                             class="w-full"
@@ -331,12 +331,12 @@ new #[Layout('layouts.app')] #[Title('Challenge Submissions')] class extends Com
                     
                     <!-- Status Filter -->
                     <div class="w-full sm:w-48">
-                        <x-flux:select wire:model.live="statusFilter" class="w-full">
+                        <flux:select wire:model.live="statusFilter" class="w-full">
                             <option value="">All Status</option>
                             @foreach($statusOptions as $value => $label)
                                 <option value="{{ $value }}">{{ $label }}</option>
                             @endforeach
-                        </x-flux:select>
+                        </flux:select>
                     </div>
                 </div>
 
@@ -347,15 +347,15 @@ new #[Layout('layouts.app')] #[Title('Challenge Submissions')] class extends Com
                             {{ count($selectedSubmissions) }} selected
                         </span>
                         <div class="flex gap-2">
-                            <x-flux:select wire:model="bulkAction" class="text-sm">
+                            <flux:select wire:model="bulkAction" class="text-sm">
                                 <option value="">Select Action</option>
                                 <option value="approve">Approve</option>
                                 <option value="reject">Reject</option>
                                 <option value="review">Quick Review</option>
-                            </x-flux:select>
+                            </flux:select>
                             
                             @if($bulkAction === 'review')
-                                <x-flux:input 
+                                <flux:input 
                                     wire:model="bulkScore" 
                                     type="number" 
                                     min="0" 
@@ -363,19 +363,19 @@ new #[Layout('layouts.app')] #[Title('Challenge Submissions')] class extends Com
                                     placeholder="Score"
                                     class="w-20 text-sm"
                                 />
-                                <x-flux:input 
+                                <flux:input 
                                     wire:model="bulkFeedback" 
                                     placeholder="Quick feedback"
                                     class="w-32 text-sm"
                                 />
                             @endif
                             
-                            <x-flux:button 
+                            <flux:button 
                                 wire:click="bulkUpdateSubmissions"
                                 variant="primary"
                                 size="sm">
                                 Apply
-                            </x-flux:button>
+                            </flux:button>
                         </div>
                     </div>
                 @endif

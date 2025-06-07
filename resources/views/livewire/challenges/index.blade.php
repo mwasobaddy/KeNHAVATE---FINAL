@@ -6,6 +6,7 @@ use App\Models\Challenge;
 use App\Models\ChallengeSubmission;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Artesaos\SEOTools\Facades\SEOTools;
 
 new class extends Component {
     use WithPagination;
@@ -51,7 +52,7 @@ new class extends Component {
     
     public function with()
     {
-        $query = Challenge::with(['author', 'submissions'])
+        $query = Challenge::with(['creator', 'submissions'])
             ->withCount('submissions');
             
         // Apply search filter
@@ -140,15 +141,15 @@ new class extends Component {
                 </div>
                 
                 @if(auth()->user()->hasRole(['manager', 'admin', 'developer']))
-                    <x-flux:button 
+                    <flux:button 
                         wire:navigate 
                         href="{{ route('challenges.create') }}" 
                         variant="primary"
                         class="bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] font-semibold px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
                     >
-                        <x-flux:icon.plus class="w-5 h-5 mr-2" />
+                        <flux:icon.plus class="w-5 h-5 mr-2" />
                         Create Challenge
-                    </x-flux:button>
+                    </flux:button>
                 @endif
             </div>
         </div>
@@ -158,36 +159,36 @@ new class extends Component {
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Search -->
                 <div class="md:col-span-2">
-                    <x-flux:input 
+                    <flux:input 
                         wire:model.live.debounce.300ms="search"
                         placeholder="Search challenges..."
                         class="w-full rounded-xl border-[#9B9EA4]/30 bg-white/80"
                     >
                         <x-slot name="iconLeading">
-                            <x-flux:icon.magnifying-glass class="w-5 h-5 text-[#9B9EA4]" />
+                            <flux:icon.magnifying-glass class="w-5 h-5 text-[#9B9EA4]" />
                         </x-slot>
-                    </x-flux:input>
+                    </flux:input>
                 </div>
 
                 <!-- Status Filter -->
                 <div>
-                    <x-flux:select wire:model.live="status" class="w-full rounded-xl border-[#9B9EA4]/30 bg-white/80">
+                    <flux:select wire:model.live="status" class="w-full rounded-xl border-[#9B9EA4]/30 bg-white/80">
                         <option value="all">All Status</option>
                         <option value="active">Active</option>
                         <option value="judging">Judging</option>
                         <option value="completed">Completed</option>
                         <option value="cancelled">Cancelled</option>
-                    </x-flux:select>
+                    </flux:select>
                 </div>
 
                 <!-- Category Filter -->
                 <div>
-                    <x-flux:select wire:model.live="category" class="w-full rounded-xl border-[#9B9EA4]/30 bg-white/80">
+                    <flux:select wire:model.live="category" class="w-full rounded-xl border-[#9B9EA4]/30 bg-white/80">
                         <option value="all">All Categories</option>
                         @foreach($categories as $cat)
                             <option value="{{ $cat }}">{{ ucfirst($cat) }}</option>
                         @endforeach
-                    </x-flux:select>
+                    </flux:select>
                 </div>
             </div>
         </div>
@@ -255,18 +256,18 @@ new class extends Component {
                         <!-- Challenge Meta -->
                         <div class="space-y-2 mb-4">
                             <div class="flex items-center text-sm text-[#9B9EA4]">
-                                <x-flux:icon.user class="w-4 h-4 mr-2" />
-                                <span>by {{ $challenge->author->name }}</span>
+                                <flux:icon.user class="w-4 h-4 mr-2" />
+                                <span>by {{ $challenge->creator->name }}</span>
                             </div>
                             
                             <div class="flex items-center text-sm text-[#9B9EA4]">
-                                <x-flux:icon.users class="w-4 h-4 mr-2" />
+                                <flux:icon.users class="w-4 h-4 mr-2" />
                                 <span>{{ $challenge->submissions_count }} {{ Str::plural('submission', $challenge->submissions_count) }}</span>
                             </div>
                             
                             @if($challenge->prize_description)
                                 <div class="flex items-center text-sm text-[#9B9EA4]">
-                                    <x-flux:icon.gift class="w-4 h-4 mr-2" />
+                                    <flux:icon.gift class="w-4 h-4 mr-2" />
                                     <span class="line-clamp-1">{{ $challenge->prize_description }}</span>
                                 </div>
                             @endif
@@ -277,7 +278,7 @@ new class extends Component {
                             @if(isset($userSubmissions[$challenge->id]))
                                 <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                                     <div class="flex items-center text-sm text-blue-800">
-                                        <x-flux:icon.check-circle class="w-4 h-4 mr-2" />
+                                        <flux:icon.check-circle class="w-4 h-4 mr-2" />
                                         <span>You have submitted to this challenge</span>
                                     </div>
                                 </div>
@@ -286,25 +287,25 @@ new class extends Component {
                         
                         <!-- Action Buttons -->
                         <div class="flex gap-2">
-                            <x-flux:button 
+                            <flux:button 
                                 wire:navigate 
                                 href="{{ route('challenges.show', $challenge) }}" 
                                 variant="primary"
                                 class="flex-1 bg-[#231F20] hover:bg-gray-800 text-white rounded-xl"
                             >
                                 View Details
-                            </x-flux:button>
+                            </flux:button>
                             
                             @auth
                                 @if($challenge->status === 'active' && !isset($userSubmissions[$challenge->id]))
-                                    <x-flux:button 
+                                    <flux:button 
                                         wire:navigate 
                                         href="{{ route('challenges.submit', $challenge) }}" 
                                         variant="primary"
                                         class="bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl px-6"
                                     >
                                         Submit
-                                    </x-flux:button>
+                                    </flux:button>
                                 @endif
                             @endauth
                         </div>
@@ -318,14 +319,14 @@ new class extends Component {
                         <p class="text-[#9B9EA4] mb-6">Try adjusting your search criteria or check back later for new challenges.</p>
                         
                         @if(auth()->user()->hasRole(['manager', 'admin', 'developer']))
-                            <x-flux:button 
+                            <flux:button 
                                 wire:navigate 
                                 href="{{ route('challenges.create') }}" 
                                 variant="primary"
                                 class="bg-[#FFF200] hover:bg-yellow-400 text-[#231F20] rounded-xl"
                             >
                                 Create First Challenge
-                            </x-flux:button>
+                            </flux:button>
                         @endif
                     </div>
                 </div>

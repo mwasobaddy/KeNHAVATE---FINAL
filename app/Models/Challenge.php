@@ -13,6 +13,7 @@ class Challenge extends Model
     protected $fillable = [
         'title',
         'description',
+        'category',
         'problem_statement',
         'evaluation_criteria',
         'prizes',

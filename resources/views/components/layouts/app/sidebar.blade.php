@@ -41,6 +41,7 @@
                     @endphp
                     <flux:navlist.item icon="home" :href="$dashboardRoute" :current="request()->routeIs('dashboard*')" wire:navigate>Dashboard</flux:navlist.item>
                     <flux:navlist.item icon="light-bulb" :href="route('ideas.index')" :current="request()->routeIs('ideas.*')" wire:navigate>Ideas</flux:navlist.item>
+                    <flux:navlist.item icon="trophy" :href="route('challenges.index')" :current="request()->routeIs('challenges.*') || request()->routeIs('challenge-reviews.*')" wire:navigate>Challenges</flux:navlist.item>
                     @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'admin']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>Reviews</flux:navlist.item>
                     @endif
@@ -129,6 +130,7 @@
                     @endphp
                     <flux:navlist.item icon="home" :href="$dashboardRoute" :current="request()->routeIs('dashboard*')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="light-bulb" :href="route('ideas.index')" :current="request()->routeIs('ideas.*')" wire:navigate>{{ __('Ideas') }}</flux:navlist.item>
+                    <flux:navlist.item icon="trophy" :href="route('challenges.index')" :current="request()->routeIs('challenges.*') || request()->routeIs('challenge-reviews.*')" wire:navigate>{{ __('Challenges') }}</flux:navlist.item>
                     @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'idea_reviewer', 'admin']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
                     @endif
