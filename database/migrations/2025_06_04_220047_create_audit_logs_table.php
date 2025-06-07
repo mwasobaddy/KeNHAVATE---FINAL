@@ -33,6 +33,7 @@ return new class extends Migration
                 'role_created',
                 'role_updated',
                 'role_deleted',
+                'role_removed',
                 'user_created',
                 'user_updated',
                 'user_deleted',
