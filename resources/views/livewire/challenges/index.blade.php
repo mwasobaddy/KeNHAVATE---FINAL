@@ -52,7 +52,7 @@ new class extends Component {
     
     public function with()
     {
-        $query = Challenge::with(['creator', 'submissions'])
+        $query = Challenge::with(['author', 'submissions'])
             ->withCount('submissions');
             
         // Apply search filter
@@ -257,7 +257,7 @@ new class extends Component {
                         <div class="space-y-2 mb-4">
                             <div class="flex items-center text-sm text-[#9B9EA4]">
                                 <flux:icon.user class="w-4 h-4 mr-2" />
-                                <span>by {{ $challenge->creator->name }}</span>
+                                <span>by {{ $challenge->author->name }}</span>
                             </div>
                             
                             <div class="flex items-center text-sm text-[#9B9EA4]">

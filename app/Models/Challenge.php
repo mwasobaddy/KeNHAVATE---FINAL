@@ -41,9 +41,9 @@ class Challenge extends Model
     }
 
     /**
-     * Creator relationship
+     * Author relationship
      */
-    public function creator()
+    public function author()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
