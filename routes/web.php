@@ -60,6 +60,11 @@ Route::middleware(['auth', 'terms.accepted'])->group(function () {
     
     // Collaboration Dashboard
     Volt::route('collaboration/dashboard', 'collaboration.dashboard')->name('collaboration.dashboard');
+    
+    // Gamification System
+    Volt::route('gamification/leaderboard', 'gamification.leaderboard')->name('gamification.leaderboard');
+    Volt::route('gamification/points', 'gamification.points')->name('gamification.points');
+    Volt::route('gamification/achievements', 'gamification.achievements')->name('gamification.achievements');
 });
 
 require __DIR__.'/auth.php';

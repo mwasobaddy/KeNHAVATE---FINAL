@@ -105,17 +105,64 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
         <section aria-labelledby="stats-heading" class="group">
             <h2 id="stats-heading" class="sr-only">Dashboard Statistics</h2>
             
-            {{-- Gamification Integration - Points Widget and Leaderboard Row --}}
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                {{-- Points Widget --}}
-                <div class="lg:col-span-2">
-                    <livewire:components.points-widget />
-                </div>
-                
-                {{-- Mini Leaderboard --}}
-                <div class="lg:col-span-1">
-                    <livewire:components.leaderboard :mini="true" />
-                </div>
+            {{-- Gamification Navigation Cards --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                {{-- Leaderboard Card --}}
+                <a href="{{ route('gamification.leaderboard') }}" wire:navigate class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#FFF200]/20 via-white to-[#F8EBD5]/30 border border-[#FFF200]/30 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFF200] text-[#231F20] shadow-lg">
+                                <flux:icon.trophy class="size-6" />
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-[#231F20] group-hover:text-[#231F20]/80">Leaderboard</h3>
+                                <p class="text-sm text-[#9B9EA4]">View your ranking</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-2xl font-bold text-[#231F20]">#{{ $gamification['ranking_position'] ?? 'N/A' }}</span>
+                            <flux:icon.arrow-right class="size-5 text-[#9B9EA4] group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
+                </a>
+
+                {{-- Points Card --}}
+                <a href="{{ route('gamification.points') }}" wire:navigate class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-100 via-white to-green-50 border border-green-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500 text-white shadow-lg">
+                                <flux:icon.star class="size-6" />
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-green-900 group-hover:text-green-700">Points & History</h3>
+                                <p class="text-sm text-green-600">Track your progress</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-2xl font-bold text-green-900">{{ number_format($gamification['total_points'] ?? 0) }}</span>
+                            <flux:icon.arrow-right class="size-5 text-green-600 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
+                </a>
+
+                {{-- Achievements Card --}}
+                <a href="{{ route('gamification.achievements') }}" wire:navigate class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-100 via-white to-purple-50 border border-purple-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500 text-white shadow-lg">
+                                <flux:icon.shield-check class="size-6" />
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-purple-900 group-hover:text-purple-700">Achievements</h3>
+                                <p class="text-sm text-purple-600">Unlock rewards</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <span class="text-2xl font-bold text-purple-900">{{ $gamification['achievements_count'] ?? 0 }}</span>
+                            <flux:icon.arrow-right class="size-5 text-purple-600 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                    </div>
+                </a>
             </div>
             
             {{-- Original Statistics Cards --}}

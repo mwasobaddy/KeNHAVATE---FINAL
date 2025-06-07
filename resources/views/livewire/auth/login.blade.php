@@ -307,6 +307,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     placeholder="hello@example.com"
                     class="mt-1 block w-full rounded-lg border-[#9B9EA4] dark:border-zinc-600 shadow-sm focus:border-[#FFF200] focus:ring-[#FFF200] dark:bg-zinc-800/50 dark:text-white dark:placeholder-zinc-400"
                 />
+                @error('email')
+                    <div class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</div>
+                @enderror
             </div>
 
             <!-- Remember Me -->
@@ -530,6 +533,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     <input type="hidden" wire:model="otp" />
                     
                     <p class="text-center text-sm text-[#9B9EA4] dark:text-zinc-400">Enter the 6-digit code sent to <span class="font-medium text-[#231F20] dark:text-white">{{ $email }}</span></p>
+                    
+                    @error('otp')
+                        <div class="mt-2 text-center text-sm text-red-600 dark:text-red-400">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <!-- Action Buttons -->

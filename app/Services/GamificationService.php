@@ -110,7 +110,8 @@ class GamificationService
             $user,
             'daily_login',
             $totalPoints,
-            $description
+            $description,
+            $user  // Add the related entity (user for daily login)
         );
 
         // Check for milestone achievements
@@ -548,18 +549,23 @@ class GamificationService
                     $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
                 }
             }], 'points')
-            ->having('points_sum_points', '>', 0)
             ->orderByDesc('points_sum_points')
-            ->limit($limit);
+            ->limit($limit * 2); // Get more to filter out users with 0 points
 
-        return $query->get()->map(function ($user, $index) {
-            return [
-                'rank' => $index + 1,
-                'user' => $user,
-                'total_points' => $user->points_sum_points ?? 0,
-                'department' => $user->staff?->department ?? 'External',
-            ];
-        })->toArray();
+        return $query->get()
+            ->filter(function ($user) {
+                return ($user->points_sum_points ?? 0) > 0;
+            })
+            ->take($limit)
+            ->values()
+            ->map(function ($user, $index) {
+                return [
+                    'rank' => $index + 1,
+                    'user' => $user,
+                    'total_points' => $user->points_sum_points ?? 0,
+                    'department' => $user->staff?->department ?? 'External',
+                ];
+            })->toArray();
     }
 
     /**
@@ -579,17 +585,22 @@ class GamificationService
                     $query->whereYear('created_at', now()->year);
                 }
             }], 'points')
-            ->having('points_sum_points', '>', 0)
             ->orderByDesc('points_sum_points')
-            ->limit($limit);
+            ->limit($limit * 2); // Get more to filter out users with 0 points
 
-        return $query->get()->map(function ($user, $index) {
-            return [
-                'rank' => $index + 1,
-                'user' => $user,
-                'total_points' => $user->points_sum_points ?? 0,
-            ];
-        })->toArray();
+        return $query->get()
+            ->filter(function ($user) {
+                return ($user->points_sum_points ?? 0) > 0;
+            })
+            ->take($limit)
+            ->values()
+            ->map(function ($user, $index) {
+                return [
+                    'rank' => $index + 1,
+                    'user' => $user,
+                    'total_points' => $user->points_sum_points ?? 0,
+                ];
+            })->toArray();
     }
 
     /**
@@ -616,10 +627,14 @@ class GamificationService
             });
         }
 
-        $users = $query->having('points_sum_points', '>', 0)
-            ->orderByDesc('points_sum_points')
-            ->limit($limit)
-            ->get();
+        $users = $query->orderByDesc('points_sum_points')
+            ->limit($limit * 2) // Get more to filter out users with 0 points
+            ->get()
+            ->filter(function ($user) {
+                return ($user->points_sum_points ?? 0) > 0;
+            })
+            ->take($limit)
+            ->values();
 
         return $users->map(function ($user, $index) {
             return [

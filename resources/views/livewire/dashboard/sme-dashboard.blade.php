@@ -111,10 +111,65 @@ new #[Layout('components.layouts.app', title: 'SME Dashboard')] class extends Co
     {{-- Gamification Integration for SME Dashboard --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div class="lg:col-span-2">
-            <livewire:components.points-widget />
+            <div class="bg-white rounded-lg shadow-sm border border-[#9B9EA4]/20 p-6">
+                <h3 class="font-semibold text-[#231F20] mb-4">Gamification Hub</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {{-- Leaderboard Card --}}
+                    <a href="{{ route('gamification.leaderboard') }}" class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-4 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+                                <flux:icon.trophy class="w-4 h-4 text-white" />
+                            </div>
+                            <flux:icon.chevron-right class="w-3 h-3 text-blue-600 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                        <h4 class="font-medium text-blue-900 text-sm">Leaderboard</h4>
+                        <p class="text-blue-700 text-xs mt-1">SME Rankings</p>
+                    </a>
+
+                    {{-- Points Card --}}
+                    <a href="{{ route('gamification.points') }}" class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 p-4 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center">
+                                <flux:icon.currency-dollar class="w-4 h-4 text-white" />
+                            </div>
+                            <flux:icon.chevron-right class="w-3 h-3 text-emerald-600 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                        <h4 class="font-medium text-emerald-900 text-sm">Points</h4>
+                        <p class="text-emerald-700 text-xs mt-1">{{ number_format($this->userPoints ?? 0) }} pts</p>
+                    </a>
+
+                    {{-- Achievements Card --}}
+                    <a href="{{ route('gamification.achievements') }}" class="group relative overflow-hidden rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-4 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center">
+                                <flux:icon.star class="w-4 h-4 text-white" />
+                            </div>
+                            <flux:icon.chevron-right class="w-3 h-3 text-purple-600 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                        <h4 class="font-medium text-purple-900 text-sm">Achievements</h4>
+                        <p class="text-purple-700 text-xs mt-1">{{ $this->userAchievements ?? 0 }} unlocked</p>
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="lg:col-span-1">
-            <livewire:components.leaderboard :mini="true" :role-filter="'sme'" />
+            <div class="bg-white rounded-lg shadow-sm border border-[#9B9EA4]/20 p-6">
+                <h3 class="font-semibold text-[#231F20] mb-4">SME Performance</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-[#231F20]/70">Rank among SMEs</span>
+                        <span class="font-semibold text-[#231F20]">#{{ $this->smeRank ?? '--' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-[#231F20]/70">Reviews Completed</span>
+                        <span class="font-semibold text-[#231F20]">{{ $this->reviewsCompleted ?? 0 }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-[#231F20]/70">Collaborations</span>
+                        <span class="font-semibold text-[#231F20]">{{ $this->collaborationsCount ?? 0 }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

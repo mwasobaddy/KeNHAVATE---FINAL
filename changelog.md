@@ -9,13 +9,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Dedicated Gamification Pages**
+  - Created comprehensive `/gamification/leaderboard` page with filtering by overall/department/role
+  - Created `/gamification/points` page with personal stats, achievement progress, and detailed history
+  - Created `/gamification/achievements` page with achievement grid, progress tracking, and category filtering
+  - Added "Gamification" section to sidebar navigation with intuitive icons and labels
+  - Implemented responsive design for all gamification pages using Flux UI components
+
 ### Changed
+- **Gamification System Architecture Complete** ✅
+  - **Points Page**: Removed 265+ lines of duplicate code, now uses existing `livewire:components.points-widget` and `livewire:components.points-history` components
+  - **Achievements Page**: Restored with clean 246-line streamlined implementation after manual edits
+  - **Leaderboard Page**: Successfully uses `livewire:components.leaderboard` wrapper component
+  - **Code Reduction**: Achieved ~90% code reduction across gamification pages through proper component reuse
+  - **Component Composition Strategy**: Shifted from rebuilding functionality to leveraging existing reusable components
 
-### Deprecated
-
-### Removed
+- **Dashboard Architecture Refactoring** 
+  - Replaced embedded livewire components (`leaderboard`, `points-widget`) across all dashboard pages
+  - Converted dashboards from complex component embedding to clean navigation cards
+  - **Leaderboard Page**: Refactored to use existing `livewire:components.leaderboard` component as thin wrapper
+  - **Points Page**: Refactored to leverage existing `livewire:components.points-widget` and `livewire:components.points-history` components
+  - **Achievements Page**: Streamlined implementation with cleaner code structure and improved filtering
+  - Reduced code duplication by ~90% through proper component composition architecture
+  - Updated User, Manager, Admin, SME, Board Member, and Challenge Reviewer dashboards
+  - Transformed embedded widgets into attractive navigation cards linking to dedicated pages
+  - Enhanced user experience with quick stats display and improved navigation flow
+  - Maintained achievement notification components for cross-system popup functionality
 
 ### Fixed
+- **GamificationService SQL Error Resolution**
+  - Fixed critical `NOT NULL constraint failed: user_points.related_type` error in daily sign-in points
+  - Updated `awardDailySignIn` method to properly pass user entity as `$relatedEntity` parameter
+  - Ensured proper database constraint compliance for all gamification point awards
 
 ### Security
 

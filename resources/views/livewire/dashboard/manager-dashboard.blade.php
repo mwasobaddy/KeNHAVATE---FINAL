@@ -48,14 +48,66 @@ new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extend
 <div class="space-y-6">
     {{-- Gamification Integration for Manager Dashboard --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {{-- Manager Points Widget --}}
+        {{-- Gamification Quick Access Cards --}}
         <div class="lg:col-span-2">
-            <livewire:components.points-widget />
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {{-- Leaderboard Card --}}
+                <a href="{{ route('gamification.leaderboard') }}" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-700/50 p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500 dark:bg-blue-600 flex items-center justify-center">
+                            <flux:icon.trophy class="w-5 h-5 text-white" />
+                        </div>
+                        <flux:icon.chevron-right class="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                    <h3 class="font-semibold text-blue-900 dark:text-blue-100 text-sm">Leaderboard</h3>
+                    <p class="text-blue-700 dark:text-blue-300 text-xs mt-1">Department Rankings</p>
+                </a>
+
+                {{-- Points Card --}}
+                <a href="{{ route('gamification.points') }}" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 border border-emerald-200 dark:border-emerald-700/50 p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500 dark:bg-emerald-600 flex items-center justify-center">
+                            <flux:icon.currency-dollar class="w-5 h-5 text-white" />
+                        </div>
+                        <flux:icon.chevron-right class="w-4 h-4 text-emerald-600 dark:text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                    <h3 class="font-semibold text-emerald-900 dark:text-emerald-100 text-sm">Points & History</h3>
+                    <p class="text-emerald-700 dark:text-emerald-300 text-xs mt-1">{{ number_format($this->userPoints ?? 0) }} total points</p>
+                </a>
+
+                {{-- Achievements Card --}}
+                <a href="{{ route('gamification.achievements') }}" class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-700/50 p-4 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500 dark:bg-purple-600 flex items-center justify-center">
+                            <flux:icon.star class="w-5 h-5 text-white" />
+                        </div>
+                        <flux:icon.chevron-right class="w-4 h-4 text-purple-600 dark:text-purple-400 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                    <h3 class="font-semibold text-purple-900 dark:text-purple-100 text-sm">Achievements</h3>
+                    <p class="text-purple-700 dark:text-purple-300 text-xs mt-1">{{ $this->userAchievements ?? 0 }} unlocked</p>
+                </a>
+            </div>
         </div>
         
-        {{-- Manager Leaderboard (Department focus) --}}
+        {{-- Quick Stats Summary --}}
         <div class="lg:col-span-1">
-            <livewire:components.leaderboard :mini="true" :department-filter="true" />
+            <div class="bg-white dark:bg-zinc-800 rounded-xl border border-gray-200 dark:border-zinc-700 p-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Your Performance</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Current Rank</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">#{{ $this->userRank ?? '--' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Department Rank</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">#{{ $this->departmentRank ?? '--' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Ideas Reviewed</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ $this->ideasReviewed ?? 0 }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

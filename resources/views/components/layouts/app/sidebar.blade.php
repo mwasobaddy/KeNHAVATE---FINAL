@@ -47,6 +47,12 @@
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>Reviews</flux:navlist.item>
                     @endif
                 </flux:navlist.group>
+
+                <flux:navlist.group heading="Gamification" class="grid">
+                    <flux:navlist.item icon="trophy" :href="route('gamification.leaderboard')" :current="request()->routeIs('gamification.leaderboard')" wire:navigate>Leaderboard</flux:navlist.item>
+                    <flux:navlist.item icon="star" :href="route('gamification.points')" :current="request()->routeIs('gamification.points')" wire:navigate>Points & History</flux:navlist.item>
+                    <flux:navlist.item icon="shield-check" :href="route('gamification.achievements')" :current="request()->routeIs('gamification.achievements')" wire:navigate>Achievements</flux:navlist.item>
+                </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
@@ -137,6 +143,12 @@
                     @if(auth()->user()->hasAnyRole(['manager', 'sme', 'board_member', 'administrator', 'developer']))
                         <flux:navlist.item icon="clipboard-document-check" :href="route('reviews.index')" :current="request()->routeIs('reviews.*')" wire:navigate>{{ __('Reviews') }}</flux:navlist.item>
                     @endif
+                </flux:navlist.group>
+
+                <flux:navlist.group :heading="__('Gamification')" class="grid">
+                    <flux:navlist.item icon="trophy" :href="route('gamification.leaderboard')" :current="request()->routeIs('gamification.leaderboard')" wire:navigate>{{ __('Leaderboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="star" :href="route('gamification.points')" :current="request()->routeIs('gamification.points')" wire:navigate>{{ __('Points & History') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shield-check" :href="route('gamification.achievements')" :current="request()->routeIs('gamification.achievements')" wire:navigate>{{ __('Achievements') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

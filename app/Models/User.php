@@ -192,6 +192,15 @@ class User extends Authenticatable
     }
 
     /**
+     * User points relationship (alias for points)
+     * This provides backward compatibility for queries using 'userPoints'
+     */
+    public function userPoints()
+    {
+        return $this->hasMany(UserPoint::class);
+    }
+
+    /**
      * Total points earned
      */
     public function totalPoints(): int
@@ -277,20 +286,28 @@ class User extends Authenticatable
                 $q->whereYear('created_at', now()->year)
                   ->whereMonth('created_at', now()->month);
             }], 'points');
-            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+            $higherCount = $query->get()->filter(function($user) use ($userPoints) {
+                return ($user->points_sum_points ?? 0) > $userPoints;
+            })->count();
         } elseif ($period === 'yearly') {
             $query->withSum(['points' => function($q) {
                 $q->whereYear('created_at', now()->year);
             }], 'points');
-            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+            $higherCount = $query->get()->filter(function($user) use ($userPoints) {
+                return ($user->points_sum_points ?? 0) > $userPoints;
+            })->count();
         } elseif ($period === 'weekly') {
             $query->withSum(['points' => function($q) {
                 $q->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
             }], 'points');
-            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+            $higherCount = $query->get()->filter(function($user) use ($userPoints) {
+                return ($user->points_sum_points ?? 0) > $userPoints;
+            })->count();
         } else {
             $query->withSum('points', 'points');
-            $higherCount = $query->having('points_sum_points', '>', $userPoints)->count();
+            $higherCount = $query->get()->filter(function($user) use ($userPoints) {
+                return ($user->points_sum_points ?? 0) > $userPoints;
+            })->count();
         }
 
         return $higherCount + 1;

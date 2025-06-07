@@ -50,11 +50,6 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
     </div>
 
     <div class="relative z-10 md:p-6 space-y-8 max-w-7xl mx-auto">
-        {{-- Gamification System Overview for Admin --}}
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <livewire:components.leaderboard :admin-view="true" />
-            <livewire:components.points-widget />
-        </div>
 
         {{-- Enhanced Statistics Cards with Glass Morphism --}}
         <section aria-labelledby="stats-heading" class="group">
@@ -224,6 +219,7 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
                                 <div class="w-16 h-16 bg-gradient-to-br from-[#FFF200] to-[#F8EBD5] dark:from-yellow-400 dark:to-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                                     <svg class="w-8 h-8 text-[#231F20]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+                                    </svg>
                                 </div>
                                 
                                 <h4 class="text-lg font-bold text-[#231F20] dark:text-zinc-100 mb-2">No Users Registered</h4>
@@ -389,5 +385,52 @@ new #[Layout('components.layouts.app', title: 'Admin Dashboard')] class extends 
         
         {{-- Gamification Achievement Notifications --}}
         <livewire:components.achievement-notifications />
+        {{-- Gamification System Overview for Admin --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {{-- Gamification Quick Access --}}
+            <div class="bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 rounded-2xl p-6 shadow-xl">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Gamification System</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <a href="{{ route('gamification.leaderboard') }}" class="group flex flex-col items-center p-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                        <flux:icon.trophy class="w-6 h-6 text-blue-600 dark:text-blue-400 mb-2" />
+                        <span class="text-xs font-medium text-blue-900 dark:text-blue-100">Leaderboard</span>
+                    </a>
+                    <a href="{{ route('gamification.points') }}" class="group flex flex-col items-center p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                        <flux:icon.currency-dollar class="w-6 h-6 text-emerald-600 dark:text-emerald-400 mb-2" />
+                        <span class="text-xs font-medium text-emerald-900 dark:text-emerald-100">Points</span>
+                    </a>
+                    <a href="{{ route('gamification.achievements') }}" class="group flex flex-col items-center p-3 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700/50 hover:shadow-md transition-all duration-300 transform hover:-translate-y-1">
+                        <flux:icon.star class="w-6 h-6 text-purple-600 dark:text-purple-400 mb-2" />
+                        <span class="text-xs font-medium text-purple-900 dark:text-purple-100">Achievements</span>
+                    </a>
+                </div>
+            </div>
+            
+            {{-- System Overview Stats --}}
+            <div class="bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 rounded-2xl p-6 shadow-xl">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Platform Activity</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Active Users Today</span>
+                        <span class="font-bold text-gray-900 dark:text-white">{{ $this->activeUsersToday ?? 0 }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Points Awarded Today</span>
+                        <span class="font-bold text-gray-900 dark:text-white">{{ number_format($this->pointsAwardedToday ?? 0) }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">New Achievements</span>
+                        <span class="font-bold text-gray-900 dark:text-white">{{ $this->newAchievementsToday ?? 0 }}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">System Health</span>
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                            <div class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1"></div>
+                            Excellent
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
