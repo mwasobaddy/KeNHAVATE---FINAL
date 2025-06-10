@@ -72,7 +72,7 @@ new #[Layout('components.layouts.app', title: 'Advanced Analytics Dashboard')] c
         <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse delay-500"></div>
     </div>
 
-    <div class="relative z-10 p-6 space-y-8 max-w-7xl mx-auto">
+    <div class="relative z-10 lg:p-6 space-y-8 max-w-7xl mx-auto">
         {{-- Header Section --}}
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-[#231F20] dark:text-white mb-4">
