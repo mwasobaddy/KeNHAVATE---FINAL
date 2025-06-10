@@ -169,255 +169,427 @@ new #[Layout('components.layouts.app', title: 'Create User')] class extends Comp
 
 }; ?>
 
-<div>
-    <div class="py-8">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Header -->
-            <div class="flex items-center justify-between mb-8">
-                <div>
-                    <h1 class="text-3xl font-bold text-[#231F20] dark:text-white">Create New User</h1>
-                    <p class="text-[#9B9EA4] dark:text-zinc-400 mt-1">Add a new user to the KeNHAVATE system</p>
-                </div>
-                
-                <flux:button variant="ghost" href="{{ route('users.index') }}" wire:navigate>
-                    <flux:icon.arrow-left class="w-4 h-4 mr-2" />
-                    Back to Users
+{{-- Modern Create User Form with Glass Morphism & Enhanced UI --}}
+<div class="min-h-screen relative overflow-hidden">
+    {{-- Animated Background Elements --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-72 h-72 bg-[#FFF200]/80 dark:bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-[#F8EBD5]/20 dark:bg-amber-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-[#FFF200]/50 dark:bg-yellow-400/5 rounded-full blur-2xl animate-pulse delay-500"></div>
+    </div>
+
+    <div class="relative z-10 md:p-6 space-y-8 max-w-5xl mx-auto">
+        {{-- Enhanced Header with Glass Morphism --}}
+        <section aria-labelledby="create-user-heading" class="group">
+                        
+            <div class="block lg:hidden mb-6">
+                <flux:button 
+                    href="{{ route('users.index') }}" 
+                    wire:navigate
+                    variant="primary"
+                    class="group/submit justify-center rounded-lg bg-[#FFF200] dark:bg-yellow-400 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-zinc-900 shadow-lg hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] dark:focus-visible:outline-yellow-400 transition-all duration-200 hover:shadow-xl"
+                >
+                    <span class="absolute inset-0 bg-gradient-to-br from-yellow-300/20 to-amber-300/20 opacity-0 group-hover/submit:opacity-100 transition-opacity duration-300"></span>
+                    <div class="relative flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        <span class="font-medium">Back to Users</span>
+                    </div>
                 </flux:button>
             </div>
 
-            <!-- Create User Form -->
-            <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-[#9B9EA4]/20 overflow-hidden">
-                <div class="p-6">
-                    <form wire:submit="createUser" class="space-y-8">
-                        <!-- Basic Information Section -->
-                        <div>
-                            <h3 class="text-lg font-medium text-[#231F20] dark:text-white mb-4">Basic Information</h3>
+            <div class="relative overflow-hidden rounded-3xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                {{-- Animated Gradient Background --}}
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-blue-600/10 dark:from-blue-400/10 dark:via-transparent dark:to-blue-500/20 opacity-100"></div>
+                
+                <div class="relative p-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 flex items-center justify-center shadow-lg">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                                    </svg>
+                                </div>
+                                <div class="absolute -inset-2 bg-blue-500/20 dark:bg-blue-400/30 rounded-2xl blur-xl opacity-50"></div>
+                            </div>
+                            <div>
+                                <h1 id="create-user-heading" class="text-3xl font-bold text-[#231F20] dark:text-zinc-100">Create New User</h1>
+                                <p class="text-[#9B9EA4] dark:text-zinc-400 mt-1">Add a new user to the KeNHAVATE Innovation Portal</p>
+                            </div>
+                        </div>
+                        
+                        <div class="hidden lg:block">
+                            <flux:button 
+                                variant="ghost" 
+                                href="{{ route('users.index') }}" 
+                                wire:navigate
+                                class="group/back relative overflow-hidden rounded-2xl bg-white/50 dark:bg-zinc-700/50 backdrop-blur-sm border border-white/40 dark:border-zinc-600/40 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 px-6 py-3"
+                            >
+                                <span class="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-600/20 dark:from-gray-400/20 dark:to-gray-500/30 opacity-0 group-hover/back:opacity-100 transition-opacity duration-300"></span>
+                                <div class="relative flex items-center space-x-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                    </svg>
+                                    <span class="font-medium">Back to Users</span>
+                                </div>
+                            </flux:button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- Enhanced Create User Form with Glass Morphism --}}
+        <section aria-labelledby="user-form-heading" class="group">
+            <div class="relative overflow-hidden rounded-3xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                {{-- Animated Background Elements --}}
+                <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#FFF200]/10 via-[#F8EBD5]/5 to-transparent dark:from-yellow-400/10 dark:via-amber-400/5 dark:to-transparent rounded-full -mr-48 -mt-48 blur-3xl"></div>
+                
+                <div class="relative z-10 p-8">
+                    <form wire:submit="createUser" class="space-y-10">
+                        {{-- Basic Information Section --}}
+                        <div class="group/section">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-[#231F20] dark:text-zinc-100">Basic Information</h3>
+                                    <p class="text-sm text-[#9B9EA4] dark:text-zinc-400">Essential user account details</p>
+                                </div>
+                            </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- First Name -->
-                                <flux:field>
-                                    <flux:label>First Name</flux:label>
-                                    <flux:input 
-                                        wire:model="first_name" 
-                                        placeholder="Enter first name"
-                                        required 
-                                    />
-                                    <flux:error name="first_name" />
-                                </flux:field>
+                                {{-- First Name --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">First Name</flux:label>
+                                        <flux:input 
+                                            wire:model="first_name" 
+                                            placeholder="Enter first name"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="first_name" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Last Name -->
-                                <flux:field>
-                                    <flux:label>Last Name</flux:label>
-                                    <flux:input 
-                                        wire:model="last_name" 
-                                        placeholder="Enter last name"
-                                        required 
-                                    />
-                                    <flux:error name="last_name" />
-                                </flux:field>
+                                {{-- Last Name --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Last Name</flux:label>
+                                        <flux:input 
+                                            wire:model="last_name" 
+                                            placeholder="Enter last name"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="last_name" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Email Address -->
-                                <flux:field>
-                                    <flux:label>Email Address</flux:label>
-                                    <flux:input 
-                                        type="email" 
-                                        wire:model.live="email" 
-                                        placeholder="user@example.com"
-                                        required 
-                                    />
-                                    <flux:error name="email" />
-                                </flux:field>
+                                {{-- Email Address --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Email Address</flux:label>
+                                        <flux:input 
+                                            type="email" 
+                                            wire:model.live="email" 
+                                            placeholder="user@example.com"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        @if($is_kenha_staff)
+                                            <div class="mt-2 inline-flex items-center space-x-2 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-3 py-1.5 rounded-full">
+                                                <div class="w-2 h-2 bg-amber-500 dark:bg-amber-400 rounded-full animate-pulse"></div>
+                                                <span>KeNHA Staff Detected</span>
+                                            </div>
+                                        @endif
+                                        <flux:error name="email" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Phone Number -->
-                                <flux:field>
-                                    <flux:label>Phone Number</flux:label>
-                                    <flux:input 
-                                        wire:model="phone" 
-                                        placeholder="+254 7XX XXX XXX"
-                                        required 
-                                    />
-                                    <flux:error name="phone" />
-                                </flux:field>
+                                {{-- Phone Number --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Phone Number</flux:label>
+                                        <flux:input 
+                                            wire:model="phone" 
+                                            placeholder="+254 7XX XXX XXX"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="phone" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Gender -->
-                                <flux:field>
-                                    <flux:label>Gender</flux:label>
-                                    <flux:select wire:model="gender" placeholder="Select gender" required>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                        <option value="other">Other</option>
-                                    </flux:select>
-                                    <flux:error name="gender" />
-                                </flux:field>
+                                {{-- Gender --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Gender</flux:label>
+                                        <flux:select 
+                                            wire:model="gender" 
+                                            placeholder="Select gender" 
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        >
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </flux:select>
+                                        <flux:error name="gender" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Role -->
-                                <flux:field>
-                                    <flux:label>Role</flux:label>
-                                    <flux:select wire:model="user_role" required>
-                                        @foreach($roles as $role)
-                                            <option value="{{ $role->name }}">{{ ucfirst(str_replace('_', ' ', $role->name)) }}</option>
-                                        @endforeach
-                                    </flux:select>
-                                    <flux:error name="user_role" />
-                                </flux:field>
+                                {{-- Role --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Role</flux:label>
+                                        <flux:select 
+                                            wire:model="user_role" 
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        >
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->name }}">{{ ucfirst(str_replace('_', ' ', $role->name)) }}</option>
+                                            @endforeach
+                                        </flux:select>
+                                        <flux:error name="user_role" />
+                                    </flux:field>
+                                </div>
                             </div>
 
-                            <!-- Account Status -->
+                            {{-- Account Status --}}
                             <div class="mt-6">
-                                <flux:field>
-                                    <flux:label>Account Status</flux:label>
-                                    <flux:select wire:model="account_status" required>
-                                        <option value="active">Active</option>
-                                        <option value="suspended">Suspended</option>
-                                        <option value="banned">Banned</option>
-                                    </flux:select>
-                                    <flux:error name="account_status" />
-                                </flux:field>
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300 max-w-md">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Account Status</flux:label>
+                                        <flux:select 
+                                            wire:model="account_status" 
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        >
+                                            <option value="active">Active</option>
+                                            <option value="suspended">Suspended</option>
+                                            <option value="banned">Banned</option>
+                                        </flux:select>
+                                        <flux:error name="account_status" />
+                                    </flux:field>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- KeNHA Staff Information Section -->
+                        {{-- KeNHA Staff Information Section --}}
                         @if($is_kenha_staff)
-                        <div class="border-t border-[#9B9EA4]/20 pt-8">
-                            <div class="mb-6">
-                                <h3 class="text-lg font-medium text-[#231F20] dark:text-white">KeNHA Staff Information</h3>
-                                <p class="text-sm text-[#9B9EA4] dark:text-zinc-400 mt-1">Additional information required for KeNHA staff members</p>
+                        <div class="group/section border-t border-[#9B9EA4]/20 dark:border-zinc-700/50 pt-10">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-[#231F20] dark:text-zinc-100">KeNHA Staff Information</h3>
+                                    <p class="text-sm text-[#9B9EA4] dark:text-zinc-400">Additional information required for KeNHA staff members</p>
+                                </div>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Personal Email -->
-                                <flux:field>
-                                    <flux:label>Personal Email Address</flux:label>
-                                    <flux:input 
-                                        type="email" 
-                                        wire:model="personal_email" 
-                                        placeholder="personal@gmail.com"
-                                        required 
-                                    />
-                                    <flux:description>Must be different from institutional email</flux:description>
-                                    <flux:error name="personal_email" />
-                                </flux:field>
+                                {{-- Personal Email --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Personal Email Address</flux:label>
+                                        <flux:input 
+                                            type="email" 
+                                            wire:model="personal_email" 
+                                            placeholder="personal@gmail.com"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:description class="text-xs text-[#9B9EA4] dark:text-zinc-400 mt-1">Must be different from institutional email</flux:description>
+                                        <flux:error name="personal_email" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Staff Number -->
-                                <flux:field>
-                                    <flux:label>Staff Number</flux:label>
-                                    <flux:input 
-                                        wire:model="staff_number" 
-                                        placeholder="KN2024001"
-                                        required 
-                                    />
-                                    <flux:error name="staff_number" />
-                                </flux:field>
+                                {{-- Staff Number --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Staff Number</flux:label>
+                                        <flux:input 
+                                            wire:model="staff_number" 
+                                            placeholder="KN2024001"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="staff_number" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Job Title -->
-                                <flux:field>
-                                    <flux:label>Job Title</flux:label>
-                                    <flux:input 
-                                        wire:model="job_title" 
-                                        placeholder="Senior Engineer"
-                                        required 
-                                    />
-                                    <flux:error name="job_title" />
-                                </flux:field>
+                                {{-- Job Title --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Job Title</flux:label>
+                                        <flux:input 
+                                            wire:model="job_title" 
+                                            placeholder="Senior Engineer"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="job_title" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Department -->
-                                <flux:field>
-                                    <flux:label>Department</flux:label>
-                                    <flux:input 
-                                        wire:model="department" 
-                                        placeholder="Engineering Department"
-                                        required 
-                                    />
-                                    <flux:error name="department" />
-                                </flux:field>
+                                {{-- Department --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Department</flux:label>
+                                        <flux:input 
+                                            wire:model="department" 
+                                            placeholder="Engineering Department"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="department" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Supervisor Name -->
-                                <flux:field>
-                                    <flux:label>Supervisor Name</flux:label>
-                                    <flux:input 
-                                        wire:model="supervisor_name" 
-                                        placeholder="John Doe (Optional)"
-                                    />
-                                    <flux:error name="supervisor_name" />
-                                </flux:field>
+                                {{-- Supervisor Name --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Supervisor Name</flux:label>
+                                        <flux:input 
+                                            wire:model="supervisor_name" 
+                                            placeholder="John Doe (Optional)"
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="supervisor_name" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Work Station -->
-                                <flux:field>
-                                    <flux:label>Work Station</flux:label>
-                                    <flux:input 
-                                        wire:model="work_station" 
-                                        placeholder="Nairobi Head Office"
-                                        required 
-                                    />
-                                    <flux:error name="work_station" />
-                                </flux:field>
+                                {{-- Work Station --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Work Station</flux:label>
+                                        <flux:input 
+                                            wire:model="work_station" 
+                                            placeholder="Nairobi Head Office"
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="work_station" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Employment Type -->
-                                <flux:field>
-                                    <flux:label>Employment Type</flux:label>
-                                    <flux:select wire:model="employment_type" required>
-                                        <option value="permanent">Permanent</option>
-                                        <option value="contract">Contract</option>
-                                        <option value="temporary">Temporary</option>
-                                    </flux:select>
-                                    <flux:error name="employment_type" />
-                                </flux:field>
+                                {{-- Employment Type --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Employment Type</flux:label>
+                                        <flux:select 
+                                            wire:model="employment_type" 
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        >
+                                            <option value="permanent">Permanent</option>
+                                            <option value="contract">Contract</option>
+                                            <option value="temporary">Temporary</option>
+                                        </flux:select>
+                                        <flux:error name="employment_type" />
+                                    </flux:field>
+                                </div>
 
-                                <!-- Employment Date -->
-                                <flux:field>
-                                    <flux:label>Employment Date</flux:label>
-                                    <flux:input 
-                                        type="date" 
-                                        wire:model="employment_date" 
-                                        required 
-                                    />
-                                    <flux:error name="employment_date" />
-                                </flux:field>
+                                {{-- Employment Date --}}
+                                <div class="group/field relative overflow-hidden rounded-2xl bg-gradient-to-r from-white/50 to-white/30 dark:from-zinc-800/50 dark:to-zinc-700/30 border border-white/40 dark:border-zinc-600/40 backdrop-blur-sm p-4 hover:shadow-lg transition-all duration-300">
+                                    <flux:field>
+                                        <flux:label class="text-[#231F20] dark:text-zinc-100 font-medium">Employment Date</flux:label>
+                                        <flux:input 
+                                            type="date" 
+                                            wire:model="employment_date" 
+                                            required
+                                            class="mt-2 bg-white/80 dark:bg-zinc-900/80 border-[#9B9EA4]/30 dark:border-zinc-600/50 rounded-xl focus:border-[#FFF200] dark:focus:border-yellow-400 focus:ring-[#FFF200]/20 dark:focus:ring-yellow-400/20"
+                                        />
+                                        <flux:error name="employment_date" />
+                                    </flux:field>
+                                </div>
                             </div>
                         </div>
                         @endif
 
-                        <!-- Submit Button -->
-                        <div class="border-t border-[#9B9EA4]/20 pt-6">
-                            <div class="flex justify-end space-x-4">
+                        {{-- Enhanced Submit Section --}}
+                        <div class="border-t border-[#9B9EA4]/20 dark:border-zinc-700/50 pt-8">
+                            <div class="flex justify-end space-x-6">
                                 <flux:button 
                                     variant="ghost" 
                                     href="{{ route('users.index') }}" 
                                     wire:navigate
+                                    class="group/cancel relative overflow-hidden rounded-2xl bg-white/50 dark:bg-zinc-700/50 backdrop-blur-sm border border-white/40 dark:border-zinc-600/40 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 px-8 py-3"
                                 >
-                                    Cancel
+                                    <span class="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-gray-600/20 dark:from-gray-400/20 dark:to-gray-500/30 opacity-0 group-hover/cancel:opacity-100 transition-opacity duration-300"></span>
+                                    <span class="relative font-medium text-[#231F20] dark:text-zinc-100">Cancel</span>
                                 </flux:button>
                                 
-                                <flux:button type="submit" variant="primary">
-                                    Create User
+                                <flux:button 
+                                    type="submit" 
+                                    variant="primary"
+                                    class="group/submit justify-center rounded-lg bg-[#FFF200] dark:bg-yellow-400 px-4 py-3 text-sm font-semibold text-[#231F20] dark:text-zinc-900 shadow-lg hover:bg-[#FFF200]/90 dark:hover:bg-yellow-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FFF200] dark:focus-visible:outline-yellow-400 transition-all duration-200 hover:shadow-xl"
+                                >
+                                    <span class="absolute inset-0 bg-gradient-to-br from-yellow-300/20 to-amber-300/20 opacity-0 group-hover/submit:opacity-100 transition-opacity duration-300"></span>
+                                    <div class="relative flex items-center space-x-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                                        </svg>
+                                        <span>Create User</span>
+                                    </div>
                                 </flux:button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+        </section>
 
-            <!-- Information Note -->
-            <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <flux:icon.information-circle class="h-5 w-5 text-blue-400" />
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
-                            Important Information
-                        </h3>
-                        <div class="mt-2 text-sm text-blue-700 dark:text-blue-300">
-                            <ul class="list-disc pl-5 space-y-1">
-                                <li>The user will receive a temporary password and must set up their own password on first login</li>
-                                <li>All admin-created users are automatically verified and have accepted terms</li>
-                                <li>KeNHA staff members (@kenha.co.ke emails) require additional staff information</li>
-                                <li>Regular users will receive gamification points for signing up</li>
-                            </ul>
+        {{-- Enhanced Information Note --}}
+        <section aria-labelledby="info-heading" class="group">
+            <div class="relative overflow-hidden rounded-3xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl">
+                {{-- Animated Gradient Background --}}
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-blue-600/10 dark:from-blue-400/10 dark:via-transparent dark:to-blue-500/20 opacity-100"></div>
+                
+                <div class="relative p-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h3 id="info-heading" class="text-xl font-bold text-[#231F20] dark:text-zinc-100 mb-3">Important Information</h3>
+                            <div class="space-y-3 text-sm text-[#9B9EA4] dark:text-zinc-400 leading-relaxed">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span>The user will receive a temporary password and must set up their own password on first login</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span>All admin-created users are automatically verified and have accepted terms</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span>KeNHA staff members (@kenha.co.ke emails) require additional staff information</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                    <span>Regular users will receive gamification points for signing up</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </div>
