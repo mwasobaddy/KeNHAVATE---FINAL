@@ -146,7 +146,7 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
         <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse delay-500"></div>
     </div>
 
-    <div class="relative z-10 p-6 space-y-8 max-w-7xl mx-auto">
+    <div class="relative z-10 lg:p-6 space-y-8 max-w-7xl mx-auto">
         {{-- Header Section --}}
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-[#231F20] dark:text-white mb-4">
@@ -159,9 +159,9 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
 
         {{-- Actions and Search Section --}}
         <div class="bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 rounded-2xl p-6 shadow-xl">
-            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+            <div class="flex flex-row gap-4 items-center justify-between">
                 {{-- Search Input --}}
-                <div class="flex-1 max-w-md">
+                <div class="flex-1 w-full lg:w-1/3">
                     <flux:input
                         wire:model.live="search"
                         placeholder="Search roles..."
@@ -181,7 +181,7 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                         variant="primary"
                         class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-6 py-2.5 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                     >
-                        Create Role
+                        <span class="hidden md:block">Create Role</span>
                     </flux:button>
                     @endcan
                 </div>
@@ -321,7 +321,7 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                                         href="{{ route('roles.show', $role) }}" 
                                         variant="ghost" 
                                         size="sm"
-                                        class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-800/50 dark:hover:to-indigo-800/50 text-blue-700 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/50 rounded-lg transition-all duration-300 hover:shadow-md py-5"
+                                        class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white border-0 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105 px-3 py-5"
                                     >
                                         <flux:icon.eye class="w-4 h-4" />
                                     </flux:button>
@@ -334,7 +334,7 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                                         href="{{ route('roles.edit', $role) }}" 
                                         variant="ghost" 
                                         size="sm"
-                                        class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-800/50 dark:hover:to-emerald-800/50 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-700/50 rounded-lg transition-all duration-300 hover:shadow-md py-5"
+                                        class="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white border-0 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105 px-3 py-5"
                                     >
                                         <flux:icon.pencil class="w-4 h-4" />
                                     </flux:button>
@@ -347,7 +347,7 @@ new #[Layout('components.layouts.app', title: 'Role Management')] class extends 
                                         wire:click="confirmDelete('{{ $role->id }}')" 
                                         variant="ghost" 
                                         size="sm"
-                                        class="bg-gradient-to-r from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 hover:from-red-100 hover:to-rose-100 dark:hover:from-red-800/50 dark:hover:to-rose-800/50 text-red-700 dark:text-red-300 border border-red-200/50 dark:border-red-700/50 rounded-lg transition-all duration-300 hover:shadow-md py-5"
+                                        class="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white border-0 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105 px-3 py-5"
                                     >
                                         <flux:icon.trash class="w-4 h-4" />
                                     </flux:button>

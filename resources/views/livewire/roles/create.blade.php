@@ -83,7 +83,7 @@ new #[Layout('components.layouts.app', title: 'Create Role')] class extends Comp
         <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse delay-500"></div>
     </div>
 
-    <div class="relative z-10 p-6 space-y-8 max-w-5xl mx-auto">
+    <div class="relative z-10 lg:p-6 space-y-8 max-w-5xl mx-auto">
         {{-- Header Section --}}
         <div class="mb-8">
             <div class="flex items-center space-x-4 mb-6">
