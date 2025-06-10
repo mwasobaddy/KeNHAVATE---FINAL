@@ -73,7 +73,7 @@ new #[Layout('components.layouts.app', title: 'Edit Role')] class extends Compon
 
             // Log the action
             app(AuditService::class)->log(
-                'role_update',
+                'role_updated',
                 'Role',
                 $this->role->id,
                 array_merge($oldValues, ['permissions' => $oldPermissions]),
@@ -85,6 +85,13 @@ new #[Layout('components.layouts.app', title: 'Edit Role')] class extends Compon
             return redirect()->route('roles.show', $this->role);
 
         } catch (\Exception $e) {
+            // Log the error in the laravel log
+            \Log::error('Failed to update role: ' . $e->getMessage(), [
+                'role_id' => $this->role->id,
+                'user_id' => auth()->id(),
+                'selected_permissions' => $this->selectedPermissions,
+                'error' => $e->getMessage()
+            ]);
             session()->flash('error', 'Failed to update role. Please try again.');
         }
     }
@@ -103,10 +110,10 @@ new #[Layout('components.layouts.app', title: 'Edit Role')] class extends Compon
         <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse delay-500"></div>
     </div>
 
-    <div class="relative z-10 p-6 space-y-8 max-w-7xl mx-auto">
+    <div class="relative z-10 lg:p-6 space-y-8 max-w-7xl mx-auto">
         {{-- Header Section --}}
         <div class="text-center mb-8">
-            <div class="flex items-center justify-center space-x-4 mb-6">
+            <div class="flex items-center justify-start space-x-4 mb-6">
                 <flux:button 
                     wire:navigate 
                     href="{{ route('roles.show', $role) }}" 
@@ -298,11 +305,13 @@ new #[Layout('components.layouts.app', title: 'Edit Role')] class extends Compon
                 {{-- Action Buttons --}}
                 <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-white/20 dark:border-zinc-600/20">
                     <flux:button 
+                        icon="check"
+                        wire:loading.attr="disabled"
+                        wire:target="save"
                         type="submit" 
                         variant="primary" 
                         class="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300"
                     >
-                        <flux:icon.check class="w-4 h-4 mr-2" />
                         Update Role
                     </flux:button>
                     

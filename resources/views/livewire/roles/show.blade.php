@@ -11,6 +11,8 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
 
     public Role $role;
     public $userSearch = '';
+    public $showRemoveUserModal = false;
+    public $userToRemove = null;
 
     public function mount(Role $role)
     {
@@ -92,25 +94,87 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
             return;
         }
 
+        // Prevent removing users from the default "user" role
+        if ($this->role->name === 'user') {
+            session()->flash('error', 'Users cannot be removed from the default "User" role. This role ensures all users have basic system access.');
+            return;
+        }
+
+        // Store user for modal and show confirmation
+        $this->userToRemove = $user;
+        $this->showRemoveUserModal = true;
+    }
+
+    public function confirmRemoveUser()
+    {
+        if (!$this->userToRemove) {
+            session()->flash('error', 'No user selected for removal.');
+            return;
+        }
+
         try {
-            $user->removeRole($this->role);
+            // Store old roles for audit trail
+            $oldRoles = $this->userToRemove->getRoleNames()->toArray();
+
+            // Remove the user from the specific role
+            $this->userToRemove->removeRole($this->role);
+
+            // Refresh the user to get updated roles
+            $this->userToRemove->refresh();
+
+            // Check if user has any remaining roles after removal
+            $remainingRoles = $this->userToRemove->getRoleNames();
+            $hasOtherRoles = $remainingRoles->count() > 0;
+            $hasUserRole = $this->userToRemove->hasRole('user');
+
+            // Ensure user always has at least the "user" role if they don't have any other roles
+            // or if they don't already have the user role
+            $defaultUserRole = \Spatie\Permission\Models\Role::where('name', 'user')->first();
+            if ($defaultUserRole && (!$hasOtherRoles || !$hasUserRole)) {
+                $this->userToRemove->assignRole($defaultUserRole);
+                $assignedUserRole = true;
+            } else {
+                $assignedUserRole = false;
+            }
+
+            // Get new roles for audit trail
+            $newRoles = $this->userToRemove->fresh()->getRoleNames()->toArray();
 
             // Log the action
             app(\App\Services\AuditService::class)->log(
                 'role_removed',
                 'User',
-                $user->id,
-                ['roles' => $user->getRoleNames()->toArray()],
-                ['roles' => $user->fresh()->getRoleNames()->toArray()]
+                $this->userToRemove->id,
+                ['roles' => $oldRoles],
+                ['roles' => $newRoles, 'removed_role' => $this->role->name]
             );
 
-            session()->flash('success', "User {$user->name} removed from {$this->role->name} role.");
+            // Set appropriate success message based on whether user role was assigned
+            if ($assignedUserRole) {
+                session()->flash('success', "User {$this->userToRemove->name} removed from {$this->role->name} role and assigned default User role to maintain system access.");
+            } else {
+                session()->flash('success', "User {$this->userToRemove->name} removed from {$this->role->name} role successfully.");
+            }
 
         } catch (\Exception $e) {
+            \Log::error('Failed to remove user from role', [
+                'user_id' => $this->userToRemove->id,
+                'role_id' => $this->role->id,
+                'error' => $e->getMessage(),
+            ]);
             session()->flash('error', 'Failed to remove user from role. Please try again.');
         }
+
+        $this->closeRemoveUserModal();
+    }
+
+    public function closeRemoveUserModal()
+    {
+        $this->showRemoveUserModal = false;
+        $this->userToRemove = null;
     }
 }; ?>
+
 <div class="min-h-screen relative overflow-hidden">
     {{-- Animated Background Elements --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -119,10 +183,10 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
         <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-full blur-2xl animate-pulse delay-500"></div>
     </div>
 
-    <div class="relative z-10 p-6 space-y-8 max-w-7xl mx-auto">
+    <div class="relative z-10 lg:p-6 space-y-8 max-w-7xl mx-auto">
         {{-- Header Section --}}
         <div class="text-center mb-8">
-            <div class="flex items-center justify-center space-x-4 mb-4">
+            <div class="flex items-center justify-start space-x-4 mb-4">
                 <flux:button 
                     wire:navigate 
                     href="{{ route('roles.index') }}" 
@@ -380,14 +444,8 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
                                         <p class="text-sm text-[#9B9EA4] dark:text-zinc-400 truncate mb-1">{{ $user->email }}</p>
                                         <div class="flex items-center space-x-4">
                                             <span class="text-xs text-[#9B9EA4] dark:text-zinc-400">
-                                                Joined {{ $user->created_at->format('M j, Y') }}
+                                                Joined {{ $user->created_at->diffForHumans() }}
                                             </span>
-                                            @if($user->email_verified_at)
-                                            <span class="inline-flex items-center text-xs text-green-600 dark:text-green-400">
-                                                <flux:icon.check-circle class="w-3 h-3 mr-1" />
-                                                Verified
-                                            </span>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -397,7 +455,7 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
                                         href="{{ route('users.show', $user) }}" 
                                         variant="ghost" 
                                         size="sm"
-                                        class="bg-white/50 dark:bg-zinc-700/50 hover:bg-white/70 dark:hover:bg-zinc-600/50 backdrop-blur-sm"
+                                        class="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white border-0 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105 px-3 py-5"
                                     >
                                         <flux:icon.eye class="w-4 h-4" />
                                     </flux:button>
@@ -405,11 +463,10 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
                                     @can('update', $role)
                                     @if($user->id !== auth()->id() && ($role->name !== 'developer' || auth()->user()->hasRole('developer')))
                                     <flux:button 
-                                        wire:click="removeUserFromRole({{ $user->id }})" 
+                                        wire:click="removeUserFromRole({{ $user->id }})"
                                         variant="ghost" 
                                         size="sm"
-                                        class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 bg-white/50 dark:bg-zinc-700/50 hover:bg-red-50 dark:hover:bg-red-900/20 backdrop-blur-sm"
-                                        wire:confirm="Are you sure you want to remove {{ $user->name }} from the {{ $role->name }} role?"
+                                        class="bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 text-white border-0 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105 px-3 py-5"
                                     >
                                         <flux:icon.user-minus class="w-4 h-4" />
                                     </flux:button>
@@ -462,4 +519,76 @@ new #[Layout('components.layouts.app', title: 'Role Details')] class extends Com
             </div>
         @endif
     </div>
+
+    {{-- Remove User Confirmation Modal --}}
+    <flux:modal wire:model="showRemoveUserModal" class="max-w-md">
+        <div class="">
+            {{-- Modal Header --}}
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <flux:icon.user-minus class="w-6 h-6 text-white" />
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-[#231F20] dark:text-white">Remove User from Role</h3>
+                    <p class="text-sm text-[#9B9EA4] dark:text-zinc-400">This action cannot be undone</p>
+                </div>
+            </div>
+
+            {{-- Warning Message --}}
+            <div class="bg-red-50/70 dark:bg-red-900/30 border border-red-200/50 dark:border-red-700/50 rounded-xl p-4 mb-6">
+                <div class="flex items-start space-x-3">
+                    <flux:icon.exclamation-triangle class="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5" />
+                    <div>
+                        <h4 class="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
+                            Remove User: {{ $userToRemove ? $userToRemove->name : '' }}
+                        </h4>
+                        <p class="text-sm text-red-700 dark:text-red-300 mb-2">
+                            This user will be removed from the <strong>{{ $role->name }}</strong> role. If they have no other roles or don't already have the "User" role, they will automatically be assigned the default "User" role to maintain system access.
+                        </p>
+                        @if($role->name === 'developer' || $role->name === 'administrator')
+                        <p class="text-sm text-red-700 dark:text-red-300">
+                            <strong>Warning:</strong> This user will lose all elevated system access and administrative capabilities.
+                        </p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- Confirmation Text --}}
+            <div class="mb-6">
+                <p class="text-[#231F20] dark:text-white">
+                    Are you sure you want to proceed? The user will lose all permissions associated with this role. If they don't have any other roles or already have the "User" role, they will automatically receive the default "User" role to maintain basic system access.
+                </p>
+            </div>
+
+            {{-- Action Buttons --}}
+            <div class="flex items-center justify-end space-x-4">
+                <flux:button 
+                    wire:click="closeRemoveUserModal" 
+                    variant="ghost"
+                    class="bg-gray-50 dark:bg-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-600 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-zinc-600 rounded-lg px-6 py-2.5 font-semibold transition-all duration-300"
+                >
+                    Cancel
+                </flux:button>
+                
+                <flux:button
+                    icon="user-minus"
+                    wire:click="confirmRemoveUser" 
+                    variant="danger"
+                    class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2.5 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    wire:loading.attr="disabled"
+                    wire:target="confirmRemoveUser"
+                >
+                    <span wire:loading.remove wire:target="confirmRemoveUser">Remove User</span>
+                    <span wire:loading wire:target="confirmRemoveUser" class="flex items-center">
+                        <svg class="w-4 h-4 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Removing...
+                    </span>
+                </flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>
