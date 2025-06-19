@@ -33,7 +33,7 @@ new #[Layout('components.layouts.app', title: 'View Idea')] class extends Compon
         }
         
         // Admins and developers can view all ideas
-        if ($user->hasAnyRole([administrator, 'developer'])) {
+        if ($user->hasAnyRole(['administrator', 'developer'])) {
             return true;
         }
         
@@ -259,7 +259,7 @@ new #[Layout('components.layouts.app', title: 'View Idea')] class extends Compon
                         @endif
 
                         {{-- Attachments --}}
-                        @if($idea->attachments->count() > 0)
+                        @if($idea->attachments && $idea->attachments->count() > 0)
                             <section aria-labelledby="attachments-heading" class="group space-y-6">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 dark:from-purple-400 dark:to-purple-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -411,7 +411,7 @@ new #[Layout('components.layouts.app', title: 'View Idea')] class extends Compon
                         </section>
 
                         {{-- Collaboration Management --}}
-                        @if($idea->collaboration_enabled || auth()->user()->hasAnyRole([administrator, 'developer', 'manager', 'sme']))
+                        @if($idea->collaboration_enabled || auth()->user()->hasAnyRole(['administrator', 'developer', 'manager', 'sme']))
                             <section aria-labelledby="collaboration-heading" class="group space-y-6">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 dark:from-violet-400 dark:to-violet-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -479,7 +479,7 @@ new #[Layout('components.layouts.app', title: 'View Idea')] class extends Compon
                         @endif
 
                         {{-- Review History --}}
-                        @if($idea->reviews->count() > 0)
+                        @if($idea->reviews && $idea->reviews->count() > 0)
                             <section aria-labelledby="reviews-heading" class="group space-y-6">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 dark:from-orange-400 dark:to-orange-500 rounded-xl flex items-center justify-center shadow-lg">

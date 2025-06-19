@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->text('problem_statement')->nullable(); // Made nullable to match form
-            $table->text('proposed_solution')->nullable(); // Made nullable to match form
-            $table->text('expected_benefits')->nullable();
-            $table->text('implementation_plan')->nullable();
+            $table->text('business_case')->nullable();
+            $table->text('expected_impact')->nullable();
+            $table->text('implementation_timeline')->nullable();
+            $table->text('resource_requirements')->nullable();
             $table->json('attachments')->nullable();
             $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null'); // Made nullable
@@ -33,12 +33,6 @@ return new class extends Migration
                 'completed', 
                 'archived'
             ])->default('draft');
-
-            // Form fields from create.blade.php
-            $table->text('business_case')->nullable();
-            $table->text('expected_impact')->nullable();
-            $table->text('implementation_timeline')->nullable();
-            $table->text('resource_requirements')->nullable();
 
             $table->foreignId('last_reviewer_id')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamp('last_stage_change')->nullable();
