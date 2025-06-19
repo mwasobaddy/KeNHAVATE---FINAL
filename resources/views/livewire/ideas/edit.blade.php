@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Services\AuditService;
 use Illuminate\Support\Facades\Storage;
 
-new #[Layout('components.layouts.app', title: $idea->title)] class extends Component
+new #[Layout('components.layouts.app', title: 'Edit Idea')] class extends Component
 {
     use WithFileUploads;
 
@@ -34,6 +34,11 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
 
         $this->idea = $idea->load(['category', 'attachments']);
         $this->categories = Category::active()->ordered()->get();
+        
+        // Set dynamic title using SEO tools
+        if (class_exists('\Artesaos\SEOTools\Facades\SEOTools')) {
+            \Artesaos\SEOTools\Facades\SEOTools::setTitle('Edit: ' . $idea->title . ' - KeNHAVATE Innovation Portal');
+        }
         
         // Fill form with existing data
         $this->title = $idea->title;

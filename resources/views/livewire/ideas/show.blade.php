@@ -4,13 +4,18 @@ use Livewire\Volt\Component;
 use App\Models\Idea;
 use App\Services\AuditService;
 
-new #[Layout('components.layouts.app', title: $idea->title)] class extends Component
+new #[Layout('components.layouts.app', title: 'View Idea')] class extends Component
 {
     public Idea $idea;
 
     public function mount(Idea $idea)
     {
         $this->idea = $idea->load(['author', 'category', 'attachments', 'reviews.reviewer']);
+        
+        // Set dynamic title using SEO tools or view data
+        if (class_exists('\Artesaos\SEOTools\Facades\SEOTools')) {
+            \Artesaos\SEOTools\Facades\SEOTools::setTitle($idea->title . ' - KeNHAVATE Innovation Portal');
+        }
         
         // Check if user can view this idea
         if (!$this->canViewIdea()) {
@@ -55,7 +60,7 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
         return $this->idea->author_id === $user->id && $this->idea->current_stage === 'draft';
     }
 
-    public function getStageColorAttribute(): string
+    public function stageColor(): string
     {
         return match($this->idea->current_stage) {
             'draft' => 'bg-gray-100 text-gray-800',
@@ -71,7 +76,7 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
         };
     }
 
-    public function getStageLabelAttribute(): string
+    public function stageLabel(): string
     {
         return match($this->idea->current_stage) {
             'draft' => 'Draft',
@@ -122,8 +127,8 @@ new #[Layout('components.layouts.app', title: $idea->title)] class extends Compo
                         </div>
                     </div>
                     <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-2">
-                        <span class="px-3 py-1 text-sm rounded-full {{ $this->stageColor }}">
-                            {{ $this->stageLabel }}
+                        <span class="px-3 py-1 text-sm rounded-full {{ $this->stageColor() }}">
+                            {{ $this->stageLabel() }}
                         </span>
                         @if($idea->collaboration_enabled)
                             <span class="px-3 py-1 text-sm rounded-full bg-[#FFF200]/20 dark:bg-yellow-400/20 text-[#231F20] dark:text-zinc-800">
