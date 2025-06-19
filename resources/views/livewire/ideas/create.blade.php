@@ -134,6 +134,20 @@ new #[Layout('components.layouts.app', title: 'Submit New Idea')] class extends 
             return redirect()->route('ideas.show', $idea);
 
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Idea submission error: ' . $e->getMessage(), [
+                'user_id' => auth()->id(),
+                'form_data' => [
+                    'title' => $this->title,
+                    'description' => $this->description,
+                    'category_id' => $this->category_id,
+                    'business_case' => $this->business_case,
+                    'expected_impact' => $this->expected_impact,
+                    'implementation_timeline' => $this->implementation_timeline,
+                    'resource_requirements' => $this->resource_requirements,
+                    'collaboration_enabled' => $this->collaboration_enabled
+                ]
+            ]);
             $this->isSubmitting = false;
             $this->addError('submission', 'An error occurred while submitting your idea. Please try again.');
         }
@@ -388,7 +402,7 @@ new #[Layout('components.layouts.app', title: 'Submit New Idea')] class extends 
                     <div class="ml-14 space-y-5">
                         <div class="relative">
                             <label for="attachments" class="block text-sm font-semibold text-[#231F20] dark:text-zinc-200 mb-2">
-                                Attachments (Optional)
+                                Attachments <span class="text-red-500">*</span>
                             </label>
                             <div class="relative group/upload">
                                 <input
