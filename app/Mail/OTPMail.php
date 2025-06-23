@@ -13,7 +13,7 @@ use Illuminate\Queue\SerializesModels;
  * KeNHAVATE Innovation Portal - OTP Email
  * Sends verification codes for secure authentication
  */
-class OTPMail extends Mailable implements ShouldQueue
+class OTPMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -21,6 +21,7 @@ class OTPMail extends Mailable implements ShouldQueue
     public string $purpose;
     public int $expiresIn;
     public string $userEmail;
+    public string $first_name;
 
     /**
      * Create a new message instance.
@@ -31,6 +32,7 @@ class OTPMail extends Mailable implements ShouldQueue
         $this->purpose = $data['purpose'];
         $this->expiresIn = $data['expires_in'];
         $this->userEmail = $data['email'];
+        $this->first_name = $data['first_name'] ?? 'User'; // Default to 'User' if not provided
     }
 
     /**
@@ -62,6 +64,7 @@ class OTPMail extends Mailable implements ShouldQueue
                 'purpose' => $this->purpose,
                 'expiresIn' => $this->expiresIn,
                 'userEmail' => $this->userEmail,
+                'first_name' => $this->first_name,
             ]
         );
     }
