@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Paste Test</title>
+    <script src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js" defer></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 2rem;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid #666;
+            border-radius: 8px;
+            background: #2a2a2a;
+            color: white;
+            margin: 0 5px;
+        }
+        .otp-input:focus {
+            border-color: #FFF200;
+            outline: none;
+        }
+        .instructions {
+            margin: 20px 0;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 8px;
+            border-left: 4px solid #FFF200;
+        }
+        .test-code {
+            background: #333;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 OTP Paste Functionality Test</h1>
+        
+        <div class="instructions">
+            <h3>📋 Test Instructions:</h3>
+            <p>1. Copy one of these test OTP codes:</p>
+            <div class="test-code">123456</div>
+            <div class="test-code">789012</div>
+            <div class="test-code">456789</div>
+            
+            <p>2. Click on any OTP input field below</p>
+            <p>3. Paste (Ctrl+V / Cmd+V) the copied code</p>
+            <p>4. The code should fill all 6 inputs automatically</p>
+        </div>
+
+        <div x-data="{ 
+            otp: ['', '', '', '', '', ''],
+            result: '',
+            init() {
+                this.$nextTick(() => {
+                    this.$refs.otp0?.focus();
+                });
+            },
+            handleInput(index, event) {
+                let value = event.target.value;
+                
+                // Only allow numeric input and single character
+                if (!/^[0-9]*$/.test(value)) {
+                    value = value.replace(/[^0-9]/g, '');
+                }
+                
+                if (value.length > 1) {
+                    value = value.slice(-1);
+                }
+                
+                event.target.value = value;
+                this.otp[index] = value;
+                this.updateResult();
+                
+                // Auto-advance to next input
+                if (value && index < 5) {
+                    const nextInput = this.$refs['otp' + (index + 1)];
+                    if (nextInput) {
+                        nextInput.focus();
+                    }
+                }
+            },
+            handleKeyDown(index, event) {
+                if (!/[0-9]/.test(event.key) && 
+                    !['Backspace', 'Delete', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                    event.preventDefault();
+                    return;
+                }
+                
+                if (event.key === 'ArrowRight' && index < 5) {
+                    event.preventDefault();
+                    this.$refs['otp' + (index + 1)]?.focus();
+                } else if (event.key === 'ArrowLeft' && index > 0) {
+                    event.preventDefault();
+                    this.$refs['otp' + (index - 1)]?.focus();
+                } else if (event.key === 'Backspace') {
+                    if (this.otp[index] === '' && index > 0) {
+                        event.preventDefault();
+                        this.otp[index - 1] = '';
+                        this.$refs['otp' + (index - 1)].value = '';
+                        this.updateResult();
+                        this.$refs['otp' + (index - 1)]?.focus();
+                    } else {
+                        this.otp[index] = '';
+                        this.updateResult();
+                    }
+                }
+            },
+            handlePaste(event) {
+                event.preventDefault();
+                
+                console.log('🔍 Paste event triggered!');
+                
+                // Get clipboard data
+                let paste = '';
+                if (event.clipboardData && event.clipboardData.getData) {
+                    paste = event.clipboardData.getData('text/plain');
+                } else if (window.clipboardData && window.clipboardData.getData) {
+                    paste = window.clipboardData.getData('Text');
+                }
+                
+                console.log('📋 Pasted text:', paste);
+                
+                // Extract only numbers
+                const numbers = paste.replace(/[^0-9]/g, '').split('').slice(0, 6);
+                console.log('🔢 Extracted numbers:', numbers);
+                
+                if (numbers.length === 0) {
+                    console.log('❌ No valid numbers found');
+                    return;
+                }
+                
+                // Clear all inputs first
+                for (let i = 0; i < 6; i++) {
+                    this.otp[i] = '';
+                    const input = this.$refs['otp' + i];
+                    if (input) {
+                        input.value = '';
+                    }
+                }
+                
+                // Fill with pasted numbers
+                for (let i = 0; i < numbers.length && i < 6; i++) {
+                    this.otp[i] = numbers[i];
+                    const input = this.$refs['otp' + i];
+                    if (input) {
+                        input.value = numbers[i];
+                    }
+                }
+                
+                this.updateResult();
+                
+                // Focus next empty input
+                const nextIndex = Math.min(numbers.length, 5);
+                const targetInput = this.$refs['otp' + nextIndex];
+                if (targetInput) {
+                    targetInput.focus();
+                }
+                
+                console.log('✅ Paste completed successfully!');
+            },
+            updateResult() {
+                this.result = this.otp.join('');
+                console.log('Current OTP:', this.result);
+            },
+            clearAll() {
+                for (let i = 0; i < 6; i++) {
+                    this.otp[i] = '';
+                    const input = this.$refs['otp' + i];
+                    if (input) {
+                        input.value = '';
+                    }
+                }
+                this.updateResult();
+                this.$refs.otp0?.focus();
+            }
+        }">
+            
+            <h3>🔢 OTP Input Test</h3>
+            
+            <!-- OTP Inputs -->
+            <div style="display: flex; justify-content: center; gap: 10px; margin: 20px 0;">
+                <input 
+                    x-ref="otp0"
+                    type="text" 
+                    inputmode="numeric"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    x-model="otp[0]"
+                    @input="handleInput(0, $event)"
+                    @keydown="handleKeyDown(0, $event)"
+                    @paste="handlePaste($event)"
+                    class="otp-input"
+                    autocomplete="off"
+                />
+                <input 
+                    x-ref="otp1"
+                    type="text" 
+                    inputmode="numeric"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    x-model="otp[1]"
+                    @input="handleInput(1, $event)"
+                    @keydown="handleKeyDown(1, $event)"
+                    @paste="handlePaste($event)"
+                    class="otp-input"
+                    autocomplete="off"
+                />
+                <input 
+                    x-ref="otp2"
+                    type="text" 
+                    inputmode="numeric"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    x-model="otp[2]"
+                    @input="handleInput(2, $event)"
+                    @keydown="handleKeyDown(2, $event)"
+                    @paste="handlePaste($event)"
+                    class="otp-input"
+                    autocomplete="off"
+                />
+                <input 
+                    x-ref="otp3"
+                    type="text" 
+                    inputmode="numeric"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    x-model="otp[3]"
+                    @input="handleInput(3, $event)"
+                    @keydown="handleKeyDown(3, $event)"
+                    @paste="handlePaste($event)"
+                    class="otp-input"
+                    autocomplete="off"
+                />
+                <input 
+                    x-ref="otp4"
+                    type="text" 
+                    inputmode="numeric"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    x-model="otp[4]"
+                    @input="handleInput(4, $event)"
+                    @keydown="handleKeyDown(4, $event)"
+                    @paste="handlePaste($event)"
+                    class="otp-input"
+                    autocomplete="off"
+                />
+                <input 
+                    x-ref="otp5"
+                    type="text" 
+                    inputmode="numeric"
+                    maxlength="1"
+                    pattern="[0-9]"
+                    x-model="otp[5]"
+                    @input="handleInput(5, $event)"
+                    @keydown="handleKeyDown(5, $event)"
+                    @paste="handlePaste($event)"
+                    class="otp-input"
+                    autocomplete="off"
+                />
+            </div>
+            
+            <!-- Result Display -->
+            <div style="text-align: center; margin: 20px 0;">
+                <p><strong>Current OTP:</strong> <span x-text="result" style="font-family: monospace; background: #333; padding: 5px 10px; border-radius: 4px;"></span></p>
+                <button @click="clearAll()" style="background: #FFF200; color: black; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-top: 10px;">
+                    Clear All
+                </button>
+            </div>
+            
+            <!-- Status -->
+            <div style="text-align: center; color: #888;">
+                <p>✅ Valid OTP length: <span x-text="result.length === 6 ? 'Yes' : 'No (' + result.length + '/6)'"></span></p>
+                <p>📱 Open browser console (F12) to see paste debug logs</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

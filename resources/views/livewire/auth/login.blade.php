@@ -424,28 +424,52 @@ new #[Layout('components.layouts.auth')] class extends Component {
                              },
                              handlePaste(event) {
                                  event.preventDefault();
-                                 const paste = (event.clipboardData || window.clipboardData).getData('text');
+                                 
+                                 // Get clipboard data
+                                 let paste = '';
+                                 if (event.clipboardData && event.clipboardData.getData) {
+                                     paste = event.clipboardData.getData('text/plain');
+                                 } else if (window.clipboardData && window.clipboardData.getData) {
+                                     paste = window.clipboardData.getData('Text');
+                                 }
+                                 
+                                 // Extract only numbers from the pasted text
                                  const numbers = paste.replace(/[^0-9]/g, '').split('').slice(0, 6);
+                                 
+                                 if (numbers.length === 0) {
+                                     return; // No valid numbers found
+                                 }
                                  
                                  // Clear all inputs first
                                  for (let i = 0; i < 6; i++) {
                                      this.otp[i] = '';
                                      const input = this.$refs['otp' + i];
-                                     if (input) input.value = '';
+                                     if (input) {
+                                         input.value = '';
+                                     }
                                  }
                                  
                                  // Fill with pasted numbers
                                  for (let i = 0; i < numbers.length && i < 6; i++) {
                                      this.otp[i] = numbers[i];
                                      const input = this.$refs['otp' + i];
-                                     if (input) input.value = numbers[i];
+                                     if (input) {
+                                         input.value = numbers[i];
+                                     }
                                  }
                                  
+                                 // Update the Livewire model
                                  this.updateOtp();
                                  
                                  // Focus the next empty input or the last filled one
                                  const nextIndex = Math.min(numbers.length, 5);
-                                 this.$refs['otp' + nextIndex]?.focus();
+                                 const targetInput = this.$refs['otp' + nextIndex];
+                                 if (targetInput) {
+                                     targetInput.focus();
+                                 }
+                                 
+                                 // Visual feedback
+                                 console.log('Pasted OTP:', this.otp.join(''));
                              }
                          }">
                         <!-- Individual OTP inputs -->
@@ -533,6 +557,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     <input type="hidden" wire:model="otp" />
                     
                     <p class="text-center text-sm text-[#9B9EA4] dark:text-zinc-400">Enter the 6-digit code sent to <span class="font-medium text-[#231F20] dark:text-white">{{ $email }}</span></p>
+                    
+                    <!-- Paste hint -->
+                    <div class="text-center mt-2">
+                        <p class="text-xs text-[#9B9EA4] dark:text-zinc-400">
+                            💡 <span class="font-medium">Tip:</span> You can paste the entire OTP code at once
+                        </p>
+                    </div>
                     
                     @error('otp')
                         <div class="mt-2 text-center text-sm text-red-600 dark:text-red-400">{{ $message }}</div>
