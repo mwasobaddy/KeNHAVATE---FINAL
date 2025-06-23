@@ -424,6 +424,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
                              },
                              handlePaste(event) {
                                  event.preventDefault();
+                                 console.log('🎯 Paste event triggered');
                                  
                                  // Get clipboard data
                                  let paste = '';
@@ -433,14 +434,18 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                      paste = window.clipboardData.getData('Text');
                                  }
                                  
+                                 console.log('📋 Pasted text:', paste);
+                                 
                                  // Extract only numbers from the pasted text
                                  const numbers = paste.replace(/[^0-9]/g, '').split('').slice(0, 6);
+                                 console.log('🔢 Extracted numbers:', numbers);
                                  
                                  if (numbers.length === 0) {
-                                     return; // No valid numbers found
+                                     console.log('❌ No valid numbers found');
+                                     return;
                                  }
                                  
-                                 // Clear all inputs first
+                                 // Clear all inputs and Alpine data first
                                  for (let i = 0; i < 6; i++) {
                                      this.otp[i] = '';
                                      const input = this.$refs['otp' + i];
@@ -449,27 +454,35 @@ new #[Layout('components.layouts.auth')] class extends Component {
                                      }
                                  }
                                  
-                                 // Fill with pasted numbers
-                                 for (let i = 0; i < numbers.length && i < 6; i++) {
-                                     this.otp[i] = numbers[i];
-                                     const input = this.$refs['otp' + i];
-                                     if (input) {
-                                         input.value = numbers[i];
+                                 // Use $nextTick to ensure the DOM is updated
+                                 this.$nextTick(() => {
+                                     // Fill with pasted numbers
+                                     for (let i = 0; i < numbers.length && i < 6; i++) {
+                                         // Update Alpine data first
+                                         this.otp[i] = numbers[i];
+                                         
+                                         // Then update the DOM input
+                                         const input = this.$refs['otp' + i];
+                                         if (input) {
+                                             input.value = numbers[i];
+                                             // Force Alpine to recognize the change
+                                             input.dispatchEvent(new Event('input', { bubbles: true }));
+                                         }
                                      }
-                                 }
-                                 
-                                 // Update the Livewire model
-                                 this.updateOtp();
-                                 
-                                 // Focus the next empty input or the last filled one
-                                 const nextIndex = Math.min(numbers.length, 5);
-                                 const targetInput = this.$refs['otp' + nextIndex];
-                                 if (targetInput) {
-                                     targetInput.focus();
-                                 }
-                                 
-                                 // Visual feedback
-                                 console.log('Pasted OTP:', this.otp.join(''));
+                                     
+                                     // Update the Livewire model
+                                     this.updateOtp();
+                                     
+                                     // Focus the next empty input or the last filled one
+                                     const nextIndex = Math.min(numbers.length, 5);
+                                     const targetInput = this.$refs['otp' + nextIndex];
+                                     if (targetInput) {
+                                         setTimeout(() => targetInput.focus(), 50);
+                                     }
+                                     
+                                     console.log('✅ Final OTP array:', this.otp);
+                                     console.log('✅ Final OTP string:', this.otp.join(''));
+                                 });
                              }
                          }">
                         <!-- Individual OTP inputs -->
@@ -561,7 +574,10 @@ new #[Layout('components.layouts.auth')] class extends Component {
                     <!-- Paste hint -->
                     <div class="text-center mt-2">
                         <p class="text-xs text-[#9B9EA4] dark:text-zinc-400">
-                            💡 <span class="font-medium">Tip:</span> You can paste the entire OTP code at once
+                            💡 <span class="font-medium">Tip:</span> You can paste the entire OTP code at once into any field
+                        </p>
+                        <p class="text-xs text-[#9B9EA4] dark:text-zinc-400 mt-1">
+                            Use <kbd class="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">Ctrl+V</kbd> or <kbd class="px-1 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs">Cmd+V</kbd> to paste
                         </p>
                     </div>
                     
