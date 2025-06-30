@@ -41,8 +41,47 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     public function mount(): void
     {
+        // Check for OTP state from URL parameters
+        $this->checkOtpStateFromUrl();
+        
         $this->title = $this->showOtpForm ? 'Enter Verification Code' : 'Welcome back';
         $this->description = $this->showOtpForm ? 'Enter the 6-digit code sent to your email' : 'Sign in to your account to continue';
+    }
+
+    /**
+     * Check and restore OTP state from URL parameters
+     */
+    private function checkOtpStateFromUrl(): void
+    {
+        $email = request()->query('email');
+        $step = request()->query('step');
+        
+        if ($email && $step === 'otp') {
+            // Validate email format
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                // Check if there's a valid unexpired OTP for this email
+                $existingOTP = \App\Models\OTP::where('email', $email)
+                    ->where('purpose', 'login')
+                    ->where('expires_at', '>', now())
+                    ->where('used_at', null)
+                    ->latest()
+                    ->first();
+                
+                if ($existingOTP) {
+                    $this->email = $email;
+                    $this->showOtpForm = true;
+                    $this->otpMessage = 'Please enter the verification code sent to your email.';
+                    
+                    // Calculate remaining time for resend cooldown
+                    $timeSinceGenerated = now()->diffInSeconds($existingOTP->created_at);
+                    $this->resendCooldown = max(0, 60 - $timeSinceGenerated);
+                    
+                    if ($this->resendCooldown > 0) {
+                        $this->dispatch('start-countdown');
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -75,6 +114,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
             // Start resend cooldown
             $this->resendCooldown = 60;
             $this->dispatch('start-countdown');
+
+            // Update URL to maintain state on page reload
+            $this->redirect(route('login', ['email' => $this->email, 'step' => 'otp']), navigate: false);
 
             // Log OTP generation attempt
             $this->auditService->log(
@@ -222,6 +264,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $this->otp = '';
         $this->otpMessage = '';
         $this->resendCooldown = 0;
+        
+        // Clear URL parameters by redirecting to clean login route
+        $this->redirect(route('login'), navigate: false);
     }
 
     /**

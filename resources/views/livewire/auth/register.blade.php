@@ -44,6 +44,9 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
     public function mount(): void
     {
+        // Check for state restoration from URL parameters
+        $this->checkStateFromUrl();
+        
         if ($this->showOtpForm) {
             $this->title = 'Verify Your Email';
             $this->description = 'Enter the verification code sent to your email';
@@ -53,6 +56,45 @@ new #[Layout('components.layouts.auth')] class extends Component {
         } else {
             $this->title = 'Create Account';
             $this->description = 'Join the KeNHAVATE innovation community';
+        }
+    }
+
+    /**
+     * Check and restore state from URL parameters
+     */
+    private function checkStateFromUrl(): void
+    {
+        $email = request()->query('email');
+        $step = request()->query('step');
+        
+        if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->email = $email;
+            $this->isKenhaStaff = str_ends_with(strtolower($this->email), '@kenha.co.ke');
+            
+            if ($step === 'staff') {
+                $this->showStaffForm = true;
+            } elseif ($step === 'otp') {
+                // Check if there's a valid unexpired OTP for this email
+                $existingOTP = \App\Models\OTP::where('email', $email)
+                    ->where('purpose', 'registration')
+                    ->where('expires_at', '>', now())
+                    ->where('used_at', null)
+                    ->latest()
+                    ->first();
+                
+                if ($existingOTP) {
+                    $this->showOtpForm = true;
+                    $this->otpMessage = 'Please enter the verification code sent to your email.';
+                    
+                    // Calculate remaining time for resend cooldown
+                    $timeSinceGenerated = now()->diffInSeconds($existingOTP->created_at);
+                    $this->resendCooldown = max(0, 60 - $timeSinceGenerated);
+                    
+                    if ($this->resendCooldown > 0) {
+                        $this->dispatch('start-countdown');
+                    }
+                }
+            }
         }
     }
 
