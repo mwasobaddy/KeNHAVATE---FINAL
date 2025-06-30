@@ -15,33 +15,14 @@ class FileUploadSecurityService
      */
     protected array $allowedMimeTypes = [
         'documents' => [
-            'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'application/vnd.ms-powerpoint',
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-            'text/plain',
-            'text/csv',
+            'application/pdf', // Only PDF allowed
         ],
-        'images' => [
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/webp',
-            'image/svg+xml',
-        ],
-        'archives' => [
-            'application/zip',
-            'application/x-rar-compressed',
-            'application/x-7z-compressed',
-            'application/gzip',
-        ],
-        'videos' => [
-            'video/mp4',
-            'video/avi',
-            'video/quicktime',
-            'video/x-msvideo',
-        ]
+    ];
+
+    protected array $allowedDirectories = [
+        'idea',
+        'admin-challenge',
+        'user-challenge-description',
     ];
 
     /**
@@ -159,8 +140,17 @@ class FileUploadSecurityService
      */
     public function storeFile(UploadedFile $file, string $directory, string $context = 'general'): array
     {
+        // Only allow storage in whitelisted directories
+        if (!in_array($directory, $this->allowedDirectories)) {
+            return [
+                'success' => false,
+                'errors' => ["Invalid storage directory: $directory"],
+                'path' => null,
+                'metadata' => null
+            ];
+        }
+
         $validation = $this->validateFile($file, $context);
-        
         if (!$validation['valid']) {
             return [
                 'success' => false,
@@ -178,7 +168,7 @@ class FileUploadSecurityService
             $path = $file->storeAs(
                 $directory,
                 $secureFilename,
-                ['disk' => 'private', 'visibility' => 'private']
+                ['disk' => 'public', 'visibility' => 'public']
             );
 
             // Store metadata
@@ -200,9 +190,8 @@ class FileUploadSecurityService
                 'path' => $path,
                 'metadata' => $metadata
             ];
-
         } catch (Exception $e) {
-            Log::error('File storage error', [
+            \Log::error('File storage error', [
                 'file' => $file->getClientOriginalName(),
                 'error' => $e->getMessage(),
                 'context' => $context

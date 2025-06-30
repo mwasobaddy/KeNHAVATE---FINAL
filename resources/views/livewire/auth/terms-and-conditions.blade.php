@@ -3,8 +3,9 @@
 use Livewire\Volt\Component;
 use App\Services\AuditService;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Terms and Conditions')] class extends Component
     public bool $hasScrolledToBottom = false;
     public bool $termsAccepted = false;
     public bool $isLoading = false;

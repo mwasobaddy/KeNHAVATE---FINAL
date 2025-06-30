@@ -4,8 +4,10 @@ use Livewire\Volt\Component;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Services\AuditService;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Edit Role')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Edit Role')] class extends Component
+{
     public Role $role;
     public $name = '';
     public $selectedPermissions = [];

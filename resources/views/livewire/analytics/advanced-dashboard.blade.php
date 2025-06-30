@@ -1,13 +1,14 @@
 <?php
 
 use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
 use App\Services\AnalyticsService;
 use App\Models\User;
 use App\Models\Idea;
 use App\Models\Challenge;
 use App\Models\Review;
 
-new #[Layout('components.layouts.app', title: 'Advanced Analytics Dashboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Advanced Analytics')] class extends Component
 {
     public $selectedTimeframe = 'last_30_days';
     public $selectedMetric = 'overview';

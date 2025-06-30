@@ -7,8 +7,9 @@ use App\Models\Challenge;
 use App\Models\ChallengeReview;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component
+new #[Layout('layouts.app')] #[Title('Create Challenge')] class extends Component
 {
     use WithPagination;
 

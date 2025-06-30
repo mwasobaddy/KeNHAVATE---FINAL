@@ -39,13 +39,16 @@ new class extends Component {
     {
         if (strlen($this->searchQuery) < 2) {
             $this->searchResults = [];
+            $this->showSearch = false;
             return;
         }
 
-        // Search for users excluding current author and existing collaborators
-        $existingCollaboratorIds = $this->collaborations
+        // Always reload collaborations to get up-to-date collaborator IDs
+        $this->loadCollaborations();
+        $existingCollaboratorIds = collect($this->collaborations)
             ->pluck('collaborator_id')
             ->push($this->idea->author_id)
+            ->unique()
             ->toArray();
 
         $this->searchResults = User::where(function ($query) {
@@ -95,8 +98,9 @@ new class extends Component {
             return;
         }
 
-        // Check if collaboration already exists
-        $existingCollaboration = Collaboration::where('idea_id', $this->idea->id)
+        // Check if collaboration already exists (use morph columns for uniqueness)
+        $existingCollaboration = Collaboration::where('collaborable_type', Idea::class)
+            ->where('collaborable_id', $this->idea->id)
             ->where('collaborator_id', $user->id)
             ->first();
 
@@ -116,7 +120,9 @@ new class extends Component {
 
         // Create collaboration invitation
         $collaboration = Collaboration::create([
-            'idea_id' => $this->idea->id,
+            'collaborable_type' => Idea::class,
+            'collaborable_id' => $this->idea->id,
+            'idea_id' => $this->idea->id, // Optional: if you have a direct idea_id column for legacy reasons
             'collaborator_id' => $user->id,
             'invited_by' => auth()->id(),
             'role' => $this->inviteRole,
@@ -248,8 +254,7 @@ new class extends Component {
 
     private function sendInvitationNotification($user, $collaboration)
     {
-        // Implementation for sending notification
-        // This would integrate with the notification system
+        \Mail::to($user->email)->send(new \App\Mail\CollaborationInvitationMail($collaboration));
     }
 
     private function notifyAuthorOfResponse($collaboration, $response)
@@ -303,8 +308,13 @@ new class extends Component {
             default => 'bg-gray-100 text-gray-800',
         };
     }
+
+    public function updatedSearchQuery()
+    {
+        $this->searchUsers();
+    }
 }; ?>
-<div class="min-h-screen relative overflow-hidden">
+<div class="min-h-fit relative overflow-hidden">
     {{-- Animated Background Elements --}}
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-10 left-10 w-48 h-48 bg-blue-500/20 dark:bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -435,8 +445,8 @@ new class extends Component {
 
                             {{-- Enhanced Manual Email Input Section --}}
                             <div class="relative">
-                                <div class="absolute inset-0 bg-gradient-to-r from-white/30 to-white/10 dark:from-zinc-700/30 dark:to-zinc-800/10 rounded-2xl"></div>
-                                <div class="relative border-t border-white/20 dark:border-zinc-700/50 pt-6">
+                                {{-- <div class="absolute inset-0 bg-gradient-to-r from-white/30 to-white/10 dark:from-zinc-700/30 dark:to-zinc-800/10 rounded-2xl"></div> --}}
+                                <div class="relative pt-6">
                                     <p class="text-sm font-medium text-[#9B9EA4] dark:text-zinc-400 mb-4 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -452,7 +462,7 @@ new class extends Component {
                                             <div class="relative">
                                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                                     <svg class="w-5 h-5 text-[#9B9EA4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 018 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
                                                     </svg>
                                                 </div>
                                                 <input
@@ -717,11 +727,12 @@ new class extends Component {
                 </div>
             </div>
         </section>
+    </div>
 
         {{-- Enhanced Flash Messages --}}
         @if (session()->has('message'))
             <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                 class="fixed top-4 right-4 bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 text-white px-6 py-4 rounded-2xl shadow-xl z-50 backdrop-blur-xl border border-white/20">
+                 class="absolute top-4 right-4 bg-gradient-to-r from-emerald-500 to-emerald-600 dark:from-emerald-400 dark:to-emerald-500 text-white px-6 py-4 rounded-2xl shadow-xl z-50 backdrop-blur-xl border border-white/20">
                 <div class="flex items-center space-x-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -733,7 +744,7 @@ new class extends Component {
 
         @if (session()->has('error'))
             <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
-                 class="fixed top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 text-white px-6 py-4 rounded-2xl shadow-xl z-50 backdrop-blur-xl border border-white/20">
+                 class="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 text-white px-6 py-4 rounded-2xl shadow-xl z-50 backdrop-blur-xl border border-white/20">
                 <div class="flex items-center space-x-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -742,5 +753,4 @@ new class extends Component {
                 </div>
             </div>
         @endif
-    </div>
 </div>

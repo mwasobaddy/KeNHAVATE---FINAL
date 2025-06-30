@@ -3,13 +3,12 @@
 use App\Models\Challenge;
 use App\Models\ChallengeSubmission;
 use App\Models\User;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
 
-new #[Layout('layouts.app')] #[Title('Challenge Leaderboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Challenge Leaderboard')] class extends Component
 {
     use WithPagination;
 

@@ -6,8 +6,9 @@ use App\Models\Idea;
 use App\Models\Category;
 use App\Services\AuditService;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Submit New Idea')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Submit New Idea')] class extends Component
 {
     use WithFileUploads;
 

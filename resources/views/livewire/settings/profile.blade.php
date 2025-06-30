@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Profile Settings')] class extends Component
+{
     public string $name = '';
     public string $email = '';
 

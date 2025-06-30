@@ -3,8 +3,7 @@
 use App\Models\Challenge;
 use App\Models\ChallengeSubmission;
 use App\Models\ChallengeReview;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;

@@ -4,8 +4,9 @@ use Livewire\Volt\Component;
 use Livewire\WithPagination;
 use App\Models\Idea;
 use App\Models\Category;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Ideas')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Ideas')] class extends Component
 {
     use WithPagination;
 

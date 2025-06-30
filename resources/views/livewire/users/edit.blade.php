@@ -6,8 +6,10 @@ use App\Models\Staff;
 use Spatie\Permission\Models\Role;
 use App\Services\AuditService;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Edit User')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Edit User')] class extends Component
+{
     public User $user;
     
     // Edit User Form Properties

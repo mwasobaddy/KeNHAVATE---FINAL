@@ -5,8 +5,9 @@ use App\Models\Idea;
 use App\Models\Challenge;
 use App\Models\Review;
 use App\Services\AchievementService;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Manager Dashboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Manager Dashboard')] class extends Component
 {
     
     public function with(): array

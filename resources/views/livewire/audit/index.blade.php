@@ -1,10 +1,11 @@
 <?php
 
 use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\WithPagination;
 use App\Models\AuditLog;
 
-new #[Layout('components.layouts.app', title: 'Audit Logs')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Audit Logs ')] class extends Component
 {
     use WithPagination;
 

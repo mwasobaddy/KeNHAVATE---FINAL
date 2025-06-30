@@ -7,8 +7,10 @@ use App\Models\ChallengeSubmission;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Submit Challenge')] class extends Component
+{
     use WithFileUploads;
     
     public Challenge $challenge;

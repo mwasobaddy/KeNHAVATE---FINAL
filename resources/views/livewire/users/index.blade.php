@@ -7,8 +7,10 @@ use App\Models\Staff;
 use Spatie\Permission\Models\Role;
 use App\Services\AuditService;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'User Management')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('User Management')] class extends Component
+{
     use WithPagination;
 
     // User Management Properties

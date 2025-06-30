@@ -20,9 +20,12 @@ return new class extends Migration
                 'login_success',
                 'logout',
                 'idea_submission',
+                'idea_draft_saved', // Added this line for draft audit
+                'idea_updated',
                 'challenge_creation',
                 'challenge_participation',
                 'collaboration_invitation',
+                'collaboration_invited',
                 'collaboration_request',
                 'account_banning',
                 'account_reporting',

@@ -6,9 +6,10 @@ use App\Models\Review;
 use App\Services\IdeaWorkflowService;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
-    
+new #[Layout('components.layouts.app')] #[Title('Review Ideas')] class extends Component
+{
     use WithPagination;
     
     public string $search = '';

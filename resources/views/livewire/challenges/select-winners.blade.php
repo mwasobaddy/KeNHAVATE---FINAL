@@ -8,8 +8,10 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Artesaos\SEOTools\Facades\SEOTools;
 use Carbon\Carbon;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Select Challenge Winners')] class extends Component
+{
     use WithPagination;
 
     public Challenge $challenge;

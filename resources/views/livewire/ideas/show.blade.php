@@ -3,8 +3,9 @@
 use Livewire\Volt\Component;
 use App\Models\Idea;
 use App\Services\AuditService;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'View Idea')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('View Idea')] class extends Component
 {
     public Idea $idea;
 
@@ -409,6 +410,9 @@ new #[Layout('components.layouts.app', title: 'View Idea')] class extends Compon
                                 @endforeach
                             </div>
                         </section>
+                    </div>
+
+                    <div class="lg:col-span-3 space-y-8">
 
                         {{-- Collaboration Management --}}
                         @if($idea->collaboration_enabled || auth()->user()->hasAnyRole(['administrator', 'developer', 'manager', 'sme']))

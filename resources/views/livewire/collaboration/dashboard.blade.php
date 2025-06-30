@@ -37,9 +37,9 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
             ->map(function ($collaboration) {
                 return [
                     'id' => $collaboration->id,
-                    'idea_id' => $collaboration->idea->id,
-                    'idea_title' => $collaboration->idea->title,
-                    'idea_author' => $collaboration->idea->author->name,
+                    'idea_id' => $collaboration->idea?->id,
+                    'idea_title' => $collaboration->idea?->title ?? '(Idea deleted)',
+                    'idea_author' => $collaboration->idea?->author?->name ?? '-',
                     'joined_at' => $collaboration->joined_at ?? $collaboration->created_at,
                     'last_activity' => $collaboration->updated_at,
                     'role' => $collaboration->role ?? 'contributor'
@@ -56,9 +56,9 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
             ->map(function ($invite) {
                 return [
                     'id' => $invite->id,
-                    'idea_id' => $invite->idea->id,
-                    'idea_title' => $invite->idea->title,
-                    'inviter_name' => $invite->inviter->name,
+                    'idea_id' => $invite->idea?->id,
+                    'idea_title' => $invite->idea?->title ?? '(Idea deleted)',
+                    'inviter_name' => $invite->inviter?->name ?? '-',
                     'invited_at' => $invite->invited_at ?? $invite->created_at,
                     'message' => $invite->invitation_message,
                     'role' => $invite->role ?? 'contributor'
@@ -104,9 +104,9 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
                 ->map(function ($collab) {
                     return [
                         'type' => 'collaboration_joined',
-                        'message' => "You joined collaboration on \"{$collab->idea->title}\"",
+                        'message' => $collab->idea ? "You joined collaboration on \"{$collab->idea->title}\"" : 'You joined a collaboration (idea deleted)',
                         'date' => $collab->joined_at ?? $collab->created_at,
-                        'idea_id' => $collab->idea->id
+                        'idea_id' => $collab->idea?->id
                     ];
                 }),
             ...Collaboration::where('collaborator_id', $user->id)
@@ -118,9 +118,9 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
                 ->map(function ($invite) {
                     return [
                         'type' => 'invite_accepted',
-                        'message' => "You accepted invitation for \"{$invite->idea->title}\"",
+                        'message' => $invite->idea ? "You accepted invitation for \"{$invite->idea->title}\"" : 'You accepted an invitation (idea deleted)',
                         'date' => $invite->responded_at ?? $invite->updated_at,
-                        'idea_id' => $invite->idea->id
+                        'idea_id' => $invite->idea?->id
                     ];
                 })
         ])->sortByDesc('date')->take(5)->values();

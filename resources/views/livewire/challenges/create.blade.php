@@ -5,8 +5,10 @@ use App\Models\Challenge;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Create Challenge')] class extends Component
+{
     public string $title = '';
     public string $description = '';
     public string $category = '';

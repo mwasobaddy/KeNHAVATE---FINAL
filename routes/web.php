@@ -118,4 +118,30 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('collaborations/accept/{collaboration}', function (App\Models\Collaboration $collaboration) {
+        if ($collaboration->collaborator_id !== auth()->id()) {
+            abort(403);
+        }
+        if ($collaboration->status !== 'pending') {
+            return redirect()->route('dashboard.user')->with('error', 'This invitation is no longer valid.');
+        }
+        $collaboration->update(['status' => 'accepted', 'responded_at' => now()]);
+        // Optionally: notify inviter
+        return redirect()->route('dashboard.user')->with('message', 'You have accepted the collaboration invitation.');
+    })->name('collaborations.accept');
+
+    Route::get('collaborations/decline/{collaboration}', function (App\Models\Collaboration $collaboration) {
+        if ($collaboration->collaborator_id !== auth()->id()) {
+            abort(403);
+        }
+        if ($collaboration->status !== 'pending') {
+            return redirect()->route('dashboard.user')->with('error', 'This invitation is no longer valid.');
+        }
+        $collaboration->update(['status' => 'declined', 'responded_at' => now()]);
+        // Optionally: notify inviter
+        return redirect()->route('dashboard.user')->with('message', 'You have declined the collaboration invitation.');
+    })->name('collaborations.decline');
+});
+
 require __DIR__.'/auth.php';

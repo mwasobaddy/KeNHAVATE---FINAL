@@ -5,9 +5,9 @@ use App\Models\Idea;
 use App\Models\Review;
 use App\Models\Challenge;
 use App\Services\AchievementService;
+use Livewire\Attributes\{Layout, Title};
 
-
-new #[Layout('components.layouts.app', title: 'Board Member Dashboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Board Member Dashboard')] class extends Component
 {
     public $pendingApprovals;
     public $recentDecisions;

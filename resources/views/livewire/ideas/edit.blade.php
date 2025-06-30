@@ -6,8 +6,9 @@ use App\Models\Idea;
 use App\Models\Category;
 use App\Services\AuditService;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Edit Idea')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Edit Idea')] class extends Component
 {
     use WithFileUploads;
 
@@ -115,6 +116,12 @@ new #[Layout('components.layouts.app', title: 'Edit Idea')] class extends Compon
             return redirect()->route('ideas.show', $this->idea);
 
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error updating idea: ' . $e->getMessage(), [
+                'idea_id' => $this->idea->id,
+                'user_id' => auth()->id(),
+                'error' => $e->getTraceAsString(),
+            ]);
             $this->isSubmitting = false;
             $this->addError('update', 'An error occurred while updating your idea. Please try again.');
         }
@@ -440,7 +447,7 @@ new #[Layout('components.layouts.app', title: 'Edit Idea')] class extends Compon
                     </div>
                     
                     {{-- Existing Attachments --}}
-                    @if($idea->attachments->count() > 0)
+                    @if(optional($idea->attachments)->count() > 0)
                         <div>
                             <h3 class="text-sm font-semibold text-[#231F20] dark:text-zinc-200 mb-3">Current Attachments</h3>
                             <div class="space-y-2">
@@ -552,7 +559,7 @@ new #[Layout('components.layouts.app', title: 'Edit Idea')] class extends Compon
                                 <input
                                     type="checkbox"
                                     id="collaboration_enabled"
-                                    wire:model="collaboration_enabled"
+                                    wire:model.live="collaboration_enabled"
                                     class="sr-only"
                                 />
                                 <div class="block w-14 h-8 rounded-full border border-white/20 dark:border-zinc-700/50 bg-white/30 dark:bg-zinc-900/30 group-hover:bg-[#F8EBD5]/20 dark:group-hover:bg-amber-900/20 transition-colors duration-300"></div>

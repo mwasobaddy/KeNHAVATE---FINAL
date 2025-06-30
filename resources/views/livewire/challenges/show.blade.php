@@ -6,8 +6,10 @@ use App\Models\ChallengeSubmission;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Artesaos\SEOTools\Facades\SEOTools;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Challenge Details')] class extends Component
+{
     public Challenge $challenge;
     public ?ChallengeSubmission $userSubmission = null;
     public bool $showRequirements = false;

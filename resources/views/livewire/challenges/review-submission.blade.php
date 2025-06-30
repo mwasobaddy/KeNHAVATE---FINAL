@@ -3,13 +3,13 @@
 use App\Models\ChallengeSubmission;
 use App\Models\ChallengeReview;
 use App\Models\User;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-new #[Layout('layouts.app')] #[Title('Review Submission')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Review Submission')] class extends Component
+{
     public ChallengeSubmission $submission;
     public ?ChallengeReview $existingReview = null;
 

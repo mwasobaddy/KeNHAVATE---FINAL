@@ -1,12 +1,13 @@
 <?php
 
 use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
 use App\Models\User;
 use App\Models\Idea;
 use App\Models\Challenge;
 use App\Services\AchievementService;
 
-new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Innovation Dashboard')] class extends Component
 {
     public $showWelcome = true;
     
@@ -42,8 +43,8 @@ new #[Layout('components.layouts.app', title: 'Innovation Dashboard')] class ext
                 'total_points' => $user->totalPoints(),
                 'monthly_points' => $user->monthlyPoints(),
                 'ranking_position' => $user->getRankingPosition(),
-                'achievements_count' => $achievementService->getUserAchievements($user)->count(),
-                'next_milestone' => $achievementService->getNextMilestone($user),
+                'achievements_count' => count($achievementService->getUserAchievements($user)),
+                'next_milestone' => null, // AchievementService does not have getNextMilestone()
             ],
             'user' => $user
         ];

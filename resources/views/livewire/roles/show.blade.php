@@ -5,8 +5,10 @@ use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\AuditLog;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Role Details')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Role Details')] class extends Component
+{
     use WithPagination;
 
     public Role $role;

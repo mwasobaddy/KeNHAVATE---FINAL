@@ -6,8 +6,10 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Hash;
 use App\Services\AuditService;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Role Management')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Role Management')] class extends Component
+{
     use WithPagination;
 
     public $search = '';

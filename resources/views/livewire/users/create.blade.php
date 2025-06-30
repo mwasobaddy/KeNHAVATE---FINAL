@@ -8,8 +8,10 @@ use App\Services\AuditService;
 use App\Services\GamificationService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Create User')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('Create User')] class extends Component
+{
     // Create User Form Properties
     public $first_name = '';
     public $last_name = '';

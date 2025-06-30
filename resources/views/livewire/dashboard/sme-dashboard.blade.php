@@ -5,8 +5,9 @@ use App\Models\Idea;
 use App\Models\Review;
 use App\Models\Collaboration;
 use App\Services\AchievementService;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'SME Dashboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('SME Dashboard')] class extends Component
 {
     public $pendingReviews;
     public $completedReviews;

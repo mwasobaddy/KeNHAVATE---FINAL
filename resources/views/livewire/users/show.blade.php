@@ -4,8 +4,10 @@ use Livewire\Volt\Component;
 use App\Models\User;
 use App\Models\AuditLog;
 use Livewire\WithPagination;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'User Details')] class extends Component {
+new #[Layout('components.layouts.app')] #[Title('User Details')] class extends Component
+{
     use WithPagination;
     
     public User $user;

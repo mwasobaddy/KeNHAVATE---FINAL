@@ -6,9 +6,11 @@ use App\Models\Review;
 use App\Services\IdeaWorkflowService;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\{Layout, Title};
 
-new class extends Component {
-    
+new #[Layout('components.layouts.app')] #[Title('Review Idea')] class extends Component
+{
+
     public Idea $idea;
     public string $stage = '';
     

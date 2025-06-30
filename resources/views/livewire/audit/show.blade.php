@@ -1,8 +1,9 @@
 <?php
 use App\Models\AuditLog;
 use Livewire\Volt\Component;
+use Livewire\Attributes\{Layout, Title};
 
-new #[Layout('components.layouts.app', title: 'Audit Log Details')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Audit Log Details')] class extends Component
 {
     public AuditLog $log;
 

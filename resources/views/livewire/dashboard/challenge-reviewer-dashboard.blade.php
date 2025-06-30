@@ -5,9 +5,9 @@ use App\Models\Challenge;
 use App\Models\ChallengeSubmission;
 use App\Models\Review;
 use App\Services\AchievementService;
+use Livewire\Attributes\{Layout, Title};
 
-
-new #[Layout('components.layouts.app', title: 'Challenge Reviewer Dashboard')] class extends Component
+new #[Layout('components.layouts.app')] #[Title('Challenge Reviewer Dashboard')] class extends Component
 {
     public $assignedChallenges;
     public $pendingReviews;

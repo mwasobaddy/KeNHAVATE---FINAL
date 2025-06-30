@@ -4,11 +4,11 @@ use App\Models\AppealMessage;
 use App\Services\AuditService;
 use App\Services\NotificationService;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Title};
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
-new #[Layout('components.layouts.auth')] class extends Component {
+new #[Layout('components.layouts.auth')] #[Title('Account Suspended')] class extends Component
     #[Validate('required|string|min:10|max:1000')]
     public string $message = '';
 

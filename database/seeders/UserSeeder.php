@@ -30,6 +30,9 @@ class UserSeeder extends Seeder
 
         // Create Kelvin Wanjohi as Developer
         $this->createKelvinWanjohi();
+        
+        // Create Mwangi Kelvin as User
+        $this->createMwangiKelvin();
 
         // Create fake users for each role
         $this->createAdministrators();
@@ -77,7 +80,7 @@ class UserSeeder extends Seeder
             [
                 'first_name' => 'Kelvin',
                 'last_name' => 'Wanjohi',
-                'phone' => '+254712345678',
+                'phone' => '+254740252837',
                 'gender' => 'male',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password123'),
@@ -93,7 +96,7 @@ class UserSeeder extends Seeder
         Staff::updateOrCreate(
             ['user_id' => $kelvin->id],
             [
-                'staff_number' => 'KNH001',
+                'staff_number' => 'KNH000',
                 'job_title' => 'Senior Systems Developer',
                 'department' => 'Information Technology',
                 'employment_type' => 'permanent',
@@ -105,6 +108,46 @@ class UserSeeder extends Seeder
         );
 
         $this->command->info('✅ Created Kelvin Wanjohi as Developer');
+    }
+
+    /**
+     * Create Mwangi Kelvin as Developer
+     */
+    private function createMwangiKelvin(): void
+    {
+        $kelvin = User::updateOrCreate(
+            ['email' => 'kelvinramsiel01@gmail.com'],
+            [
+                'first_name' => 'Kelvin',
+                'last_name' => 'Mwangi',
+                'phone' => '+254719734056',
+                'gender' => 'male',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password123'),
+                'account_status' => 'active',
+                'terms_accepted' => true,
+            ]
+        );
+
+        // Assign developer role
+        $kelvin->assignRole('user');
+
+        // Create staff profile for Kelvin (KeNHA staff)
+        Staff::updateOrCreate(
+            ['user_id' => $kelvin->id],
+            [
+                'staff_number' => 'KNH001',
+                'job_title' => 'Attachee',
+                'department' => 'Information Technology',
+                'employment_type' => 'permanent',
+                'employment_date' => now()->subYears(3),
+                'work_station' => 'Nairobi Headquarters',
+                'supervisor_name' => 'John Doe',
+                'personal_email' => 'kelvin.mwangi@gmail.com',
+            ]
+        );
+
+        $this->command->info('✅ Created Kelvin Mwangi as User');
     }
 
     /**
