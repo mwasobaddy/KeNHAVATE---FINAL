@@ -109,6 +109,12 @@ Route::middleware(['auth'])->group(function () {
             Volt::route('system/logs', 'system.logs')->name('system.logs');
             Volt::route('system/maintenance', 'system.maintenance')->name('system.maintenance');
         });
+        
+        // Audit Log Management (Developer & Admin only)
+        Route::middleware(['permission:view_audit_logs'])->group(function () {
+            Volt::route('audit', 'audit.index')->name('audit.index');
+            Volt::route('audit/{id}', 'audit.show')->name('audit.show');
+        });
     });
 });
 

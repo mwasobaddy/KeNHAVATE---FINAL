@@ -66,6 +66,12 @@
                         @endcan
                     </flux:navlist.group>
                 @endcan
+
+                @can('view_audit_logs')
+                    <flux:navlist.group heading="System" class="grid">
+                        <flux:navlist.item icon="document-magnifying-glass" :href="route('audit.index')" :current="request()->routeIs('audit.*')" wire:navigate>Audit Logs</flux:navlist.item>
+                    </flux:navlist.group>
+                @endcan
             </flux:navlist>
 
             <flux:spacer />
@@ -164,6 +170,12 @@
                         @can('view_roles')
                         <flux:navlist.item icon="shield-check" :href="route('roles.index')" :current="request()->routeIs('roles.*')" wire:navigate>{{ __('Role Management') }}</flux:navlist.item>
                         @endcan
+                    </flux:navlist.group>
+                @endcan
+
+                @can('view_audit_logs')
+                    <flux:navlist.group :heading="__('System')" class="grid">
+                        <flux:navlist.item icon="document-magnifying-glass" :href="route('audit.index')" :current="request()->routeIs('audit.*')" wire:navigate>{{ __('Audit Logs') }}</flux:navlist.item>
                     </flux:navlist.group>
                 @endcan
             </flux:navlist>
