@@ -63,6 +63,13 @@ new #[Layout('components.layouts.app')] #[Title('View Idea')] class extends Comp
         return false;
     }
 
+
+    private function canInvite()
+    {
+        return $this->idea->author_id === auth()->id() 
+            || auth()->user()->hasAnyRole(['manager', 'sme', 'administrator', 'developer']);
+    }
+
     public function canEdit(): bool
     {
         $user = auth()->user();
@@ -426,6 +433,7 @@ new #[Layout('components.layouts.app')] #[Title('View Idea')] class extends Comp
 
                         {{-- Collaboration Management --}}
                         @if($idea->collaboration_enabled || auth()->user()->hasAnyRole(['administrator', 'developer', 'manager', 'sme']))
+                        @if ($this->canInvite())
                             <section aria-labelledby="collaboration-heading" class="group space-y-6">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-10 h-10 bg-gradient-to-br from-violet-500 to-violet-600 dark:from-violet-400 dark:to-violet-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -440,6 +448,7 @@ new #[Layout('components.layouts.app')] #[Title('View Idea')] class extends Comp
                                     @livewire('community.collaboration-management', ['idea' => $idea])
                                 </div>
                             </section>
+                        @endif
                         @endif
 
                         {{-- Comments & Discussion --}}
