@@ -13,6 +13,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] #[Title('Create Account')] class extends Component
+{
     public string $first_name = '';
     public string $last_name = '';
     public string $email = '';

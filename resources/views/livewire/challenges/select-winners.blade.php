@@ -35,7 +35,7 @@ new #[Layout('components.layouts.app')] #[Title('Select Challenge Winners')] cla
         if (
             !auth()
                 ->user()
-                ->hasAnyRole(['manager', administrator, 'developer'])
+                ->hasAnyRole(['manager', 'administrator', 'developer'])
         ) {
             abort(403, 'Unauthorized access to winner selection.');
         }

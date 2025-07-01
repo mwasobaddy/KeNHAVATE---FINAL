@@ -24,7 +24,7 @@ new #[Layout('layouts.app')] #[Title('Create Challenge')] class extends Componen
     public function mount(): void
     {
         // Authorization check - only reviewers can access this page
-        if (!auth()->user()->hasAnyRole(['manager', 'challenge_reviewer', 'sme', administrator, 'developer'])) {
+        if (!auth()->user()->hasAnyRole(['manager', 'challenge_reviewer', 'sme', 'administrator', 'developer'])) {
             abort(403, 'Unauthorized access to challenge reviews.');
         }
     }

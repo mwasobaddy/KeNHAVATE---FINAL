@@ -20,7 +20,7 @@ return new class extends Migration
                 'login_success',
                 'logout',
                 'idea_submission',
-                'idea_draft_saved', // Added this line for draft audit
+                'idea_draft_saved',
                 'idea_updated',
                 'challenge_creation',
                 'challenge_participation',
@@ -50,7 +50,11 @@ return new class extends Migration
                 'device_trusted',
                 'password_change',
                 'terms_accepted',
-                'terms_disagreed'
+                'terms_disagreed',
+                'comment_created',
+                'comment_reply_created',
+                'comment_deleted',
+                'comment_updated',
             ]);
             $table->string('entity_type')->nullable(); // Model class name
             $table->unsignedBigInteger('entity_id')->nullable(); // Model ID

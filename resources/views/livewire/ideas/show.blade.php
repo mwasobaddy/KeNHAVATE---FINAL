@@ -50,6 +50,16 @@ new #[Layout('components.layouts.app')] #[Title('View Idea')] class extends Comp
             return true;
         }
         
+        // Allow users with accepted/active collaborations to view the idea
+        $hasCollaboration = \App\Models\Collaboration::where('collaborable_type', \App\Models\Idea::class)
+            ->where('collaborable_id', $this->idea->id)
+            ->where('collaborator_id', $user->id)
+            ->whereIn('status', ['accepted', 'active'])
+            ->exists();
+        if ($hasCollaboration) {
+            return true;
+        }
+        
         return false;
     }
 

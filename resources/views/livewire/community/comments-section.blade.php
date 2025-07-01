@@ -165,7 +165,7 @@ new class extends Component {
         $comment = Comment::findOrFail($commentId);
         
         // Check authorization
-        if ($comment->author_id !== auth()->id() && !auth()->user()->hasRole([administrator, 'developer'])) {
+        if ($comment->author_id !== auth()->id() && !auth()->user()->hasRole(['administrator', 'developer'])) {
             abort(403);
         }
 
@@ -238,7 +238,7 @@ new class extends Component {
                             <div>
                                 <label for="newComment" class="sr-only">Add a comment</label>
                                 <textarea
-                                    wire:model="newComment"
+                                    wire:model.live="newComment"
                                     id="newComment"
                                     rows="4"
                                     class="w-full px-6 py-4 border border-white/20 dark:border-zinc-600/50 rounded-2xl focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none bg-white/80 dark:bg-zinc-700/80 backdrop-blur-sm text-[#231F20] dark:text-zinc-100 placeholder-[#9B9EA4] dark:placeholder-zinc-400 shadow-lg transition-all duration-300"
@@ -264,7 +264,9 @@ new class extends Component {
                                 <button
                                     type="submit"
                                     class="group/submit relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 px-8 py-3 {{ strlen($newComment) < 3 ? 'opacity-50 cursor-not-allowed' : '' }}"
-                                    {{ strlen($newComment) < 3 ? 'disabled' : '' }}
+                                    wire:loading.attr="disabled"
+                                    wire:target="addComment"
+                                    @if(strlen($newComment) < 3) disabled @endif
                                 >
                                     <span class="absolute inset-0 bg-gradient-to-br from-blue-700 to-blue-800 dark:from-blue-600 dark:to-blue-700 opacity-0 group-hover/submit:opacity-100 transition-opacity duration-300"></span>
                                     <span class="relative text-white font-semibold flex items-center space-x-2">
@@ -390,8 +392,6 @@ new class extends Component {
                                             <div class="flex items-center space-x-2 text-red-600 dark:text-red-400">
                                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                                </svg>
-                                                <span class="text-sm font-medium">{{ $message }}</span>
                                             </div>
                                         @enderror
                                         
@@ -460,7 +460,6 @@ new class extends Component {
                                                     <div class="w-6 h-6 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700/50 flex items-center justify-center">
                                                         <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
-                                                        </svg>
                                                     </div>
                                                     <span class="font-semibold">{{ $reply->upvotes_count }}</span>
                                                 </button>

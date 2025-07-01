@@ -9,6 +9,7 @@ use Livewire\Volt\Component;
 use Livewire\Attributes\{Layout, Title};
 
 new #[Layout('components.layouts.auth')] #[Title('Banned Account')] class extends Component
+{
     #[Validate('required|string|min:10|max:1000')]
     public string $message = '';
 

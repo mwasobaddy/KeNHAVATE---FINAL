@@ -166,14 +166,14 @@ new class extends Component {
     private function canCreateVersion()
     {
         return $this->idea->author_id === auth()->id() 
-            || auth()->user()->hasAnyRole([administrator, 'developer'])
+            || auth()->user()->hasAnyRole(['administrator', 'developer'])
             || auth()->user()->collaborations()->where('idea_id', $this->idea->id)->whereIn('status', ['accepted', 'active'])->exists();
     }
 
     private function canRestoreVersion()
     {
         return $this->idea->author_id === auth()->id() 
-            || auth()->user()->hasAnyRole([administrator, 'developer']);
+            || auth()->user()->hasAnyRole(['administrator', 'developer']);
     }
 
     public function exportVersion($versionId)

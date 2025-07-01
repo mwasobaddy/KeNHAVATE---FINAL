@@ -5,6 +5,7 @@ use Livewire\Volt\Component;
 use Livewire\Attributes\{Layout, Title};
 
 new #[Layout('components.layouts.auth')] #[Title('Forgot Password')] class extends Component
+{
     public string $email = '';
 
     public string $title = 'Forgot Password';

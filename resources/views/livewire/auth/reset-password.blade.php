@@ -11,6 +11,7 @@ use Livewire\Attributes\Locked;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] #[Title('Reset Password')] class extends Component
+{
     #[Locked]
     public string $token = '';
     public string $email = '';

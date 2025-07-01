@@ -193,7 +193,7 @@ new #[Layout('components.layouts.app')] #[Title('Submit Challenge')] class exten
         // Send notifications
         // Notify challenge author/managers
         app(App\Services\NotificationService::class)->sendToRoles(
-            ['manager', administrator, 'challenge_reviewer'],
+            ['manager', 'administrator', 'challenge_reviewer'],
             'challenge_submission',
             [
                 'title' => 'New Challenge Submission',

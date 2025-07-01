@@ -9,6 +9,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] #[Title('Account Suspended')] class extends Component
+{
     #[Validate('required|string|min:10|max:1000')]
     public string $message = '';
 

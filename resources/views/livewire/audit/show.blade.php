@@ -57,7 +57,7 @@ new #[Layout('components.layouts.app')] #[Title('Audit Log Details')] class exte
                 {{-- Statistics Cards --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     {{-- Date --}}
-                    <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="col-span-1 sm:col-span-2  group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-amber-600/10 dark:from-amber-400/10 dark:via-transparent dark:to-amber-500/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
                         <div class="relative p-6 flex items-center justify-between">
                             <div>
@@ -71,7 +71,7 @@ new #[Layout('components.layouts.app')] #[Title('Audit Log Details')] class exte
                         </div>
                     </div>
                     {{-- User --}}
-                    <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="col-span-1 sm:col-span-2  group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-blue-600/10 dark:from-blue-400/10 dark:via-transparent dark:to-blue-500/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
                         <div class="relative p-6 flex items-center justify-between">
                             <div>
@@ -93,7 +93,7 @@ new #[Layout('components.layouts.app')] #[Title('Audit Log Details')] class exte
                         </div>
                     </div>
                     {{-- Action --}}
-                    <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="col-span-1 sm:col-span-2  group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-purple-600/10 dark:from-purple-400/10 dark:via-transparent dark:to-purple-500/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
                         <div class="relative p-6 flex items-center justify-between">
                             <div>
@@ -107,7 +107,7 @@ new #[Layout('components.layouts.app')] #[Title('Audit Log Details')] class exte
                         </div>
                     </div>
                     {{-- Entity --}}
-                    <div class="group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
+                    <div class="col-span-1 sm:col-span-2  group/card relative overflow-hidden rounded-2xl bg-white/70 dark:bg-zinc-800/70 backdrop-blur-xl border border-white/20 dark:border-zinc-700/50 shadow-xl hover:shadow-2xl transition-all duration-300">
                         <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-green-600/10 dark:from-green-400/10 dark:via-transparent dark:to-green-500/20 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
                         <div class="relative p-6 flex items-center justify-between">
                             <div>

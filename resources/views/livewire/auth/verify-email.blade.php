@@ -7,6 +7,7 @@ use Livewire\Attributes\{Layout, Title};
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] #[Title('Verify Email')] class extends Component
+{
     public string $title = 'Verify Email';
     public string $description = 'Please verify your email address by clicking on the link we sent to your email.';
 

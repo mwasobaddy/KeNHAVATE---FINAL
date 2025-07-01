@@ -89,7 +89,7 @@ new #[Layout('components.layouts.app')] #[Title('Challenge Details')] class exte
     public function canEdit()
     {
         return Auth::check() && (
-            Auth::user()->hasRole([administrator, 'developer']) ||
+            Auth::user()->hasRole(['administrator', 'developer']) ||
             (Auth::user()->hasRole('manager') && $this->challenge->author_id === Auth::id())
         );
     }

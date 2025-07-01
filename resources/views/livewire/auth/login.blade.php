@@ -17,6 +17,7 @@ use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.auth')] #[Title('Login')] class extends Component
+{
     #[Validate('required|string|email')]
     public string $email = '';
 
