@@ -16,7 +16,7 @@ return new class extends Migration
             $table->morphs('collaborable'); // For ideas or challenge submissions
             $table->foreignId('collaborator_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('invited_by')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'accepted', 'declined', 'removed'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'active', 'declined', 'removed'])->default('pending');
             $table->enum('role', ['contributor', 'co_author', 'reviewer'])->default('contributor');
             $table->text('invitation_message')->nullable();
             $table->text('contribution_summary')->nullable();
