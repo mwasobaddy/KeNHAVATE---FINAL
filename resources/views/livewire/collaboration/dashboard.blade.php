@@ -29,7 +29,7 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
         
         // Active collaborations (ideas where user is collaborating)
         $this->activeCollaborations = Collaboration::where('collaborator_id', $user->id)
-            ->with(['idea.author', 'idea.category'])
+            ->with(['collaborable', 'collaborable.author', 'collaborable.category'])
             ->where('status', 'active')
             ->latest()
             ->take(6)
@@ -37,9 +37,9 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
             ->map(function ($collaboration) {
                 return [
                     'id' => $collaboration->id,
-                    'idea_id' => $collaboration->idea?->id,
-                    'idea_title' => $collaboration->idea?->title ?? '(Idea deleted)',
-                    'idea_author' => $collaboration->idea?->author?->name ?? '-',
+                    'idea_id' => $collaboration->idea_model?->id,
+                    'idea_title' => $collaboration->idea_model?->title ?? 'Idea deleted',
+                    'idea_author' => $collaboration->idea_model?->author?->name ?? '-',
                     'joined_at' => $collaboration->joined_at ?? $collaboration->created_at,
                     'last_activity' => $collaboration->updated_at,
                     'role' => $collaboration->role ?? 'contributor'
@@ -48,7 +48,7 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
 
         // Pending collaboration invites
         $this->pendingInvites = Collaboration::where('collaborator_id', $user->id)
-            ->with(['idea.author', 'inviter'])
+            ->with(['collaborable', 'inviter', 'collaborable.author'])
             ->where('status', 'pending')
             ->latest()
             ->take(5)
@@ -56,8 +56,8 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
             ->map(function ($invite) {
                 return [
                     'id' => $invite->id,
-                    'idea_id' => $invite->idea?->id,
-                    'idea_title' => $invite->idea?->title ?? '(Idea deleted)',
+                    'idea_id' => $invite->idea_model?->id,
+                    'idea_title' => $invite->idea_model?->title ?? '(Idea deleted)',
                     'inviter_name' => $invite->inviter?->name ?? '-',
                     'invited_at' => $invite->invited_at ?? $invite->created_at,
                     'message' => $invite->invitation_message,
@@ -143,6 +143,8 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
 
         // Accept the invitation using the model method
         $invite->accept();
+        // Immediately activate the collaboration so it appears in dashboard
+        $invite->activate();
 
         session()->flash('message', 'Collaboration invitation accepted successfully!');
         $this->loadDashboardData();
@@ -341,7 +343,11 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
                                             <div class="flex justify-between items-start">
                                                 <div class="flex-1">
                                                     <h3 class="font-semibold text-lg text-[#231F20] dark:text-zinc-100 mb-2">
-                                                        <a href="{{ route('ideas.show', $collaboration['idea_id']) }}" wire:navigate class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
+                                                        @if($collaboration['idea_id'])
+                                                            <a href="{{ route('ideas.show', $collaboration['idea_id']) }}" wire:navigate class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300">
+                                                        @else
+                                                            <span class="text-gray-500 dark:text-gray-400">Idea not available</span>
+                                                        @endif
                                                             {{ $collaboration['idea_title'] }}
                                                         </a>
                                                     </h3>
@@ -363,7 +369,9 @@ new #[Layout('components.layouts.app')] #[Title('Collaboration Dashboard')] clas
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <flux:button size="sm" href="{{ route('ideas.show', $collaboration['idea_id']) }}" wire:navigate class="ml-4">
+                                                @if($collaboration['idea_id'])
+                                                    <flux:button size="sm" href="{{ route('ideas.show', $collaboration['idea_id']) }}" wire:navigate class="ml-4">
+                                                @endif
                                                     View Idea
                                                 </flux:button>
                                             </div>

@@ -30,7 +30,8 @@ new class extends Component {
     public function loadCollaborations()
     {
         $this->collaborations = Collaboration::with(['collaborator', 'inviter'])
-            ->where('idea_id', $this->idea->id)
+            ->where('collaborable_type', Idea::class)
+            ->where('collaborable_id', $this->idea->id)
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -346,10 +347,18 @@ new class extends Component {
                         @if($this->canInvite())
                             <flux:button 
                                 wire:click="toggleInviteForm"
-                                class="group/btn relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/90 to-white/60 dark:from-zinc-700/90 dark:to-zinc-800/60 border border-white/20 dark:border-zinc-700/50 backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 px-6 py-3"
+                                wire:loading.attr="disabled"
+                                wire:target="toggleInviteForm"
+                                class="group/btn relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/90 to-white/60 dark:from-zinc-700/90 dark:to-zinc-800/60 border border-white/20 dark:border-zinc-700/50 backdrop-blur-sm shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 px-6 py-3 disabled:opacity-60 disabled:cursor-not-allowed"
                             >
                                 <span class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-600/20 dark:from-blue-400/20 dark:to-purple-500/30 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></span>
                                 <span class="relative flex items-center space-x-2 text-[#231F20] dark:text-zinc-100 font-semibold">
+                                    <span wire:loading wire:target="toggleInviteForm" class="flex items-center">
+                                        <svg class="w-4 h-4 animate-spin mr-2 text-blue-500" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                        </svg>
+                                    </span>
                                     @if($showInviteForm)
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

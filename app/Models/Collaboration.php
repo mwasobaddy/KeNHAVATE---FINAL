@@ -173,4 +173,12 @@ class Collaboration extends Model
     {
         return $query->where('collaborator_id', $userId);
     }
+
+    /**
+     * Get the related Idea model if this collaboration is for an idea
+     */
+    public function getIdeaModelAttribute()
+    {
+        return $this->collaborable_type === Idea::class ? $this->collaborable : null;
+    }
 }
